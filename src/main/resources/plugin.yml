@@ -1,0 +1,6 @@
+name: CashApp
+version: '${project.version}'
+main: doubleyoucash.eaplugin.CashApp
+api-version: 1.18
+authors: [ Wcash ]
+website: https://www.github.com/DoubleYouCash
