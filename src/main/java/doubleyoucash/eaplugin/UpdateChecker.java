@@ -9,15 +9,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Scanner;
 
-public class UpdateChecker {
-
-    private final JavaPlugin plugin;
-    private final int resourceID;
-
-    public UpdateChecker(JavaPlugin plugin, int resourceID) {
-        this.plugin = plugin;
-        this.resourceID = resourceID;
-    }
+public record UpdateChecker(JavaPlugin plugin, int resourceID) {
 
     public void getVersion(final Consumer<String> consumer) {
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
