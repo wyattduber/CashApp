@@ -1,6 +1,7 @@
 package doubleyoucash.eaplugin;
 
 import doubleyoucash.eaplugin.commands.BOTM;
+import doubleyoucash.eaplugin.commands.CA;
 import doubleyoucash.eaplugin.listeners.LoginListener;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,6 +20,9 @@ public final class CashApp extends JavaPlugin {
     public FileConfiguration config;
     public File customConfigFile;
     public static String[] versions = new String[2];
+    public String botToken;
+    public String serverID;
+    public JavacordStart js;
 
     public static CashApp getPlugin() { return getPlugin(CashApp.class); }
 
@@ -33,11 +37,15 @@ public final class CashApp extends JavaPlugin {
             error("Error setting up the config! Contact the developer if you cannot fix this issue");
         }
 
-        /* Listeners */
-        initListeners();
+        /* Config Parsing */
+        if (parseConfig()) {
+            initListeners();
+            js = new JavacordStart();
+        }
 
         /* Commands */
         try {
+            Objects.requireNonNull(this.getCommand("ca")).setExecutor(new CA());
             Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BOTM());
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -72,6 +80,30 @@ public final class CashApp extends JavaPlugin {
             e.printStackTrace();
         }
         log("Minecraft Listeners Loaded!");
+    }
+
+    public boolean parseConfig() {
+        try {
+            botToken = getConfigString("bot-token");
+            if (getConfigString("bot-token").equalsIgnoreCase("BOTTOKEN") || getConfigString("bot-token").equalsIgnoreCase("")) throw new Exception();
+        } catch (Exception e) {
+            saveDefaultConfig();
+            warn("Invalid Bot Token! Please enter a valid Bot Token in config.yml and reload the plugin.");
+            return false;
+        }
+
+        try {
+            serverID = getConfigString("server-id");
+            if (getConfigString("server-id").equalsIgnoreCase("000000000000000000") || getConfigString("server-id").equalsIgnoreCase("")) throw new Exception();
+            log("Discord Server Found!");
+        } catch (Exception e) {
+            saveDefaultConfig();
+            warn("Invalid Server ID! Please enter a valid Server ID in config.yml and reload the plugin.");
+            return false;
+        }
+
+        log("Config loaded!");
+        return true;
     }
 
     public String getConfigString(String entryName) {
