@@ -1,15 +1,73 @@
 package doubleyoucash.eaplugin.commands;
 
+import doubleyoucash.eaplugin.CashApp;
+import doubleyoucash.eaplugin.JavacordStart;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class BOTM implements CommandExecutor {
 
+    private final CashApp ca = CashApp.getPlugin();
+    private final JavacordStart js;
+
+    // This is a string of words that
+    String bannedWords = "anal asshole ballsack bastard bitch biatch blowjob boner boob boobs bullshit buttplug clitoris cock crackwhore cunt cum cyka dick dildo dipshit doggystyle douche dyke earrape fag faggot fuck fucker jerk jizz knobend knobhead knobjockey marijuana meth minge motherfucker muff penis þorn þornography prick pussy queer rape retard retarded scrotum slut sperm spunk shit shite shitty sussy tit tosser turd twat vagina vibrator wank wanker whore omfg wtf uwu onision owo 0w0 pussys pussies";
+
+    public BOTM() {
+        js = ca.js;
+    }
+
+    /**
+     * Args format: /botm <username> <x> <y> <z> <message...>
+     * @param sender
+     * @param command
+     * @param s
+     * @param args
+     * @return
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        return false;
+
+        if (args.length < 5) {
+            return false;
+        }
+
+        String username = args[0];
+        String world = args[1];
+        String x = args[2];
+        String y = args[3];
+        String z = args[4];
+        StringBuilder message = new StringBuilder();
+
+        if (args.length > 5) {
+            for (int i = 5; i < args.length; i++) {
+                message.append(args[i]).append(" ");
+            }
+
+            String[] bwords = bannedWords.split(" ");
+            for (String bword : bwords) {
+                if (message.toString().contains(bword)) {
+                    sender.sendMessage("§cKeep your message kid-friendly!");
+                    return true;
+                }
+            }
+        } else {
+            message.append("None");
+        }
+
+        if (sender instanceof Player player) {
+            if (!player.getName().equals(username)) {
+                player.sendMessage("§cUsernames do not match!");
+                return true;
+            }
+        }
+
+        js.sendBOTMMessage(username, world, x, y, z, message.toString());
+
+        return true;
     }
 
 }

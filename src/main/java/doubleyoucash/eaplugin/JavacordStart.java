@@ -2,17 +2,20 @@ package doubleyoucash.eaplugin;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.server.Server;
 
 public class JavacordStart {
 
     public DiscordApi api;
     public Server discordServer;
+    public TextChannel botmChannel;
 
     private final CashApp ca = CashApp.getPlugin();
 
     public JavacordStart() {
         parseConfig();
+        botmChannel = api.getTextChannelById(569228321175371776L).get();
     }
 
     public void disableAPI() {
@@ -52,6 +55,14 @@ public class JavacordStart {
             ca.warn("Server not Found! Please enter a valid Server ID in config.yml and reload the plugin.");
         }
 
+    }
+
+    public void sendBOTMMessage(String username, String world, String x, String y, String z, String message) {
+        String messageToSend = "Name: " + username + "\n" +
+                               "World: " + world + "\n" +
+                               "Co-Ords: " + x + " " + y + " " + z + "\n" +
+                               "Other: " + message;
+        botmChannel.sendMessage(messageToSend);
     }
 
 }

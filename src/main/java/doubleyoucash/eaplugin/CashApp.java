@@ -3,6 +3,7 @@ package doubleyoucash.eaplugin;
 import doubleyoucash.eaplugin.commands.BOTM;
 import doubleyoucash.eaplugin.commands.CA;
 import doubleyoucash.eaplugin.listeners.LoginListener;
+import net.byteflux.libby.BukkitLibraryManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,6 +29,10 @@ public final class CashApp extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        /* Use Libby */
+        loadDependencies();
+
         /* Load and Initiate Configs */
         try {
             reloadCustomConfig();
@@ -55,13 +60,33 @@ public final class CashApp extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        if (js != null) {
+            js.disableAPI();
+        }
     }
 
     public void reload() {
         reloadCustomConfig();
         config = getCustomConfig();
         saveCustomConfig();
+
+        if (parseConfig() || js == null) {
+            js = new JavacordStart();
+        } else {
+            js.reload();
+        }
+    }
+
+    public void loadDependencies() {
+        BukkitLibraryManager manager = new BukkitLibraryManager(this); //depends on the server core you are using
+        manager.addMavenCentral(); //there are also methods for other repositories
+        manager.fromGeneratedResource(this.getResource("AzimDP.json")).forEach(library->{
+            try {
+                manager.loadLibrary(library);
+            }catch(RuntimeException e) { // in case some of the libraries cant be found or dont have .jar file or etc
+                getLogger().info("Skipping download of\""+library+"\", it either doesnt exist or has no .jar file");
+            }
+        });
     }
 
     public void initListeners() {
