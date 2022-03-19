@@ -1,0 +1,35 @@
+name: CashApp
+version: 1.0.0
+main: doubleyoucash.eaplugin.CashApp
+api-version: 1.18
+author: Wcash
+website: https://www.github.com/DoubleYouCash/CashApp
+
+commands:
+  ca:
+    description: Helper command for the CashApp plugin
+    usage: /ca <args...>
+    permission: ca.ca
+    permission-message: §cYou do not have permission!
+  botm:
+    description: Command to send the BOTM message to the EA BOTM channel
+    usage: /botm <username> <world> <x> <y> <z> <message...>
+    permission: ca.botm
+    permission-message: §cYou do not have permission!
+
+permissions:
+  ca.*:
+    description: Gives access to all CashApp Commands and Features
+    children:
+      ca.ca: true
+      ca.update: true
+      ca.botm: true
+  ca.botm:
+    description: Allows the use of the BOTM command
+    default: op
+  ca.ca:
+    description: Allows the use of the /ca command
+    default: op
+  ca.update:
+    description: Allows the user to see if the plugin can update
+    default: op

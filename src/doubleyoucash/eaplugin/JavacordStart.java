@@ -15,7 +15,7 @@ public class JavacordStart {
 
     public JavacordStart() {
         parseConfig();
-        botmChannel = api.getTextChannelById(569228321175371776L).get();
+        botmChannel = api.getTextChannelById(954576595740414022L).get();
     }
 
     public void disableAPI() {

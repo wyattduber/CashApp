@@ -35,6 +35,7 @@ public class BOTM implements CommandExecutor {
             return false;
         }
 
+        // Declare variables and assign initial arguments
         String username = args[0];
         String world = args[1];
         String x = args[2];
@@ -42,6 +43,9 @@ public class BOTM implements CommandExecutor {
         String z = args[4];
         StringBuilder message = new StringBuilder();
 
+        // Check if there is a message attached
+        // If so, then parse string and check for bad words
+        // If not, set it to the default "None"
         if (args.length > 5) {
             for (int i = 5; i < args.length; i++) {
                 message.append(args[i]).append(" ");
@@ -58,6 +62,7 @@ public class BOTM implements CommandExecutor {
             message.append("None");
         }
 
+        // Check if player is who they say they are when sending the command
         if (sender instanceof Player player) {
             if (!player.getName().equals(username)) {
                 player.sendMessage("§cUsernames do not match!");
@@ -65,6 +70,7 @@ public class BOTM implements CommandExecutor {
             }
         }
 
+        // If all the above conditions check out, then send the message to the javacord handler
         js.sendBOTMMessage(username, world, x, y, z, message.toString());
 
         return true;

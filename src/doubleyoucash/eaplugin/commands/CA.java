@@ -22,7 +22,7 @@ public class CA implements CommandExecutor {
 
         if (args.length > 0) {
             if (sender instanceof Player player) {
-                if (args[0].equalsIgnoreCase("reload")) {
+                if (args[0].equalsIgnoreCase("reload")) { // reload command
                     ca.reload();
                     player.sendMessage("§f[§aCash§bApp§f] Configuration Reloaded!");
                     return true;

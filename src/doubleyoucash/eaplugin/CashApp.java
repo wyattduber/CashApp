@@ -31,7 +31,7 @@ public final class CashApp extends JavaPlugin {
     public void onEnable() {
 
         /* Use Libby */
-        loadDependencies();
+        //loadDependencies();
 
         /* Load and Initiate Configs */
         try {
@@ -77,7 +77,7 @@ public final class CashApp extends JavaPlugin {
         }
     }
 
-    public void loadDependencies() {
+    /*public void loadDependencies() {
         BukkitLibraryManager manager = new BukkitLibraryManager(this); //depends on the server core you are using
         manager.addMavenCentral(); //there are also methods for other repositories
         manager.fromGeneratedResource(this.getResource("AzimDP.json")).forEach(library->{
@@ -87,7 +87,7 @@ public final class CashApp extends JavaPlugin {
                 getLogger().info("Skipping download of\""+library+"\", it either doesnt exist or has no .jar file");
             }
         });
-    }
+    }*/
 
     public void initListeners() {
         try {
