@@ -1,5 +1,6 @@
 package doubleyoucash.eaplugin;
 
+import doubleyoucash.eaplugin.commands.BCE;
 import doubleyoucash.eaplugin.commands.BOTM;
 import doubleyoucash.eaplugin.commands.CA;
 import doubleyoucash.eaplugin.listeners.LoginListener;
@@ -16,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.logging.Level;
 
-public final class CashApp extends JavaPlugin {
+public class CashApp extends JavaPlugin {
 
     public FileConfiguration config;
     public File customConfigFile;
@@ -31,7 +32,7 @@ public final class CashApp extends JavaPlugin {
     public void onEnable() {
 
         /* Use Libby */
-        //loadDependencies();
+        loadDependencies();
 
         /* Load and Initiate Configs */
         try {
@@ -52,6 +53,7 @@ public final class CashApp extends JavaPlugin {
         try {
             Objects.requireNonNull(this.getCommand("ca")).setExecutor(new CA());
             Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BOTM());
+            Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -77,7 +79,7 @@ public final class CashApp extends JavaPlugin {
         }
     }
 
-    /*public void loadDependencies() {
+    public void loadDependencies() {
         BukkitLibraryManager manager = new BukkitLibraryManager(this); //depends on the server core you are using
         manager.addMavenCentral(); //there are also methods for other repositories
         manager.fromGeneratedResource(this.getResource("AzimDP.json")).forEach(library->{
@@ -87,7 +89,7 @@ public final class CashApp extends JavaPlugin {
                 getLogger().info("Skipping download of\""+library+"\", it either doesnt exist or has no .jar file");
             }
         });
-    }*/
+    }
 
     public void initListeners() {
         try {

@@ -1,9 +1,10 @@
 name: CashApp
-version: 1.0.0
+version: 1.1.0
 main: doubleyoucash.eaplugin.CashApp
 api-version: 1.18
 author: Wcash
 website: https://www.github.com/DoubleYouCash/CashApp
+softdepend: [PermissionsEx]
 
 commands:
   ca:
@@ -15,6 +16,11 @@ commands:
     description: Command to send the BOTM message to the EA BOTM channel
     usage: /botm <username> <world> <x> <y> <z> <message...>
     permission: ca.botm
+    permission-message: §cYou do not have permission!
+  bce:
+    description: Helper command for the buycraft plugin to email staff (buy craft event)
+    usage: /bce <event id> <playername>
+    permission: ca.bce
     permission-message: §cYou do not have permission!
 
 permissions:
@@ -32,4 +38,7 @@ permissions:
     default: op
   ca.update:
     description: Allows the user to see if the plugin can update
+    default: op
+  ca.bce:
+    description: Allows the use of the /bce command
     default: op
