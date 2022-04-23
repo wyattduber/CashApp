@@ -1,6 +1,7 @@
 package doubleyoucash.eaplugin.commands;
 
 import doubleyoucash.eaplugin.CashApp;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,23 +10,22 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import ru.tehkode.permissions.PermissionGroup;
-import ru.tehkode.permissions.PermissionUser;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
-
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 
 public class BCE implements CommandExecutor {
 
-    private PermissionUser[] modPlusList = new PermissionUser[20];
-    private PermissionUser[] modList = new PermissionUser[30];
-    private CashApp ca;
-    private ConsoleCommandSender console;
+    private ArrayList<String> modPlusList = new ArrayList<>();
+    private ArrayList<String> modList = new ArrayList<>();
+    private final CashApp ca;
+    private final ConsoleCommandSender console;
+    private final Permission perms;
+    private final List<UUID> staff;
 
     public BCE() {
         ca = CashApp.getPlugin();
         console = Bukkit.getServer().getConsoleSender();
+        perms = ca.perms;
+        staff = ca.staffUUID;
     }
 
     @Override
@@ -41,13 +41,28 @@ public class BCE implements CommandExecutor {
             player.sendMessage("§cCommand must be executed from console!"); Removed for Testing
         }*/
 
-        // Mod+ List Initialize
-        PermissionGroup modPlus = PermissionsEx.getPermissionManager().getGroup("Moderator+");
-        modPlus.getActiveUsers().toArray(modPlusList);
+        // Initialize Staff Lists
+        /*for (UUID uuid : staff) {
+            Player player = ca.getServer().getOfflinePlayer(uuid).getPlayer();
+            if (perms.getPrimaryGroup(player).equalsIgnoreCase("Moderator+")) {
+                modPlusList.add(player);
+            } else if (perms.getPrimaryGroup(player).equalsIgnoreCase("Moderator")) {
+                modList.add(player);
+            }
+        }*/
 
-        // Mod List Initialize
-        PermissionGroup mod = PermissionsEx.getPermissionManager().getGroup("Moderator");
-        mod.getActiveUsers().toArray(modList);
+        modPlusList.add("Dronox");
+        modPlusList.add("Cubemaster02");
+        modPlusList.add("GreenCreepyGhost");
+        modPlusList.add("Wcash12");
+        modPlusList.add("thenameisKO");
+        modList.add("Cobethel");
+        modList.add("PokedonGCG");
+        modList.add("Cinecs");
+        modList.add("Scoutblade");
+        modList.add("EchoEnvoyer");
+        modList.add("Anjulah");
+        modList.add("Deizhor");
 
         /*
          * Dictionary:
@@ -60,42 +75,42 @@ public class BCE implements CommandExecutor {
          */
         switch (args[0]) {
             case "0":
-                for (PermissionUser value : modPlusList) {
-                    Bukkit.dispatchCommand(console, "/mail send " + value.getName() + " " + args[1] + " has purchased a Custom Title.");
+                for (String value : modPlusList) {
+                    Bukkit.dispatchCommand(console, "mail send " + value + " " + args[1] + " has purchased a Custom Title.");
                 }
                 break;
             case "1":
-                for (PermissionUser user : modPlusList) {
-                    Bukkit.dispatchCommand(console, "/mail send " + user.getName() + " " + args[1] + " has purchased a Custom Title Replacement.");
+                for (String user : modPlusList) {
+                    Bukkit.dispatchCommand(console, "mail send " + user+ " " + args[1] + " has purchased a Custom Title Replacement.");
                 }
                 break;
             case "2":
-                for (PermissionUser permissionUser : modPlusList) {
-                    Bukkit.dispatchCommand(console, "/mail send " + permissionUser.getName() + " " + args[1] + " has purchased a Custom Weapon Name/Lore.");
+                for (String permissionUser : modPlusList) {
+                    Bukkit.dispatchCommand(console, "mail send " + permissionUser+ " " + args[1] + " has purchased a Custom Weapon Name/Lore.");
                 }
                 break;
             case "3":
-                for (PermissionUser permissionUser : modPlusList) {
-                    Bukkit.dispatchCommand(console, "/mail send " + permissionUser.getName() + " " + args[1] + " has purchased a Public Warp.");
+                for (String permissionUser : modPlusList) {
+                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp.");
                 }
-                for (PermissionUser permissionUser : modList) {
-                    Bukkit.dispatchCommand(console, "/mail send " + permissionUser.getName() + " " + args[1] + " has purchased a Public Warp.");
+                for (String permissionUser : modList) {
+                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp.");
                 }
                 break;
             case "4":
-                for (PermissionUser permissionUser : modPlusList) {
-                    Bukkit.dispatchCommand(console, "/mail send " + permissionUser.getName() + " " + args[1] + " has purchased a Public Warp Move/Rename.");
+                for (String permissionUser : modPlusList) {
+                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp Move/Rename.");
                 }
-                for (PermissionUser permissionUser : modList) {
-                    Bukkit.dispatchCommand(console, "/mail send " + permissionUser.getName() + " " + args[1] + " has purchased a Public Warp Move/Rename.");
+                for (String permissionUser : modList) {
+                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp Move/Rename.");
                 }
                 break;
             case "5":
-                for (PermissionUser permissionUser : modPlusList) {
-                    Bukkit.dispatchCommand(console, "/mail send " + permissionUser.getName() + " " + args[1] + " has purchased a Mob Spawner.");
+                for (String permissionUser : modPlusList) {
+                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Mob Spawner.");
                 }
-                for (PermissionUser permissionUser : modList) {
-                    Bukkit.dispatchCommand(console, "/mail send " + permissionUser.getName() + " " + args[1] + " has purchased a Mob Spawner.");
+                for (String permissionUser : modList) {
+                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Mob Spawner.");
                 }
                 break;
         }

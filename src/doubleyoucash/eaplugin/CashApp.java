@@ -5,8 +5,10 @@ import doubleyoucash.eaplugin.commands.BOTM;
 import doubleyoucash.eaplugin.commands.CA;
 import doubleyoucash.eaplugin.listeners.LoginListener;
 import net.byteflux.libby.BukkitLibraryManager;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -14,7 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Level;
 
 public class CashApp extends JavaPlugin {
@@ -25,6 +27,9 @@ public class CashApp extends JavaPlugin {
     public String botToken;
     public String serverID;
     public JavacordStart js;
+    public Permission perms;
+    public List<String> staff;
+    public ArrayList<UUID> staffUUID = new ArrayList<>();
 
     public static CashApp getPlugin() { return getPlugin(CashApp.class); }
 
@@ -32,7 +37,7 @@ public class CashApp extends JavaPlugin {
     public void onEnable() {
 
         /* Use Libby */
-        loadDependencies();
+        //loadDependencies();
 
         /* Load and Initiate Configs */
         try {
@@ -42,6 +47,9 @@ public class CashApp extends JavaPlugin {
         } catch (Exception e) {
             error("Error setting up the config! Contact the developer if you cannot fix this issue");
         }
+
+        /* Permissions Loading */
+        setupPermissions();
 
         /* Config Parsing */
         if (parseConfig()) {
@@ -79,7 +87,7 @@ public class CashApp extends JavaPlugin {
         }
     }
 
-    public void loadDependencies() {
+    /*public void loadDependencies() {
         BukkitLibraryManager manager = new BukkitLibraryManager(this); //depends on the server core you are using
         manager.addMavenCentral(); //there are also methods for other repositories
         manager.fromGeneratedResource(this.getResource("AzimDP.json")).forEach(library->{
@@ -89,7 +97,7 @@ public class CashApp extends JavaPlugin {
                 getLogger().info("Skipping download of\""+library+"\", it either doesnt exist or has no .jar file");
             }
         });
-    }
+    }*/
 
     public void initListeners() {
         try {
@@ -129,8 +137,23 @@ public class CashApp extends JavaPlugin {
             return false;
         }
 
+        try {
+            for (int i = 0; i < config.getStringList("staff-list").size(); i++) {
+                staffUUID.add(i, getServer().getPlayerUniqueId(config.getStringList("staff-list").get(i)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
         log("Config loaded!");
         return true;
+    }
+
+    private boolean setupPermissions() {
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        perms = rsp.getProvider();
+        return perms != null;
     }
 
     public String getConfigString(String entryName) {

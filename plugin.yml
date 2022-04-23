@@ -4,7 +4,7 @@ main: doubleyoucash.eaplugin.CashApp
 api-version: 1.18
 author: Wcash
 website: https://www.github.com/DoubleYouCash/CashApp
-softdepend: [PermissionsEx]
+depend: [Vault]
 
 commands:
   ca:

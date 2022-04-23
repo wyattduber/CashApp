@@ -45,8 +45,14 @@
             <groupId>org.javacord</groupId>
             <artifactId>javacord</artifactId>
             <version>3.4.0</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
             <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>com.github.MilkBowl</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
