@@ -53,7 +53,7 @@ public class BOTM implements CommandExecutor {
 
             String[] bwords = bannedWords.split(" ");
             for (String bword : bwords) {
-                if (message.toString().contains(bword)) {
+                if (message.toString().contains(bword) || username.contains(bword) || world.contains(bword) || x.contains(bword) || y.contains(bword) || z.contains(bword)) {
                     sender.sendMessage("§cKeep your message kid-friendly!");
                     return true;
                 }
@@ -72,6 +72,7 @@ public class BOTM implements CommandExecutor {
 
         // If all the above conditions check out, then send the message to the javacord handler
         js.sendBOTMMessage(username, world, x, y, z, message.toString());
+        sender.sendMessage("BOTM Message Sent!");
 
         return true;
     }

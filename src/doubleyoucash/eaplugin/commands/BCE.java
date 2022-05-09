@@ -14,8 +14,8 @@ import java.util.*;
 
 public class BCE implements CommandExecutor {
 
-    private ArrayList<String> modPlusList = new ArrayList<>();
-    private ArrayList<String> modList = new ArrayList<>();
+    private String[] modPlusList = { "Dronox", "Cubemaster02", "GreenCreepyGhost", "thenameisKO", "Wcash12" };
+    private String[] modList = { "Cobethel", "PokedonGCG", "Cinecs", "EchoingStar", "Anjulah", "Deizhor", "Scoutblade" };
     private final CashApp ca;
     private final ConsoleCommandSender console;
     private final Permission perms;
@@ -51,19 +51,6 @@ public class BCE implements CommandExecutor {
             }
         }*/
 
-        modPlusList.add("Dronox");
-        modPlusList.add("Cubemaster02");
-        modPlusList.add("GreenCreepyGhost");
-        modPlusList.add("Wcash12");
-        modPlusList.add("thenameisKO");
-        modList.add("Cobethel");
-        modList.add("PokedonGCG");
-        modList.add("Cinecs");
-        modList.add("Scoutblade");
-        modList.add("EchoEnvoyer");
-        modList.add("Anjulah");
-        modList.add("Deizhor");
-
         /*
          * Dictionary:
          * 0 = Custom Title (Mod+)
@@ -81,12 +68,12 @@ public class BCE implements CommandExecutor {
                 break;
             case "1":
                 for (String user : modPlusList) {
-                    Bukkit.dispatchCommand(console, "mail send " + user+ " " + args[1] + " has purchased a Custom Title Replacement.");
+                    Bukkit.dispatchCommand(console, "mail send " + user + " " + args[1] + " has purchased a Custom Title Replacement.");
                 }
                 break;
             case "2":
                 for (String permissionUser : modPlusList) {
-                    Bukkit.dispatchCommand(console, "mail send " + permissionUser+ " " + args[1] + " has purchased a Custom Weapon Name/Lore.");
+                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Custom Weapon Name/Lore.");
                 }
                 break;
             case "3":
@@ -115,7 +102,8 @@ public class BCE implements CommandExecutor {
                 break;
         }
 
-        return false;
+        sender.sendMessage("Buycraft Event Sent!");
+        return true;
     }
 
     private void fillLists() {
