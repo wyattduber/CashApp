@@ -14,7 +14,7 @@ public class BOTM implements CommandExecutor {
     private final JavacordStart js;
 
     // This is a string of words that
-    String bannedWords = "anal asshole ballsack bastard bitch biatch blowjob boner boob boobs bullshit buttplug clitoris cock crackwhore cunt cum cyka dick dildo dipshit doggystyle douche dyke earrape fag faggot fuck fucker jerk jizz knobend knobhead knobjockey marijuana meth minge motherfucker muff penis þorn þornography prick pussy queer rape retard retarded scrotum slut sperm spunk shit shite shitty sussy tit tosser turd twat vagina vibrator wank wanker whore omfg wtf uwu onision owo 0w0 pussys pussies";
+    String bannedWords = "anal ass asshole ballsack bastard bitch biatch blowjob boner boob boobs bullshit buttplug clitoris cock crackwhore cunt cum cyka dick dildo dipshit doggystyle douche dyke earrape fag faggot fuck fucker jerk jizz knobend knobhead knobjockey marijuana meth minge motherfucker muff penis þorn þornography prick pussy queer rape retard retarded scrotum slut sperm spunk shit shite shitty sussy tit tosser turd twat penis vagina vibrator wank wanker whore omfg wtf uwu onision owo 0w0 pussy pussys pussies";
 
     public BOTM() {
         js = ca.js;
