@@ -4,8 +4,8 @@ import doubleyoucash.eaplugin.commands.BCE;
 import doubleyoucash.eaplugin.commands.BOTM;
 import doubleyoucash.eaplugin.commands.CA;
 import doubleyoucash.eaplugin.listeners.LoginListener;
-import net.byteflux.libby.BukkitLibraryManager;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -139,7 +139,7 @@ public class CashApp extends JavaPlugin {
 
         try {
             for (int i = 0; i < config.getStringList("staff-list").size(); i++) {
-                staffUUID.add(i, getServer().getPlayerUniqueId(config.getStringList("staff-list").get(i)));
+                //staffUUID.add(i, getServer().getPlayerUniqueId(config.getStringList("staff-list").get(i)));
             }
         } catch (Exception e) {
             e.printStackTrace();
