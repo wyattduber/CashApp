@@ -30,6 +30,8 @@ public class RMD implements CommandExecutor {
             Bukkit.dispatchCommand(console, cmd);
         }
 
+        Bukkit.dispatchCommand(console, "bce -1 " + commandSender.getName());
+
         return true;
     }
 }

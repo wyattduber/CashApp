@@ -36,10 +36,11 @@ public class BCE implements CommandExecutor {
             return false;
         }
 
-        // Check to make sure that only console is executing the command
-        /*if (sender instanceof Player player) {
-            player.sendMessage("§cCommand must be executed from console!"); Removed for Testing
-        }*/
+        //Check to make sure that only console is executing the command
+        if (sender instanceof Player player) {
+            player.sendMessage("§cCommand must be executed from console!");
+            return true;
+        }
 
         // Initialize Staff Lists
         /*for (UUID uuid : staff) {
@@ -61,48 +62,56 @@ public class BCE implements CommandExecutor {
          * 5 = Mob Spawner (Mod/Mod+)
          */
         switch (args[0]) {
+            case "-1":
+                for (String value : modList) {
+                    Bukkit.dispatchCommand(console, "cmi mail send " + value + " " + args[1] + " reminded mall renters of re-rental period.");
+                }
+                for (String value : modPlusList) {
+                    Bukkit.dispatchCommand(console, "cmi mail send " + value + " " + args[1] + " reminded mall renters of re-rental period.");
+                }
+                break;
             case "0":
                 for (String value : modPlusList) {
-                    Bukkit.dispatchCommand(console, "mail send " + value + " " + args[1] + " has purchased a Custom Title.");
+                    Bukkit.dispatchCommand(console, "cmi mail send " + value + " " + args[1] + " has purchased a Custom Title.");
                 }
                 break;
             case "1":
                 for (String user : modPlusList) {
-                    Bukkit.dispatchCommand(console, "mail send " + user + " " + args[1] + " has purchased a Custom Title Replacement.");
+                    Bukkit.dispatchCommand(console, "cmi mail send " + user + " " + args[1] + " has purchased a Custom Title Replacement.");
                 }
                 break;
             case "2":
                 for (String permissionUser : modPlusList) {
-                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Custom Weapon Name/Lore.");
+                    Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Custom Weapon Name/Lore.");
                 }
                 break;
             case "3":
                 for (String permissionUser : modPlusList) {
-                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp.");
+                    Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp.");
                 }
                 for (String permissionUser : modList) {
-                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp.");
+                    Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp.");
                 }
                 break;
             case "4":
                 for (String permissionUser : modPlusList) {
-                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp Move/Rename.");
+                    Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp Move/Rename.");
                 }
                 for (String permissionUser : modList) {
-                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp Move/Rename.");
+                    Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp Move/Rename.");
                 }
                 break;
             case "5":
                 for (String permissionUser : modPlusList) {
-                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Mob Spawner.");
+                    Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Mob Spawner.");
                 }
                 for (String permissionUser : modList) {
-                    Bukkit.dispatchCommand(console, "mail send " + permissionUser + " " + args[1] + " has purchased a Mob Spawner.");
+                    Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Mob Spawner.");
                 }
                 break;
         }
 
-        sender.sendMessage("Buycraft Event Sent!");
+        sender.sendMessage("Buycraft Event " + args[0] + " Sent!");
         return true;
     }
 
