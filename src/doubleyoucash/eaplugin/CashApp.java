@@ -3,9 +3,9 @@ package doubleyoucash.eaplugin;
 import doubleyoucash.eaplugin.commands.BCE;
 import doubleyoucash.eaplugin.commands.BOTM;
 import doubleyoucash.eaplugin.commands.CA;
+import doubleyoucash.eaplugin.commands.RMD;
 import doubleyoucash.eaplugin.listeners.LoginListener;
 import net.milkbowl.vault.permission.Permission;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -26,6 +26,7 @@ public class CashApp extends JavaPlugin {
     public static String[] versions = new String[2];
     public String botToken;
     public String serverID;
+    public String mallMsg;
     public JavacordStart js;
     public Permission perms;
     public List<String> staff;
@@ -62,6 +63,7 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("ca")).setExecutor(new CA());
             Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BOTM());
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
+            Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new RMD());
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -144,6 +146,14 @@ public class CashApp extends JavaPlugin {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+
+        try {
+            mallMsg = getConfigString("mall-remind-msg");
+            log("Mall Reminder Message Loaded!");
+        } catch (Exception e) {
+            saveDefaultConfig();
+            warn("Invalid Mall Reminder Message! Please set the mall-remind-msg in the config.yml!");
         }
 
         log("Config loaded!");

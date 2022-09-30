@@ -22,6 +22,11 @@ commands:
     usage: /bce <event id> <playername>
     permission: ca.bce
     permission-message: §cYou do not have permission!
+  rmd:
+    description: Command to send all of the current users a reminder /mail
+    usage: /rmd <username-1> <username-2> ... <username-n>
+    permission: ca.rmd
+    permission-message: §cYou do not have permission!
 
 permissions:
   ca.*:
@@ -41,4 +46,7 @@ permissions:
     default: op
   ca.bce:
     description: Allows the use of the /bce command
+    default: op
+  ca.rmd:
+    description: Allows the use of the /rmd command
     default: op

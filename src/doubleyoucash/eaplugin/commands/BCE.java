@@ -14,8 +14,8 @@ import java.util.*;
 
 public class BCE implements CommandExecutor {
 
-    private String[] modPlusList = { "Dronox", "Cubemaster02", "GreenCreepyGhost", "thenameisKO", "Wcash" };
-    private String[] modList = { "Cobethel", "PokedonGCG", "EchoingStar", "Anjulah", "Deizhor", "Scoutblade" };
+    private String[] modPlusList = { "Dronox", "Cubemaster02", "GreenCreepyGhost", "Wcash" };
+    private String[] modList = { "Cobethel", "PokedonGCG", "EchoingStar", "Anjulah", "Nindroid", "Scoutblade" };
     private final CashApp ca;
     private final ConsoleCommandSender console;
     private final Permission perms;
