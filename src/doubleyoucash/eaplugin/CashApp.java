@@ -4,6 +4,7 @@ import doubleyoucash.eaplugin.commands.BCE;
 import doubleyoucash.eaplugin.commands.BOTM;
 import doubleyoucash.eaplugin.commands.CA;
 import doubleyoucash.eaplugin.commands.RMD;
+import doubleyoucash.eaplugin.commands.ls;
 import doubleyoucash.eaplugin.listeners.LoginListener;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,7 +30,6 @@ public class CashApp extends JavaPlugin {
     public String mallMsg;
     public JavacordStart js;
     public Permission perms;
-    public List<String> staff;
     public ArrayList<UUID> staffUUID = new ArrayList<>();
 
     public static CashApp getPlugin() { return getPlugin(CashApp.class); }
@@ -64,6 +64,7 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BOTM());
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new RMD());
+            Objects.requireNonNull(this.getCommand("ls")).setExecutor((new ls()));
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -141,6 +142,7 @@ public class CashApp extends JavaPlugin {
 
         try {
             for (int i = 0; i < config.getStringList("staff-list").size(); i++) {
+                System.currentTimeMillis();
                 //staffUUID.add(i, getServer().getPlayerUniqueId(config.getStringList("staff-list").get(i)));
             }
         } catch (Exception e) {
@@ -160,10 +162,10 @@ public class CashApp extends JavaPlugin {
         return true;
     }
 
-    private boolean setupPermissions() {
+    private void setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        assert rsp != null;
         perms = rsp.getProvider();
-        return perms != null;
     }
 
     public String getConfigString(String entryName) {
