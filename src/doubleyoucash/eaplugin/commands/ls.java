@@ -1,11 +1,7 @@
 package doubleyoucash.eaplugin.commands;
 
-import doubleyoucash.eaplugin.CashApp;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,13 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ls implements CommandExecutor {
 
-    private final CashApp ca;
-    private final ConsoleCommandSender console;
-
-    public ls() {
-        ca = CashApp.getPlugin();
-        console = Bukkit.getServer().getConsoleSender();
-    }
+    public ls() {}
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String string, @NotNull String[] strings) {

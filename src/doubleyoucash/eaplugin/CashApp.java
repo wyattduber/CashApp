@@ -30,7 +30,6 @@ public class CashApp extends JavaPlugin {
     public String mallMsg;
     public JavacordStart js;
     public Permission perms;
-    public ArrayList<UUID> staffUUID = new ArrayList<>();
 
     public static CashApp getPlugin() { return getPlugin(CashApp.class); }
 
@@ -170,10 +169,6 @@ public class CashApp extends JavaPlugin {
 
     public String getConfigString(String entryName) {
         return config.getString(entryName);
-    }
-
-    public boolean getConfigBool(String entryName) {
-        return config.getBoolean(entryName);
     }
 
     public void reloadCustomConfig() {
