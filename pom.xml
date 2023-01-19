@@ -77,10 +77,10 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
-                    <!--excludes>META-INF/*.SF</excludes>
+                    <excludes>META-INF/*.SF</excludes>
                     <excludes>META-INF/*.DSA</excludes>
                     <excludes>META-INF/*.RSA</excludes>
-                    <outputDirectory>${project.build.directory}/classes</outputDirectory-->
+                    <outputDirectory>${project.build.directory}/classes</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
@@ -96,9 +96,9 @@
                         <exclude>com.github.Azim.libby:libby-bukkit:whateva</exclude>
                         <!--outputDirectory>${project.build.directory}/classes</outputDirectory-->
                     </excludes>
-                    <!--excludes>META-INF/*.SF</excludes>
+                    <excludes>META-INF/*.SF</excludes>
                     <excludes>META-INF/*.DSA</excludes>
-                    <excludes>META-INF/*.RSA</excludes-->
+                    <excludes>META-INF/*.RSA</excludes>
                 </configuration>
                 <executions>
                     <execution>
@@ -123,15 +123,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
-                </configuration>
             </plugin>
         </plugins>
     </build>

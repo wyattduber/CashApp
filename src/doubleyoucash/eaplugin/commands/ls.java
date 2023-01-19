@@ -2,8 +2,10 @@ package doubleyoucash.eaplugin.commands;
 
 import doubleyoucash.eaplugin.CashApp;
 import net.kyori.adventure.text.Component;
-import org.apache.commons.lang.ObjectUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -50,11 +52,18 @@ public class ls implements CommandExecutor {
         }
 
         String s = message.toString();
-        Sign sign = (Sign) player.getTargetBlock(10);
+        Sign sign;
+        if (player.getTargetBlock(null, 10).getState() instanceof Sign) {
+            sign = (Sign) player.getTargetBlock(null, 10).getState();
+        } else {
+            player.sendMessage("§cYou are not looking at a sign!");
+            return true;
+        }
 
         try {
-            assert sign != null;
+            s = ChatColor.translateAlternateColorCodes('&', s);
             sign.line(line, Component.text(s));
+            sign.update();
         } catch (Exception e) {
             e.printStackTrace();
             player.sendMessage("§cUnknown Error Occurred. Nag Wcash about this error.");
