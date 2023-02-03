@@ -46,7 +46,14 @@ public class CashApp extends JavaPlugin {
             config = getCustomConfig();
             saveCustomConfig();
         } catch (Exception e) {
-            error("Error setting up the config! Contact the developer if you cannot fix this issue");
+            error("Error setting up the config! Contact the developer if you cannot fix this issue.");
+        }
+
+        /* Load and Initiate Voting Folder/Data */
+        try {
+
+        } catch (Exception e) {
+            error("Error gathering the voting data! Contact the developer if you cannot fix this issue.");
         }
 
         /* Permissions Loading */
@@ -100,6 +107,18 @@ public class CashApp extends JavaPlugin {
             }
         });
     }*/
+
+    public void initVotingData() throws IOException {
+        try {
+            if (!getDataFolder().listFiles()[0].exists()) {
+
+            }
+        } catch (NullPointerException e) {
+            File file = new File("voting");
+            getDataFolder().file
+
+        }
+    }
 
     public void initListeners() {
         try {
