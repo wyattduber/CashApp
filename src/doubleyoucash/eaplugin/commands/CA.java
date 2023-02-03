@@ -1,7 +1,6 @@
 package doubleyoucash.eaplugin.commands;
 
 import doubleyoucash.eaplugin.CashApp;
-import doubleyoucash.eaplugin.JavacordStart;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,10 +10,8 @@ import org.jetbrains.annotations.NotNull;
 public class CA implements CommandExecutor {
 
     private final CashApp ca = CashApp.getPlugin();
-    private final JavacordStart js;
 
     public CA() {
-        js = ca.js;
     }
 
     @Override

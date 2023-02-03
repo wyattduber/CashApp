@@ -10,24 +10,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class BOTM implements CommandExecutor {
 
-    private final CashApp ca = CashApp.getPlugin();
     private final JavacordStart js;
 
     // This is a string of words that
     String bannedWords = "anal ass asshole ballsack bastard bitch biatch blowjob boner boob boobs bullshit buttplug clitoris cock crackwhore cunt cum cyka dick dildo dipshit doggystyle douche dyke earrape fag faggot fuck fucker jerk jizz knobend knobhead knobjockey marijuana meth minge motherfucker muff penis þorn þornography prick pussy queer rape retard retarded scrotum slut sperm spunk shit shite shitty sussy tit tosser turd twat penis vagina vibrator wank wanker whore omfg wtf uwu onision owo 0w0 pussy pussys pussies";
 
     public BOTM() {
+        CashApp ca = CashApp.getPlugin();
         js = ca.js;
     }
 
-    /**
-     * Args format: /botm <username> <x> <y> <z> <message...>
-     * @param sender
-     * @param command
-     * @param s
-     * @param args
-     * @return
-     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 

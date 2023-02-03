@@ -1,6 +1,6 @@
 bot-token: "BOTTOKEN"
 server-id: "000000000000000000"
 
-staff-list: [ "Dronox", "GreenCreepyGhost", "Cubemaster02", "PokedonGCG", "Cobethel", "EchoEnvoyer", "Anjulah", "scoutblade", "Nindroid" , "PrincessDorianna" ]
+staff-list: [ "GreenCreepyGhost", "Cubemaster02", "PokedonGCG", "Cobethel", "EchoEnvoyer", "Anjulah", "scoutblade", "Nindroid" ]
 
 mall-remind-msg: "Hello, mall re-rental has begun! Please contact an online staff member to be "
