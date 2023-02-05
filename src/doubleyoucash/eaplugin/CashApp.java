@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystemException;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -24,6 +25,8 @@ public class CashApp extends JavaPlugin {
 
     public FileConfiguration config;
     public File customConfigFile;
+    public File voteFolder;
+    public HashMap<UUID, File> voteFiles;
     public static String[] versions = new String[2];
     public String botToken;
     public String serverID;
@@ -109,14 +112,18 @@ public class CashApp extends JavaPlugin {
     }*/
 
     public void initVotingData() throws IOException {
-        try {
-            if (!getDataFolder().listFiles()[0].exists()) {
+        voteFolder = new File(getDataFolder().getName() + "/voting");
+        if (!voteFolder.createNewFile()) throw new FileSystemException(voteFolder.getName());
 
+        log("Voting File Initiated!");
+        try {
+            for (File file : voteFolder.listFiles()) {
+                UUID uuid = UUID.fromString(file.getName().substring(0, file.getName().length() - 4));
+                voteFiles.put(uuid, file);
+                log("Vote File for " + getServer().getPlayer(uuid) + " : " + uuid + " loaded!");
             }
         } catch (NullPointerException e) {
-            File file = new File("voting");
-            getDataFolder().file
-
+            log("No files found! This is normal on first startup / no votes.");
         }
     }
 
