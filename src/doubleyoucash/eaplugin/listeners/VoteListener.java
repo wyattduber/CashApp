@@ -34,7 +34,7 @@ public class VoteListener implements Listener {
 
         try (FileWriter fw = new FileWriter(file)) {
             if (!(numLines > 30)) {
-                fw.append(player.getName() + " (" + player.getUniqueId() + ") voted on " + date.getTime());
+                fw.append(player.getName()).append(" (").append(String.valueOf(player.getUniqueId())).append(") voted on ").append(String.valueOf(date.getTime()));
             }
         } catch (IOException e) {
             ca.error("Nag the developer about this error! This should not happen!");
