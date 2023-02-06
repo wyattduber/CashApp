@@ -6,6 +6,7 @@ import doubleyoucash.eaplugin.commands.CA;
 import doubleyoucash.eaplugin.commands.RMD;
 import doubleyoucash.eaplugin.commands.ls;
 import doubleyoucash.eaplugin.listeners.LoginListener;
+import doubleyoucash.eaplugin.listeners.VoteListener;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -138,6 +139,7 @@ public class CashApp extends JavaPlugin {
                 } else {
                     getServer().getPluginManager().registerEvents(new LoginListener(false, versions), this);
                 }
+                getServer().getPluginManager().registerEvents(new VoteListener(), this);
             });
         } catch (Exception e) {
             e.printStackTrace();
