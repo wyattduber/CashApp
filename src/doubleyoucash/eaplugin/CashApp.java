@@ -54,9 +54,10 @@ public class CashApp extends JavaPlugin {
 
         /* Load and Initiate Voting Folder/Data */
         try {
-
+            initVotingData();
         } catch (Exception e) {
             error("Error gathering the voting data! Contact the developer if you cannot fix this issue.");
+            e.printStackTrace();
         }
 
         /* Permissions Loading */

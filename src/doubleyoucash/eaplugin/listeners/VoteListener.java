@@ -1,10 +1,12 @@
 package doubleyoucash.eaplugin.listeners;
 
 import doubleyoucash.eaplugin.CashApp;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import com.bencodez.votingplugin.events.PlayerVoteEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,8 +24,8 @@ public class VoteListener implements Listener {
     }
 
     @EventHandler
-    public void onVote(PlayerVoteEvent event) throws FileNotFoundException {
-        Player player = event.getVotingPluginUser().getPlayer();
+    public void onVote(AsyncChatEvent event) throws FileNotFoundException {
+        Player player = event.getPlayer();
 
         File file = ca.voteFiles.get(player.getUniqueId());
         int numLines = 0;
