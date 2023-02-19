@@ -5,6 +5,7 @@ import doubleyoucash.eaplugin.commands.BOTM;
 import doubleyoucash.eaplugin.commands.CA;
 import doubleyoucash.eaplugin.commands.RMD;
 import doubleyoucash.eaplugin.commands.ls;
+import doubleyoucash.eaplugin.database.Database;
 import doubleyoucash.eaplugin.listeners.LoginListener;
 import doubleyoucash.eaplugin.listeners.VoteListener;
 import net.milkbowl.vault.permission.Permission;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystemException;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -26,7 +27,6 @@ public class CashApp extends JavaPlugin {
 
     public FileConfiguration config;
     public File customConfigFile;
-    public File voteFolder;
     public HashMap<UUID, File> voteFiles;
     public static String[] versions = new String[2];
     public String botToken;
@@ -34,6 +34,7 @@ public class CashApp extends JavaPlugin {
     public String mallMsg;
     public JavacordStart js;
     public Permission perms;
+    public Database db;
 
     public static CashApp getPlugin() { return getPlugin(CashApp.class); }
 
@@ -52,13 +53,14 @@ public class CashApp extends JavaPlugin {
             error("Error setting up the config! Contact the developer if you cannot fix this issue.");
         }
 
-        /* Load and Initiate Voting Folder/Data */
-        try {
-            initVotingData();
-        } catch (Exception e) {
-            error("Error gathering the voting data! Contact the developer if you cannot fix this issue.");
-            e.printStackTrace();
-        }
+        /* Load Database */
+         try {
+             db = new Database("cashapp.sqlite.db");
+             log("Database Found! Path is " + db.getDbPath());
+         } catch (SQLException e) {
+             error("Error setting up database! Is there permissions issue preventing the database file creation?");
+             e.printStackTrace();
+         }
 
         /* Permissions Loading */
         setupPermissions();
@@ -112,22 +114,6 @@ public class CashApp extends JavaPlugin {
             }
         });
     }*/
-
-    public void initVotingData() throws IOException {
-        voteFolder = new File(getDataFolder().getName() + "/voting");
-        if (!voteFolder.createNewFile()) throw new FileSystemException(voteFolder.getName());
-
-        log("Voting File Initiated!");
-        try {
-            for (File file : voteFolder.listFiles()) {
-                UUID uuid = UUID.fromString(file.getName().substring(0, file.getName().length() - 4));
-                voteFiles.put(uuid, file);
-                log("Vote File for " + getServer().getPlayer(uuid) + " : " + uuid + " loaded!");
-            }
-        } catch (NullPointerException e) {
-            log("No files found! This is normal on first startup / no votes.");
-        }
-    }
 
     public void initListeners() {
         try {
