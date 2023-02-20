@@ -1,10 +1,6 @@
 package doubleyoucash.eaplugin;
 
-import doubleyoucash.eaplugin.commands.BCE;
-import doubleyoucash.eaplugin.commands.BOTM;
-import doubleyoucash.eaplugin.commands.CA;
-import doubleyoucash.eaplugin.commands.RMD;
-import doubleyoucash.eaplugin.commands.ls;
+import doubleyoucash.eaplugin.commands.*;
 import doubleyoucash.eaplugin.database.Database;
 import doubleyoucash.eaplugin.listeners.LoginListener;
 import doubleyoucash.eaplugin.listeners.VoteListener;
@@ -78,6 +74,7 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new RMD());
             Objects.requireNonNull(this.getCommand("ls")).setExecutor((new ls()));
+            Objects.requireNonNull(this.getCommand("streak")).setExecutor(new STREAK());
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

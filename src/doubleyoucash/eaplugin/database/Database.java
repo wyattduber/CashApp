@@ -1,12 +1,10 @@
 package doubleyoucash.eaplugin.database;
 
 import doubleyoucash.eaplugin.CashApp;
-import org.apache.commons.lang.ObjectUtils;
 
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.time.*;
@@ -14,17 +12,17 @@ import java.time.*;
 public class Database {
 
     private String dbPath;
-    private Connection dbcon;
-    private CashApp ca;
+    private final Connection dbcon;
+    private final CashApp ca;
 
     public Database(String dbName) throws SQLException {
         ca = CashApp.getPlugin();
         dbPath = (ca.getDataFolder() + "/" + dbName);
         dbPath = "jdbc:sqlite:" + dbPath;
         dbcon = DriverManager.getConnection(dbPath);
-        PreparedStatement stmt = dbcon.prepareStatement("CREATE TABLE IF NOT EXISTS streaks(minecraftid TEXT NOT NULL, lastVote INT NOT NULL, streak INT NOT NULL, showStreak BIT NOT NULL)");
+        PreparedStatement stmt = dbcon.prepareStatement("CREATE TABLE IF NOT EXISTS streaks(minecraftid TEXT NOT NULL, totalVotes INT NOT NULL, lastVote INT NOT NULL, streak INT NOT NULL, showStreak BIT NOT NULL)");
         stmt.execute();
-        stmt = dbcon.prepareStatement("CREATE TABLE IF NOT EXISTS votes(id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, minecraftid TEXT NOT NULL, voteDate BIGINT NOT NULL, voteNum INT NOT NULL, site TEXT NOT NULL)");
+        stmt = dbcon.prepareStatement("CREATE TABLE IF NOT EXISTS votes(id INT IDENTITY(1,1) PRIMARY KEY, minecraftid TEXT NOT NULL, voteDate BIGINT NOT NULL, voteNum INT NOT NULL, site TEXT NOT NULL)");
         stmt.execute();
     }
 
@@ -32,10 +30,12 @@ public class Database {
 
     public void addUserStreakEntry(UUID minecraftID) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO streaks(minecraftid,lastvote,streak) VALUES (?,?,?)");
+            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO streaks(minecraftid,lastvote,streak,showStreak) VALUES (?,?,?,?,?)");
             stmt.setString(1, minecraftID.toString());
-            stmt.setLong(2, System.currentTimeMillis());
-            stmt.setInt(3, 1);
+            stmt.setInt(2, 1);
+            stmt.setLong(3, System.currentTimeMillis());
+            stmt.setInt(4, 1);
+            stmt.setBoolean(5, true);
             stmt.execute();
         } catch (SQLException e) {
             ca.error("Error inserting link for user " + getName(minecraftID) + "!");
@@ -150,6 +150,7 @@ public class Database {
         } catch (SQLException e) {
             ca.error("Error getting the last vote time for user " + getName(minecraftID) + "!");
             e.printStackTrace();
+            return 0;
         }
     }
 
@@ -175,17 +176,57 @@ public class Database {
         try {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT * FROM votes WHERE minecraftid=?");
             rs = stmt.executeQuery();
-            for (int i = 0; i < num; i++) {
-                var zonedDateTime = java.time.ZonedDateTime.ofInstant(java.time.Instant.ofEpochMilli(rs.getLong("voteDate")), java.time.ZoneId.of("Germany/Berlin"));
-                var formatter = java.time.format.DateTimeFormatter.ofPattern("hh:mm:ss yyyy-M-d");
-                String date = zonedDateTime.format(formatter);
-                list.add("Date: " + date + "; Site: " + rs.getString("site") + "; ID: " + rs.getInt("voteNum"));
+            int i = 0;
+            while (rs.next() && i < num) {
+                i = addToList(rs, list, i);
             }
             return list;
         } catch (SQLException e) {
             ca.error("Error retrieving user " + getName(minecraftID) + "'s vote data!");
             e.printStackTrace();
             return null;
+        }
+    }
+
+    private int addToList(ResultSet rs, ArrayList<String> list, int i) throws SQLException {
+        var zonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(rs.getLong("voteDate")), ZoneId.of("Germany/Berlin"));
+        var formatter = DateTimeFormatter.ofPattern("hh:mm:ss yyyy-M-d");
+        String date = zonedDateTime.format(formatter);
+        list.add("Date: " + date + "; Site: " + rs.getString("site") + "; ID: " + rs.getInt("voteNum"));
+        i++;
+        return i;
+    }
+
+    public ArrayList<String> getAllVotes(UUID minecraftID) {
+        ResultSet rs;
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT * FROM votes WHERE minecraftid=?");
+            rs = stmt.executeQuery();
+            int total = 0;
+            while (rs.next()) {
+                total = addToList(rs, list, total);
+            }
+            list.add(0, "Votes for user " + getName(minecraftID) + " (Limit " + total + ")");
+            return list;
+        } catch (SQLException e) {
+            ca.error("Error retrieving user " + getName(minecraftID) + "'s vote data!");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public int getTotalVotes(UUID minecraftID) {
+        ResultSet rs;
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT totalVotes FROM streaks WHERE minecraftid=?");
+            stmt.setString(1, minecraftID.toString());
+            rs = stmt.executeQuery();
+            return rs.getInt("totalVotes");
+        } catch (SQLException e) {
+            ca.error("Error fetching total vote number for user " + getName(minecraftID) + "!");
+            e.printStackTrace();
+            return 0;
         }
     }
 

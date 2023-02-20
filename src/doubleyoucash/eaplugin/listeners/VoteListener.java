@@ -2,29 +2,19 @@ package doubleyoucash.eaplugin.listeners;
 
 import doubleyoucash.eaplugin.CashApp;
 import doubleyoucash.eaplugin.database.Database;
-import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import com.bencodez.votingplugin.events.PlayerVoteEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Date;
-import java.util.Scanner;
 import java.util.UUID;
 
 public class VoteListener implements Listener {
 
-    private final CashApp ca;
     private final Database db;
 
     public VoteListener() {
-        ca = CashApp.getPlugin();
-        db = ca.db;
+        db = CashApp.getPlugin().db;
     }
 
     @EventHandler
@@ -42,30 +32,37 @@ public class VoteListener implements Listener {
             db.resetStreak(id);
         }
 
-        //Count the vote
+        //Count the votes
         db.insertVote(id, event.getVoteNumber(), event.getVoteSite().getDisplayName());
-        int votes = db.getVotes(id);
+        int votes = db.getTotalVotes(id);
+        db.updateLastVote(id);
 
         switch (votes) {
             case 5:
                 sm(player, "You have voted 5 days in a row! Receiving rewards...");
+                giveRewards(5);
             case 10:
                 sm(player, "You have voted 10 days in a row! Receiving rewards...");
+                giveRewards(10);
             case 15:
                 sm(player, "You have voted 15 days in a row! Receiving rewards...");
+                giveRewards(15);
             case 20:
                 sm(player, "You have voted 20 days in a row! Receiving rewards...");
+                giveRewards(20);
             case 25:
                 sm(player, "You have voted 25 days in a row! Receiving rewards...");
+                giveRewards(25);
             case 30:
                 sm(player, "You have voted 30 days in a row! Receiving rewards...");
+                giveRewards(30);
             default:
                 if (votes > 30 ) sm(player, "You are " + (5 % (votes % 5)) + " days away from your next reward tier!");
         }
 
         if (votes > 30)  {
             sm(player, "You have voted more than 30 days in a row! Receiving rewards...");
-
+            giveRewards(31);
         }
 
     }
@@ -74,6 +71,8 @@ public class VoteListener implements Listener {
         player.sendMessage("§f[§aCash§bApp§f] " + message);
     }
 
+    private void giveRewards(int votes) {
 
+    }
 
 }

@@ -32,6 +32,7 @@ public class LoginListener implements Listener {
             ca.log("Version " + versions[0] + " available! You have " + versions[1] + ".");
         }
 
+        /* Check for voting streak status and send message if enabled for that user */
         if (db.userExistsInStreaks(id) && db.getStreakStatus(id)) {
             int streak = db.getStreak(id);
             if (streak == 1) event.getPlayer().sendMessage("[§aCash§bApp§f] Current vote streak: " + streak + " day");
