@@ -4,7 +4,6 @@ import doubleyoucash.eaplugin.commands.*;
 import doubleyoucash.eaplugin.database.Database;
 import doubleyoucash.eaplugin.listeners.LoginListener;
 import doubleyoucash.eaplugin.listeners.VoteListener;
-import net.milkbowl.vault.permission.Permission;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -29,7 +28,6 @@ public class CashApp extends JavaPlugin {
     public String serverID;
     public String mallMsg;
     public JavacordStart js;
-    public Permission perms;
     public Database db;
 
     public static CashApp getPlugin() { return getPlugin(CashApp.class); }
@@ -57,9 +55,6 @@ public class CashApp extends JavaPlugin {
              error("Error setting up database! Is there permissions issue preventing the database file creation?");
              e.printStackTrace();
          }
-
-        /* Permissions Loading */
-        setupPermissions();
 
         /* Config Parsing */
         if (parseConfig()) {
@@ -171,12 +166,6 @@ public class CashApp extends JavaPlugin {
 
         log("Config loaded!");
         return true;
-    }
-
-    private void setupPermissions() {
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        assert rsp != null;
-        perms = rsp.getProvider();
     }
 
     public String getConfigString(String entryName) {

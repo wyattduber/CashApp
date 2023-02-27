@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class STREAK implements CommandExecutor {
     private final CashApp ca;
     private final Database db;
 
+
     public STREAK() {
         ca = CashApp.getPlugin();
         db = ca.db;
@@ -25,7 +27,23 @@ public class STREAK implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String text, @NotNull String[] args) {
-        if (args.length < 1) return false;
+        String ADMIN_HELP_MESSAGE = "All of the above commands can be run on other players, with this format:\n" +
+                "/streak <subcommand> [args] <username>";
+        String BASIC_HELP_MESSAGE = """
+                Streak Sub-Command List:
+                /streak togglelogin - Toggle the login streak reminder
+                /streak totalvotes - Show how many total votes you have since streaks were released
+                /streak getvotes [#] - Shows a detailed list of votes with a custom list limit [#]
+                /streak getstreak - Shows your current streak
+                /streak lastvote - Shows the time of your last vote
+                """;
+        if (args.length < 1) {
+            sender.sendMessage(BASIC_HELP_MESSAGE);
+            if (sender.hasPermission("ca.streak.admin")) {
+                sender.sendMessage(ADMIN_HELP_MESSAGE);
+                return true;
+            } else return false;
+        }
 
         switch (args[0].toLowerCase()) {
             case "togglelogin" -> {
@@ -69,7 +87,10 @@ public class STREAK implements CommandExecutor {
                 }
             }
             case "getvotes" -> {
-                if (args.length == 2) {
+                if (args.length == 1) {
+                    if (sender instanceof Player player && player.hasPermission("ca.streak.getvotes")) getVotes(player, 5);
+                    else sender.sendMessage("§cYou don't have permission!");
+                } else if (args.length == 2) {
                     if (sender instanceof Player player && player.hasPermission("ca.streak.getvotes")) getVotes(player, Integer.parseInt(args[1]));
                     else sender.sendMessage("§cYou don't have permission!");
                 } else if (args.length == 3) {
@@ -128,6 +149,14 @@ public class STREAK implements CommandExecutor {
                     wrongArgAmount(sender);
                 }
             }
+            default -> {
+                sender.sendMessage("§cUnknown subcommand. Please read the list below:");
+                sender.sendMessage(BASIC_HELP_MESSAGE);
+                if (sender.hasPermission("ca.streak.admin")) {
+                    sender.sendMessage(ADMIN_HELP_MESSAGE);
+                    return true;
+                } else return false;
+            }
         }
         return true;
     }
@@ -164,25 +193,31 @@ public class STREAK implements CommandExecutor {
         }
     }
 
-    public void getStreak(Player player) {
+    private void getStreak(Player player) {
         int streak = db.getStreak(player.getUniqueId());
-        if (streak == 1) player.sendMessage("Current Vote Streak: " + db.getStreak(player.getUniqueId()) + " day");
-        else player.sendMessage("Current Vote Streak: " + db.getStreak(player.getUniqueId()) + " days");
+        if (streak == 1) player.sendMessage("Current Vote Streak: " + streak + " day");
+        else if (streak == -1) player.sendMessage("Current Vote Streak: 0 days");
+        else player.sendMessage("Current Vote Streak: " + streak + " days");
     }
 
-    public void getStreakOther(CommandSender sender, Player player) {
+    private void getStreakOther(CommandSender sender, Player player) {
         int streak = db.getStreak(player.getUniqueId());
         if (streak == 1) sender.sendMessage("Current Vote Streak for " + player.getName() + ": " + db.getStreak(player.getUniqueId()) + " day");
         else sender.sendMessage("Current Vote Streak for " + player.getName() + ": " + db.getStreak(player.getUniqueId()) + " days");
     }
 
-    public void getLastVote(Player player) {
+    private void getLastVote(Player player) {
         DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm:ss Z");
-        Date result = new Date(db.getLastVote(player.getUniqueId()));
+        long lastVote = db.getLastVote(player.getUniqueId());
+        if (lastVote == 0) {
+            player.sendMessage("No past votes!");
+            return;
+        }
+        Date result = new Date(lastVote);
         player.sendMessage("Time of Last Vote: " + simple.format(result));
     }
 
-    public void getLastVoteOther(CommandSender sender, Player player) {
+    private void getLastVoteOther(CommandSender sender, Player player) {
         DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm:ss Z");
         Date result = new Date(db.getLastVote(player.getUniqueId()));
         sender.sendMessage("Time of Last Vote for " + player.getName() + ": " + simple.format(result));

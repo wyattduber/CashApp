@@ -12,28 +12,41 @@ import java.util.UUID;
 public class VoteListener implements Listener {
 
     private final Database db;
+    private final CashApp ca;
 
     public VoteListener() {
+        ca = CashApp.getPlugin();
         db = CashApp.getPlugin().db;
     }
 
     @EventHandler
     public void onVote(PlayerVoteEvent event) {
-        Player player = event.getVotingPluginUser().getPlayer();
+        ca.log("VOTE DETECTED: " + event.getPlayer() + " voted on " + event.getVoteSite().getDisplayName());
+        Player player;
+        try {
+            player = ca.getServer().getPlayer(event.getPlayer());
+        } catch (NullPointerException e) {
+            ca.error("Error getting player named + " + event.getPlayer() + "!");
+            e.printStackTrace();
+            return;
+        }
+        assert player != null;
         UUID id = player.getUniqueId();
 
         // Check if the user exists in the streak database
         if (!db.userExistsInStreaks(id)) {
+            ca.log("PLAYER NOT IN DATABASE!");
             db.addUserStreakEntry(id);
         }
 
         // Check if the user lost their streak
         if ((System.currentTimeMillis() - db.getLastVote(id)) > 86400000) {
+            ca.log(player.getName() + " lost their streak of " + db.getStreak(id) + "!");
             db.resetStreak(id);
         }
 
         //Count the votes
-        db.insertVote(id, event.getVoteNumber(), event.getVoteSite().getDisplayName());
+        db.insertVote(id, event.getVoteSite().getDisplayName());
         int votes = db.getTotalVotes(id);
         db.updateLastVote(id);
 
