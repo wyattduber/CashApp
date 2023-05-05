@@ -25,7 +25,13 @@ public class ls implements CommandExecutor {
 
         Player player = (Player) commandSender;
 
-        int line = Integer.parseInt(strings[0]);
+        int line = 0;
+        try {
+            line = Integer.parseInt(strings[0]);
+        } catch (NumberFormatException e) {
+            commandSender.sendMessage("§cInvalid Line Number!");
+            return true;
+        }
         line--;
         if (line > 3 || line < 0) {
             player.sendMessage("§cLine Range must be between 1 and 4!");

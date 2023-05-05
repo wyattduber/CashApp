@@ -239,7 +239,7 @@ public class Database {
     }
 
     private void printDate(UUID id, long date) {
-        var zonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.of("Germany/Berlin"));
+        var zonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.of("Europe/Paris"));
         var formatter = DateTimeFormatter.ofPattern("hh:mm:ss yyyy-M-d");
         String result = zonedDateTime.format(formatter);
         ca.log(id + "'s last vote is at " + result);

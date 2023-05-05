@@ -69,7 +69,9 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new RMD());
             Objects.requireNonNull(this.getCommand("ls")).setExecutor((new ls()));
-            Objects.requireNonNull(this.getCommand("streak")).setExecutor(new STREAK());
+            STREAK s = new STREAK();
+            Objects.requireNonNull(this.getCommand("streak")).setExecutor(s);
+            Objects.requireNonNull(this.getCommand("streak")).setTabCompleter(s);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

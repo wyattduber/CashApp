@@ -2,19 +2,17 @@ package doubleyoucash.eaplugin.commands;
 
 import doubleyoucash.eaplugin.CashApp;
 import doubleyoucash.eaplugin.database.Database;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class STREAK implements CommandExecutor {
+public class STREAK implements TabExecutor {
 
     private final CashApp ca;
     private final Database db;
@@ -224,5 +222,19 @@ public class STREAK implements CommandExecutor {
     }
 
     private void wrongArgAmount(CommandSender sender) { sender.sendMessage("§cIncorrect amount of arguments!"); }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+
+        ArrayList<String> commands = new ArrayList<>();
+
+        commands.add("togglelogin");
+        commands.add("totalvotes");
+        commands.add("getvotes");
+        commands.add("getstreak");
+        commands.add("lastvote");
+
+        return commands;
+    }
 
 }
