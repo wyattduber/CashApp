@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import com.bencodez.votingplugin.events.PlayerVoteEvent;
 
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class VoteListener implements Listener {
@@ -35,22 +36,26 @@ public class VoteListener implements Listener {
 
         // Check if the user exists in the streak database
         if (!db.userExistsInStreaks(id)) {
-            ca.log("PLAYER NOT IN DATABASE!");
+            ca.log(player.getName() + " not in database. Adding to database...");
             db.addUserStreakEntry(id);
         }
 
         // Check if the user lost their streak
-        if ((System.currentTimeMillis() - db.getLastVote(id)) > 86400000) {
+        double hoursSinceLastVote = (System.currentTimeMillis() - db.getLastVoteTime(id)) / (1000.0 * 60 * 60);
+        if (hoursSinceLastVote >= 48.0) {
             ca.log(player.getName() + " lost their streak of " + db.getStreak(id) + "!");
             db.resetStreak(id);
+        } else if (hoursSinceLastVote >= 24.0) {
+            db.addDayToStreak(id);
         }
 
-        //Count the votes
+        // Add the vote to the votes and streak database
         db.insertVote(id, event.getVoteSite().getDisplayName());
-        int votes = db.getTotalVotes(id);
         db.updateLastVote(id);
 
-        switch (votes) {
+        int streak = db.getStreak(id);
+
+        switch (streak) {
             case 5:
                 sm(player, "You have voted 5 days in a row! Receiving rewards...");
                 giveRewards(5);
@@ -70,10 +75,10 @@ public class VoteListener implements Listener {
                 sm(player, "You have voted 30 days in a row! Receiving rewards...");
                 giveRewards(30);
             default:
-                if (votes > 30 ) sm(player, "You are " + (5 % (votes % 5)) + " days away from your next reward tier!");
+                if (streak > 30 ) sm(player, "You are " + (5 % (streak % 5)) + " days away from your next reward tier!");
         }
 
-        if (votes > 30)  {
+        if (streak > 30)  {
             sm(player, "You have voted more than 30 days in a row! Receiving rewards...");
             giveRewards(31);
         }
@@ -85,7 +90,7 @@ public class VoteListener implements Listener {
     }
 
     private void giveRewards(int votes) {
-
+        assert true; // TODO Add rewards here (config perhaps?)
     }
 
 }

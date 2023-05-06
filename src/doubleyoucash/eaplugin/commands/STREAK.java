@@ -89,8 +89,13 @@ public class STREAK implements TabExecutor {
                     if (sender instanceof Player player && player.hasPermission("ca.streak.getvotes")) getVotes(player, 5);
                     else sender.sendMessage("§cYou don't have permission!");
                 } else if (args.length == 2) {
-                    if (sender instanceof Player player && player.hasPermission("ca.streak.getvotes")) getVotes(player, Integer.parseInt(args[1]));
-                    else sender.sendMessage("§cYou don't have permission!");
+                    try {
+                        if (sender instanceof Player player && player.hasPermission("ca.streak.getvotes"))
+                            getVotes(player, Integer.parseInt(args[1]));
+                        else sender.sendMessage("§cYou don't have permission!");
+                    } catch (NumberFormatException e) {
+                        sender.sendMessage("§cIncorrect format! /streak getvotes [#]");
+                    }
                 } else if (args.length == 3) {
                     if (sender instanceof Player player && !player.hasPermission("ca.streak.getvotes.others")) {
                         player.sendMessage("§cYou don't have permission to use this command on others!");
@@ -206,7 +211,7 @@ public class STREAK implements TabExecutor {
 
     private void getLastVote(Player player) {
         DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm:ss Z");
-        long lastVote = db.getLastVote(player.getUniqueId());
+        long lastVote = db.getLastVoteTime(player.getUniqueId());
         if (lastVote == 0) {
             player.sendMessage("No past votes!");
             return;
@@ -217,7 +222,7 @@ public class STREAK implements TabExecutor {
 
     private void getLastVoteOther(CommandSender sender, Player player) {
         DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm:ss Z");
-        Date result = new Date(db.getLastVote(player.getUniqueId()));
+        Date result = new Date(db.getLastVoteTime(player.getUniqueId()));
         sender.sendMessage("Time of Last Vote for " + player.getName() + ": " + simple.format(result));
     }
 

@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.javacord</groupId>
             <artifactId>javacord</artifactId>
-            <version>3.7.0</version>
+            <version>3.8.0</version>
             <scope>compile</scope>
             <type>pom</type>
         </dependency>
@@ -87,6 +87,35 @@
         </resources>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.build.directory}</directory>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <excludes>
+                        <exclude>META-INF/*.SF</exclude>
+                        <exclude>META-INF/*.DSA</exclude>
+                        <exclude>META-INF/*.RSA</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
@@ -111,9 +140,6 @@
                         <exclude>com.github.Azim.libby:libby-bukkit:whateva</exclude>
                         <!--outputDirectory>${project.build.directory}/classes</outputDirectory-->
                     </excludes>
-                    <excludes>META-INF/*.SF</excludes>
-                    <excludes>META-INF/*.DSA</excludes>
-                    <excludes>META-INF/*.RSA</excludes>
                 </configuration>
                 <executions>
                     <execution>

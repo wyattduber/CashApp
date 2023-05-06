@@ -54,6 +54,7 @@ public class CashApp extends JavaPlugin {
          } catch (SQLException e) {
              error("Error setting up database! Is there permissions issue preventing the database file creation?");
              e.printStackTrace();
+             error(e.getSQLState());
          }
 
         /* Config Parsing */
@@ -89,6 +90,15 @@ public class CashApp extends JavaPlugin {
         reloadCustomConfig();
         config = getCustomConfig();
         saveCustomConfig();
+
+        /* Reload database if it's gone */
+        try {
+            if (!db.testConnection()) db = new Database("cashapp.sqlite.db");
+        } catch (SQLException e) {
+            error("Error setting up database! Is there permissions issue preventing the database file creation?");
+            e.printStackTrace();
+            error(e.getSQLState());
+        }
 
         if (parseConfig() || js == null) {
             js = new JavacordStart();

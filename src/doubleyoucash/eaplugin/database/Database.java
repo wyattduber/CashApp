@@ -30,7 +30,7 @@ public class Database {
 
     public void addUserStreakEntry(UUID minecraftID) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO streaks(minecraftid,totalVotes,lastvote,streak,showStreak) VALUES (?,?,?,?,?)");
+            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO streaks(minecraftid,totalVotes,lastVote,streak,showStreak) VALUES (?,?,?,?,?)");
             stmt.setString(1, minecraftID.toString());
             stmt.setInt(2, 1);
             stmt.setLong(3, System.currentTimeMillis());
@@ -44,14 +44,15 @@ public class Database {
     }
 
     public int getStreak(UUID minecraftID) {
-        ResultSet rs;
         int streak;
         try {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT streak FROM streaks WHERE minecraftid=?");
             stmt.setString(1, minecraftID.toString());
-            rs = stmt.executeQuery();
-            streak = rs.getInt("streak");
-            return streak;
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                streak = rs.getInt("streak");
+                return streak;
+            } else return -1;
         } catch (SQLException e) {
             //ca.error("Error getting the streak for user " + getName(minecraftID) + "!");
             //e.printStackTrace();
@@ -60,12 +61,15 @@ public class Database {
     }
 
     public boolean getStreakStatus(UUID minecraftID) {
-        ResultSet rs;
         try {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT showStreak FROM streaks WHERE minecraftid=?");
             stmt.setString(1, minecraftID.toString());
-            rs = stmt.executeQuery();
-            return rs.getInt("showStreak") == 1;
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("showStreak") == 1;
+            } else {
+                return false;
+            }
         } catch (SQLException e) {
             ca.error("Error getting showStreak boolean for user " + getName(minecraftID) + "!");
             e.printStackTrace();
@@ -78,6 +82,7 @@ public class Database {
             PreparedStatement stmt = dbcon.prepareStatement("UPDATE streaks SET showStreak=? WHERE minecraftid=?");
             if (!getStreakStatus(minecraftID)) stmt.setInt(1, 1);
             else stmt.setInt(1, 0);
+            stmt.setString(2, minecraftID.toString());
             stmt.execute();
             return getStreakStatus(minecraftID);
         } catch (SQLException e) {
@@ -87,10 +92,10 @@ public class Database {
         }
     }
 
-    private void addDayToStreak(UUID minecraftID) {
+    public void addDayToStreak(UUID minecraftID) {
         try {
             PreparedStatement stmt = dbcon.prepareStatement("UPDATE streaks SET streak=? WHERE minecraftid=?");
-            stmt.setInt(1, getStreak(minecraftID));
+            stmt.setInt(1, getStreak(minecraftID) + 1);
             stmt.setString(2, minecraftID.toString());
             stmt.execute();
         } catch (SQLException e) {
@@ -100,17 +105,16 @@ public class Database {
     }
 
     public boolean userExistsInStreaks(UUID minecraftID) {
-        ResultSet rs;
         try {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT streak FROM streaks WHERE minecraftid=?");
-            rs = stmt.executeQuery();
-            try {
+            stmt.setString(1, minecraftID.toString());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
                 int streak = rs.getInt("streak");
-                if (streak == 0) return false;
-            } catch (NullPointerException | SQLException e) {
+                return streak != 0;
+            } else {
                 return false;
             }
-            return true;
         } catch (SQLException e) {
             ca.error("Error checking for user " + getName(minecraftID) + " in database!");
             e.printStackTrace();
@@ -134,7 +138,6 @@ public class Database {
         try {
             PreparedStatement stmt = dbcon.prepareStatement("UPDATE streaks SET lastVote=? WHERE minecraftid=?");
             long time = System.currentTimeMillis();
-            printDate(minecraftID, time);
             stmt.setLong(1, time);
             stmt.execute();
         } catch (SQLException e) {
@@ -143,12 +146,11 @@ public class Database {
         }
     }
 
-    public long getLastVote(UUID minecraftID) {
-        ResultSet rs;
+    public long getLastVoteTime(UUID minecraftID) {
         try {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT lastVote FROM streaks WHERE minecraftid=?");
             stmt.setString(1, minecraftID.toString());
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
             return rs.getLong("lastVote");
         } catch (SQLException e) {
             //ca.error("Error getting the last vote time for user " + getName(minecraftID) + "!");
@@ -164,7 +166,9 @@ public class Database {
             stmt.setLong(2, System.currentTimeMillis());
             stmt.setString(3, voteSite);
             stmt.execute();
-            addDayToStreak(minecraftID);
+
+            // Add new vote to total votes for this user
+            addVoteToTotal(minecraftID);
         } catch (SQLException e) {
             ca.error("Error inserting a vote record for user " + getName(minecraftID) + "!");
             e.printStackTrace();
@@ -172,14 +176,13 @@ public class Database {
     }
 
     public ArrayList<String> getVotes(UUID minecraftID, int num) {
-        ResultSet rs;
         ArrayList<String> list = new ArrayList<>();
         list.add("Votes for user " + getName(minecraftID) + " (Limit " + num + ")");
         try {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT * FROM votes WHERE minecraftid=?");
-            rs = stmt.executeQuery();
+            stmt.setString(1, minecraftID.toString());
+            ResultSet rs = stmt.executeQuery();
             int i = 0;
-            ca.log(String.valueOf(rs.getInt("id")));
             while (rs.next() && i < num) {
                 i = addToList(rs, list, i);
             }
@@ -192,21 +195,19 @@ public class Database {
     }
 
     private int addToList(ResultSet rs, ArrayList<String> list, int i) throws SQLException {
-        var zonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(rs.getLong("voteDate")), ZoneId.of("Germany/Berlin"));
-        var formatter = DateTimeFormatter.ofPattern("hh:mm:ss yyyy-M-d");
+        var zonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(rs.getLong("voteDate")), ZoneId.of("Europe/Paris"));
+        var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy @ hh:mm:ss");
         String date = zonedDateTime.format(formatter);
-        list.add("Date: " + date + "; Site: " + rs.getString("site"));
-        ca.log("Date: " + date + "; Site: " + rs.getString("site"));
+        list.add(i + " - Date: " + date + "; Site: " + rs.getString("site"));
         i++;
         return i;
     }
 
     public ArrayList<String> getAllVotes(UUID minecraftID) {
-        ResultSet rs;
         ArrayList<String> list = new ArrayList<>();
         try {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT * FROM votes WHERE minecraftid=?");
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
             int total = 0;
             while (rs.next()) {
                 total = addToList(rs, list, total);
@@ -221,16 +222,42 @@ public class Database {
     }
 
     public int getTotalVotes(UUID minecraftID) {
-        ResultSet rs;
         try {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT totalVotes FROM streaks WHERE minecraftid=?");
             stmt.setString(1, minecraftID.toString());
-            rs = stmt.executeQuery();
-            return rs.getInt("totalVotes");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("totalVotes");
+            } else {
+                // handle the case when no rows are returned
+                return 0;
+            }
         } catch (SQLException e) {
             ca.error("Error fetching total vote number for user " + getName(minecraftID) + "!");
             e.printStackTrace();
             return 0;
+        }
+    }
+
+    public void addVoteToTotal(UUID minecraftID) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("UPDATE streaks SET totalVotes=? WHERE minecraftid=?");
+            stmt.setInt(1, getTotalVotes(minecraftID) + 1);
+            stmt.setString(2, minecraftID.toString());
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error adding a vote to the total votes for user " + getName(minecraftID) + "!");
+            e.printStackTrace();
+        }
+    }
+
+    public boolean testConnection() {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT totalVotes FROM streaks");
+            stmt.executeQuery();
+            return true;
+        } catch (SQLException e) {
+            return false;
         }
     }
 
