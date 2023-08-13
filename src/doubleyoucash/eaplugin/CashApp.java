@@ -6,7 +6,6 @@ import doubleyoucash.eaplugin.listeners.LoginListener;
 import doubleyoucash.eaplugin.listeners.VoteListener;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -27,6 +26,9 @@ public class CashApp extends JavaPlugin {
     public String botToken;
     public String serverID;
     public String mallMsg;
+    public boolean enableUsernameSync;
+    public boolean enableVoteStreak;
+    public HashMap<String, Integer> usersCurrentlySyncing;
     public JavacordStart js;
     public Database db;
 
@@ -34,9 +36,6 @@ public class CashApp extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
-        /* Use Libby */
-        //loadDependencies();
 
         /* Load and Initiate Configs */
         try {
@@ -70,9 +69,19 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new RMD());
             Objects.requireNonNull(this.getCommand("ls")).setExecutor((new ls()));
-            STREAK s = new STREAK();
-            Objects.requireNonNull(this.getCommand("streak")).setExecutor(s);
-            Objects.requireNonNull(this.getCommand("streak")).setTabCompleter(s);
+
+            if (enableVoteStreak) {
+                STREAK s = new STREAK();
+                Objects.requireNonNull(this.getCommand("streak")).setExecutor(s);
+                Objects.requireNonNull(this.getCommand("streak")).setTabCompleter(s);
+            }
+            
+            if (enableUsernameSync) {
+                SDU u = new SDU();
+                Objects.requireNonNull(this.getCommand("sdu")).setExecutor(u);
+                Objects.requireNonNull(this.getCommand("sdu")).setTabCompleter(u);
+                usersCurrentlySyncing = new HashMap<String, Integer>();
+            }
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -107,23 +116,11 @@ public class CashApp extends JavaPlugin {
         }
     }
 
-    /*public void loadDependencies() {
-        BukkitLibraryManager manager = new BukkitLibraryManager(this); //depends on the server core you are using
-        manager.addMavenCentral(); //there are also methods for other repositories
-        manager.fromGeneratedResource(this.getResource("AzimDP.json")).forEach(library->{
-            try {
-                manager.loadLibrary(library);
-            }catch(RuntimeException e) { // in case some of the libraries cant be found or dont have .jar file or etc
-                getLogger().info("Skipping download of\""+library+"\", it either doesnt exist or has no .jar file");
-            }
-        });
-    }*/
-
     public void initListeners() {
         try {
             new UpdateChecker(this, 88409).getVersion(version -> {
                 // Initializes Login Listener when no Updates
-                if (!this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                if (!getDescription().getVersion().equalsIgnoreCase(version)) {
                     versions[0] = version;
                     versions[1] = this.getDescription().getVersion();
                     getServer().getPluginManager().registerEvents(new LoginListener(true, versions), this);
@@ -176,12 +173,34 @@ public class CashApp extends JavaPlugin {
             warn("Invalid Mall Reminder Message! Please set the mall-remind-msg in the config.yml!");
         }
 
+        try {
+            enableUsernameSync = getConfigBoolean("enable-username-sync");
+            if (enableUsernameSync) log("Username Sync Enabled!");
+            else log("Username Sync Disabled!");
+        } catch (Exception e) {
+            saveDefaultConfig();
+            warn("Invalid Username Setting! Please set the enable-username-sync in the config.yml!");
+        }
+
+        try {
+            enableVoteStreak = getConfigBoolean("enable-vote-streak");
+            if (enableVoteStreak) log("Vote Streak Enabled!");
+            else log("Vote Streak Disabled!");
+        } catch (Exception e) {
+            saveDefaultConfig();
+            warn("Invalid Vote Streak Setting! Please set the enable-vote-streak in the config.yml!");
+        }
+
         log("Config loaded!");
         return true;
     }
 
     public String getConfigString(String entryName) {
         return config.getString(entryName);
+    }
+
+    public boolean getConfigBoolean(String entryName) {
+        return config.getBoolean(entryName);
     }
 
     public void reloadCustomConfig() {

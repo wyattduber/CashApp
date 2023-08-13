@@ -4,7 +4,7 @@ main: doubleyoucash.eaplugin.CashApp
 api-version: 1.18
 author: Wcash
 website: https://www.github.com/DoubleYouCash/CashApp
-depend: [VotingPlugin]
+softdepend: [VotingPlugin]
 
 commands:
   ca:
@@ -36,6 +36,11 @@ commands:
     description: Parent command for all streak-related commands
     usage: /streak <subcommand> <arg1> <arg2...>
     permission: ca.streak
+    permission-message: §cYou do not have permission!
+  sdu:
+    description: Discord username sync command
+    usage: /sdu <username> [#/unsync]
+    permission: ca.sdu
     permission-message: §cYou do not have permission!
 
 permissions:
@@ -116,4 +121,7 @@ permissions:
     default: op
   ca.streak.lastvote.others:
     description: Allows the use of the lastvote command on others
+    default: op
+  ca.sdu:
+    description: Allows the use of the /sdu command
     default: op

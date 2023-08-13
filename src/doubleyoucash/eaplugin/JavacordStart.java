@@ -1,9 +1,12 @@
 package doubleyoucash.eaplugin;
 
+import java.util.concurrent.ExecutionException;
+
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.server.Server;
+import org.javacord.api.entity.user.User;
 
 public class JavacordStart {
 
@@ -58,12 +61,36 @@ public class JavacordStart {
 
     }
 
+    public User checkUserExists(String username) {
+        try {
+            User user = api.getCachedUsersByNameIgnoreCase(username).iterator().next();
+            discordServer.requestMember(user).get().getId();
+            return user;
+        } catch (NullPointerException | InterruptedException | ExecutionException e) {
+            return null;
+        } 
+    }
+
     public void sendBOTMMessage(String username, String world, String x, String y, String z, String message) {
         String messageToSend = "Name: " + username + "\n" +
                                "World: " + world + "\n" +
                                "Co-Ords: " + x + " " + y + " " + z + "\n" +
                                "Other: " + message;
         botmChannel.sendMessage(messageToSend);
+    }
+
+    public int sendCode(User user) {
+        int code = (int) (Math.random() * 1000000);
+        user.openPrivateChannel().thenAccept(channel -> channel.sendMessage("Your code is: " + code)).join();
+        return code;
+    }
+
+    public void syncUsername(User user, String username) {
+        user.updateNickname(discordServer, username);
+    }
+
+    public void unsyncUsername(User user) {
+        user.updateNickname(discordServer, "");
     }
 
 }
