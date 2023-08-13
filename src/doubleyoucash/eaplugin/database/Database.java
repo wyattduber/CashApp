@@ -24,7 +24,7 @@ public class Database {
         stmt.execute();
         stmt = dbcon.prepareStatement("CREATE TABLE IF NOT EXISTS votes(id INT IDENTITY(1,1) PRIMARY KEY, minecraftid TEXT NOT NULL, voteDate BIGINT NOT NULL, site TEXT NOT NULL)");
         stmt.execute();
-        stmt = dbcon.prepareStatement("CREATE TABLE IF NOT EXISTS usernameSync(minecraftid TEXT NOT NULL, mcusername TEXT NOT NULL, discordid TEXT NOT NULL, discordusername TEXT NOT NULL, synced BIT NOT NULL)");
+        stmt = dbcon.prepareStatement("CREATE TABLE IF NOT EXISTS usernameSync(minecraftid TEXT NOT NULL, mcusername TEXT NOT NULL, discordid TEXT NOT NULL, isSynced BIT NOT NULL)");
         stmt.execute();
     }
 
@@ -270,40 +270,46 @@ public class Database {
     public void addSyncRecord(UUID minecraftid, String mcusername, long discordid, boolean isSynced) {
         try {
             PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO usernameSync(minecraftid,mcusername,discordid,isSynced) VALUES (?,?,?,?)");
-            stmt.setString(0, minecraftid.toString());
-            stmt.setString(1, mcusername);
-            stmt.setLong(2, discordid);
-            stmt.setBoolean(3, isSynced);
+            stmt.setString(1, minecraftid.toString());
+            stmt.setString(2, mcusername);
+            stmt.setString(3, Long.toString(discordid));
+            stmt.setBoolean(4, isSynced);
+            stmt.execute();
         } catch (SQLException e) {
             ca.error("Error adding a sync record for user " + getName(minecraftid) + "!");
+            e.printStackTrace();
         }
     }
 
     public void updateSyncRecord(UUID minecraftid, String mcusername, long discordid, boolean isSynced) {
         try {
             PreparedStatement stmt = dbcon.prepareStatement("UPDATE usernameSync SET mcusername=?,discordid=?,isSynced=? WHERE minecraftid=?");
-            stmt.setString(0, mcusername);
-            stmt.setLong(1, discordid);
-            stmt.setBoolean(2, isSynced);
-            stmt.setString(3, minecraftid.toString());
+            stmt.setString(1, mcusername);
+            stmt.setString(2, Long.toString(discordid));
+            stmt.setBoolean(3, isSynced);
+            stmt.setString(4, minecraftid.toString());
+            stmt.execute();
         } catch (SQLException e) {
             ca.error("Error updating a sync record for user " + getName(minecraftid) + "!");
+            e.printStackTrace();
         }
     }
 
     public void removeSyncRecord(UUID minecraftid) {
         try {
             PreparedStatement stmt = dbcon.prepareStatement("DELETE FROM usernameSync WHERE minecraftid=?");
-            stmt.setString(0, minecraftid.toString());
+            stmt.setString(1, minecraftid.toString());
+            stmt.execute();
         } catch (SQLException e) {
             ca.error("Error removing a sync record for user " + getName(minecraftid) + "!");
+            e.printStackTrace();
         }
     }
 
     public boolean isSynced(UUID minecraftid) {
         try {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT isSynced FROM usernameSync WHERE minecraftid=?");
-            stmt.setString(0, minecraftid.toString());
+            stmt.setString(1, minecraftid.toString());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getBoolean("isSynced");
@@ -318,28 +324,28 @@ public class Database {
         }
     }
 
-    public String getSyncedUsername(UUID minecraftid) {
+    public boolean userExistsInSync(UUID minecraftid) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT discordusername FROM usernameSync WHERE minecraftid=?");
-            stmt.setString(0, minecraftid.toString());
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT minecraftid FROM usernameSync WHERE minecraftid=?");
+            stmt.setString(1, minecraftid.toString());
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getString("discordusername");
+            if (!rs.wasNull()) {
+                return true;
             } else {
                 // handle the case when no rows are returned
-                return null;
+                return false;
             }
         } catch (SQLException e) {
-            ca.error("Error fetching synced username for user " + getName(minecraftid) + "!");
+            ca.error("Error fetching sync status for user " + getName(minecraftid) + "!");
             e.printStackTrace();
-            return null;
+            return false;
         }
     }
 
     public long getSyncedDiscordID(UUID minecraftid) {
         try {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT discordid FROM usernameSync WHERE minecraftid=?");
-            stmt.setString(0, minecraftid.toString());
+            stmt.setString(1, minecraftid.toString());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getLong("discordid");

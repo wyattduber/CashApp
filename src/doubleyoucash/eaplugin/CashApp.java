@@ -67,6 +67,8 @@ public class CashApp extends JavaPlugin {
         try {
             Objects.requireNonNull(this.getCommand("ca")).setExecutor(new CA());
             Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BOTM());
+            if (enableBuycraftMessages)
+                Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new RMD());
             Objects.requireNonNull(this.getCommand("ls")).setExecutor((new ls()));
