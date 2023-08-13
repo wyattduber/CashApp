@@ -127,6 +127,7 @@ public class SDU implements TabExecutor {
 
         ArrayList<String> commands = new ArrayList<>();
 
+        commands.add("discord_username");
         commands.add("#/unsync");
 
         return commands;

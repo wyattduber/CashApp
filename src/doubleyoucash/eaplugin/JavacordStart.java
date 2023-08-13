@@ -86,11 +86,11 @@ public class JavacordStart {
     }
 
     public void syncUsername(User user, String username) {
-        user.updateNickname(discordServer, username);
+        discordServer.updateNickname(user, username, "Username Sync");
     }
 
     public void unsyncUsername(User user) {
-        user.updateNickname(discordServer, "");
+        discordServer.updateNickname(user, "", "Username Unsync");
     }
 
 }
