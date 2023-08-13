@@ -18,10 +18,12 @@ public class SDU implements TabExecutor {
 
     private final CashApp ca;
     private final JavacordStart js;
+    private final Database db;
 
     public SDU() {
         ca = CashApp.getPlugin();
         js = ca.js;
+        db = ca.db;
     }
 
     /* §c */
@@ -60,7 +62,7 @@ public class SDU implements TabExecutor {
                 return true;
             }
 
-            if (player.hasPermission("ca.sdu")) startSync(player);
+            if (player.hasPermission("ca.sdu")) startSync(player, args[0]);
             else sender.sendMessage("§cYou must be a player to use this command!");
             return true;
         }
@@ -78,7 +80,16 @@ public class SDU implements TabExecutor {
                         player.sendMessage("§cYou are not linked to a Discord account! Please contact an admin.");
                         return true;
                     }
+                    if (!db.isSynced(player.getUniqueId())) {
+                        player.sendMessage("§cYou are not synced to a Discord account!");
+                        return true;
+                    }
+                    if (!Long.toString(db.getSyncedDiscordID(player.getUniqueId())).equals(user.getIdAsString())) {
+                        player.sendMessage("§cYou are not synced to that account!");
+                        return true;
+                    }
                     js.unsyncUsername(user);
+                    db.updateSyncRecord(player.getUniqueId(), username, user.getId(), false);
                     player.sendMessage("Your username has been unsynced!");
                 } else player.sendMessage("§cYou don't have permission to use this command!");
             }
@@ -87,7 +98,7 @@ public class SDU implements TabExecutor {
                     String username = player.getName();
                     User user = js.checkUserExists(username);
                     if (user == null) {
-                        player.sendMessage("§cYou are not linked to a Discord account! Please contact an admin.");
+                        player.sendMessage("§cThat Discord account does not exist!");
                         return true;
                     }
                     int code = 0;
@@ -99,9 +110,19 @@ public class SDU implements TabExecutor {
                     }
                     int savedCode = ca.usersCurrentlySyncing.get(username);
                     if (code == savedCode) {
-                        js.syncUsername(user, player.getName());
-                        player.sendMessage("Your username has been synced!");
+                        try {
+                            js.syncUsername(user, player.getName());
+                        } catch (Exception e) {
+                            player.sendMessage("§cAn error occurred while syncing your username! Please contact an admin.");
+                            return true;
+                        }
                         ca.usersCurrentlySyncing.remove(username);
+                        if (db.getSyncedUsername(player.getUniqueId()) == null) {
+                            db.addSyncRecord(player.getUniqueId(), player.getName(), user.getId(), true);
+                        } else {
+                            db.updateSyncRecord(player.getUniqueId(), player.getName(), user.getId(), true);
+                        }
+                        player.sendMessage("Your username has been synced!");
                     } else player.sendMessage("§cThe code you entered is incorrect! Please check your DM's for a code from the bot.");
                 } else player.sendMessage("§cYou don't have permission to use this command!");
             }
@@ -109,8 +130,7 @@ public class SDU implements TabExecutor {
         return true;
     }
 
-    public void startSync(Player player) {
-        String username = player.getName();
+    public void startSync(Player player, String username) {
         User user = js.checkUserExists(username);
         if (user == null) {
             player.sendMessage("§cYou are not linked to a Discord account! Please contact an admin.");
@@ -119,7 +139,7 @@ public class SDU implements TabExecutor {
         player.sendMessage("Please check your DM's for a code from the bot.");
         player.sendMessage("If you did not receive a DM, please contact an admin.");
         player.sendMessage("If you did receive a DM, please run /sdu confirm <code> in game.");
-        ca.usersCurrentlySyncing.put(username, js.sendCode(user));
+        ca.usersCurrentlySyncing.put(player.getName(), js.sendCode(user));
     } 
 
     @Override

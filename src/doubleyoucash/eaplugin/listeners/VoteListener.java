@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import com.bencodez.votingplugin.events.PlayerVoteEvent;
 
-import java.sql.SQLException;
 import java.util.UUID;
 
 public class VoteListener implements Listener {

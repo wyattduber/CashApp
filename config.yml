@@ -8,3 +8,5 @@ mall-remind-msg: Hello, mall re-rental has begun! Please contact an online staff
 enable-username-sync: false
 
 enable-vote-streaks: false
+
+enable-buycraft-messages: false

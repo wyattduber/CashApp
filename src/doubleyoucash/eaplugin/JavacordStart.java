@@ -1,5 +1,6 @@
 package doubleyoucash.eaplugin;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutionException;
 
 import org.javacord.api.DiscordApi;
@@ -7,6 +8,7 @@ import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
+import org.javacord.api.util.logging.ExceptionLogger;
 
 public class JavacordStart {
 
@@ -66,7 +68,7 @@ public class JavacordStart {
             User user = api.getCachedUsersByNameIgnoreCase(username).iterator().next();
             discordServer.requestMember(user).get().getId();
             return user;
-        } catch (NullPointerException | InterruptedException | ExecutionException e) {
+        } catch (NullPointerException | InterruptedException | ExecutionException | NoSuchElementException e) {
             return null;
         } 
     }
@@ -86,11 +88,11 @@ public class JavacordStart {
     }
 
     public void syncUsername(User user, String username) {
-        discordServer.updateNickname(user, username, "Username Sync");
+        discordServer.updateNickname(user, username, "Username Sync").exceptionally(ExceptionLogger.get());
     }
 
     public void unsyncUsername(User user) {
-        discordServer.updateNickname(user, "", "Username Unsync");
+        discordServer.updateNickname(user, "", "Username Unsync").exceptionally(ExceptionLogger.get());
     }
 
 }

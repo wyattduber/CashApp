@@ -28,6 +28,7 @@ public class CashApp extends JavaPlugin {
     public String mallMsg;
     public boolean enableUsernameSync;
     public boolean enableVoteStreak;
+    public boolean enableBuycraftMessages;
     public HashMap<String, Integer> usersCurrentlySyncing;
     public JavacordStart js;
     public Database db;
@@ -156,16 +157,6 @@ public class CashApp extends JavaPlugin {
         }
 
         try {
-            for (int i = 0; i < config.getStringList("staff-list").size(); i++) {
-                System.currentTimeMillis();
-                //staffUUID.add(i, getServer().getPlayerUniqueId(config.getStringList("staff-list").get(i)));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        try {
             mallMsg = getConfigString("mall-remind-msg");
             log("Mall Reminder Message Loaded!");
         } catch (Exception e) {
@@ -189,6 +180,15 @@ public class CashApp extends JavaPlugin {
         } catch (Exception e) {
             saveDefaultConfig();
             warn("Invalid Vote Streak Setting! Please set the enable-vote-streak in the config.yml!");
+        }
+
+        try {
+            enableBuycraftMessages = getConfigBoolean("enable-buycraft-messages");
+            if (enableBuycraftMessages) log("Buycraft Messages Enabled!");
+            else log("Buycraft Messages Disabled!");
+        } catch (Exception e) {
+            saveDefaultConfig();
+            warn("Invalid Buycraft Messages Setting! Please set the enable-buycraft-messages in the config.yml!");
         }
 
         log("Config loaded!");

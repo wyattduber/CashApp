@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class BCE implements CommandExecutor {
 
     private final String[] modPlusList = { "Cubemaster02", "GreenCreepyGhost", "Wcash", "Cobethel" };
-    private final String[] modList = { "PokedonGCG", "EchoingStar", "Anjulah", "Nindroid", "Scoutblade" };
+    private final String[] modList = { "PokedonGCG", "EchoingStar", "Anjulah", "Nindroid", "Scoutblade", "Mc_BoogyWoogy" };
     private final ConsoleCommandSender console;
 
     public BCE() {
