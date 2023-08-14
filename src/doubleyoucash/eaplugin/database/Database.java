@@ -311,12 +311,7 @@ public class Database {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT isSynced FROM usernameSync WHERE minecraftid=?");
             stmt.setString(1, minecraftid.toString());
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getBoolean("isSynced");
-            } else {
-                // handle the case when no rows are returned
-                return false;
-            }
+            return rs.getBoolean("isSynced");
         } catch (SQLException e) {
             ca.error("Error fetching sync status for user " + getName(minecraftid) + "!");
             e.printStackTrace();
@@ -329,12 +324,8 @@ public class Database {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT minecraftid FROM usernameSync WHERE minecraftid=?");
             stmt.setString(1, minecraftid.toString());
             ResultSet rs = stmt.executeQuery();
-            if (!rs.wasNull()) {
-                return true;
-            } else {
-                // handle the case when no rows are returned
-                return false;
-            }
+            // Use rs.next() to check if there are any rows in the result set
+            return rs.next();
         } catch (SQLException e) {
             ca.error("Error fetching sync status for user " + getName(minecraftid) + "!");
             e.printStackTrace();

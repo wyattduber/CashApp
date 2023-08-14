@@ -129,7 +129,7 @@ public class SDU implements TabExecutor {
                             return true;
                         }
                         ca.usersCurrentlySyncing.remove(username);
-                        if (!db.userExistsInStreaks(player.getUniqueId())) {
+                        if (!db.userExistsInSync(player.getUniqueId())) {
                             ca.log("Returned false! " + db.userExistsInStreaks(player.getUniqueId()));
                             db.addSyncRecord(player.getUniqueId(), player.getName(), user.getId(), true);
                         } else {
