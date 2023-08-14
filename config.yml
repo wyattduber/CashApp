@@ -1,12 +1,23 @@
 bot-token: "BOTTOKEN"
 server-id: "000000000000000000"
 
-staff-list: [ "GreenCreepyGhost", "Cubemaster02", "PokedonGCG", "Cobethel", "EchoEnvoyer", "Anjulah", "scoutblade", "Nindroid" ]
+mod-list: 
+  - Anjulah
+  - EchoingStar
+  - Mc_BoogyWoogy
+  - Nindroid
+  - scoutblade
+  - Tand_
+  - PokedonGCG
+
+mod-plus-list:
+  - Wcash
+  - GreenCreepyGhost
+  - Cubemaster02
+  - Cobethel
 
 mall-remind-msg: Hello, mall re-rental has begun! Please contact an online staff member to re-rent your stall, or do nothing and your stall will be emptied."
 
 enable-username-sync: false
-
 enable-vote-streaks: false
-
 enable-buycraft-messages: false

@@ -1,5 +1,7 @@
 package doubleyoucash.eaplugin.commands;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,14 +10,20 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import doubleyoucash.eaplugin.CashApp;
+
 public class BCE implements CommandExecutor {
 
-    private final String[] modPlusList = { "Cubemaster02", "GreenCreepyGhost", "Wcash", "Cobethel" };
-    private final String[] modList = { "PokedonGCG", "EchoingStar", "Anjulah", "Nindroid", "Scoutblade", "Mc_BoogyWoogy" };
+    private final CashApp ca;
+    private final List<String> modList;
+    private final List<String> modPlusList;
     private final ConsoleCommandSender console;
 
     public BCE() {
+        ca = CashApp.getPlugin();
         console = Bukkit.getServer().getConsoleSender();
+        modList = ca.modList;
+        modPlusList = ca.modPlusList;
     }
 
     @Override

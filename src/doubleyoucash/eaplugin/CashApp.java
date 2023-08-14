@@ -23,6 +23,8 @@ public class CashApp extends JavaPlugin {
     public File customConfigFile;
     public HashMap<UUID, File> voteFiles;
     public static String[] versions = new String[2];
+    public List<String> modList;
+    public List<String> modPlusList;
     public String botToken;
     public String serverID;
     public String mallMsg;
@@ -65,28 +67,9 @@ public class CashApp extends JavaPlugin {
 
         /* Commands */
         try {
-            Objects.requireNonNull(this.getCommand("ca")).setExecutor(new CA());
-            Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BOTM());
-            if (enableBuycraftMessages)
-                Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
-            Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
-            Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new RMD());
-            Objects.requireNonNull(this.getCommand("ls")).setExecutor((new ls()));
-
-            if (enableVoteStreak) {
-                STREAK s = new STREAK();
-                Objects.requireNonNull(this.getCommand("streak")).setExecutor(s);
-                Objects.requireNonNull(this.getCommand("streak")).setTabCompleter(s);
-            }
-            
-            if (enableUsernameSync) {
-                SDU u = new SDU();
-                Objects.requireNonNull(this.getCommand("sdu")).setExecutor(u);
-                Objects.requireNonNull(this.getCommand("sdu")).setTabCompleter(u);
-                usersCurrentlySyncing = new HashMap<String, Integer>();
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+            initCommands();
+        } catch (Exception e) {
+            error("Error setting up commands! Contact the developer if you cannot fix this issue.");
         }
 
     }
@@ -159,6 +142,17 @@ public class CashApp extends JavaPlugin {
         }
 
         try {
+            modList = getConfig().getStringList("mod-list");
+            modPlusList = getConfig().getStringList("mod-plus-list");
+            System.out.println(Arrays.toString(modList.toArray()));
+            System.out.println(Arrays.toString(modPlusList.toArray()));
+        } catch (Exception e) {
+            saveDefaultConfig();
+            warn("Invalid Staff List! Please enter a valid Staff List in config.yml and reload the plugin.");
+            return false;
+        }
+
+        try {
             mallMsg = getConfigString("mall-remind-msg");
             log("Mall Reminder Message Loaded!");
         } catch (Exception e) {
@@ -195,6 +189,33 @@ public class CashApp extends JavaPlugin {
 
         log("Config loaded!");
         return true;
+    }
+
+    public void initCommands() {
+        try {
+            Objects.requireNonNull(this.getCommand("ca")).setExecutor(new CA());
+            Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BOTM());
+            if (enableBuycraftMessages)
+                Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
+            Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
+            Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new RMD());
+            Objects.requireNonNull(this.getCommand("ls")).setExecutor((new ls()));
+
+            if (enableVoteStreak) {
+                STREAK s = new STREAK();
+                Objects.requireNonNull(this.getCommand("streak")).setExecutor(s);
+                Objects.requireNonNull(this.getCommand("streak")).setTabCompleter(s);
+            }
+            
+            if (enableUsernameSync) {
+                SDU u = new SDU();
+                Objects.requireNonNull(this.getCommand("sdu")).setExecutor(u);
+                Objects.requireNonNull(this.getCommand("sdu")).setTabCompleter(u);
+                usersCurrentlySyncing = new HashMap<String, Integer>();
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getConfigString(String entryName) {
