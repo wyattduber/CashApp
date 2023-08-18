@@ -36,11 +36,11 @@
     </repositories>
 
     <dependencies>
-        <dependency>
+        <!--<dependency>
             <groupId>com.github.Azim.libby</groupId>
             <artifactId>libby-bukkit</artifactId>
             <version>53954e3276</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
@@ -51,7 +51,7 @@
             <groupId>org.javacord</groupId>
             <artifactId>javacord</artifactId>
             <version>3.8.0</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
             <type>pom</type>
         </dependency>
         <dependency>
@@ -65,11 +65,13 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>16.0.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.byteflux</groupId>
             <artifactId>libby-bukkit</artifactId> <!-- Replace bukkit if you're using another platform -->
             <version>1.2.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -97,6 +99,14 @@
                         </relocation>
                     </relocations>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 			<!-- Make a Jar -->
 			<plugin>

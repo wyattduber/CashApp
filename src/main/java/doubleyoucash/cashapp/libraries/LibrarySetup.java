@@ -4,6 +4,7 @@ import doubleyoucash.cashapp.CashApp;
 import net.byteflux.libby.BukkitLibraryManager;
 import net.byteflux.libby.Library;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,8 +14,10 @@ public class LibrarySetup implements AbstractLibraryLoader<Library, BukkitLibrar
 
     @Override
     public List<Library> initLibraries() {
-        return Collections.singletonList(
-                createLibrary(LibraryConfig.JAVACORD));
+        return Arrays.asList(
+                createLibrary(LibraryConfig.JAVACORD_API),
+                createLibrary(LibraryConfig.JAVACORD_CORE)
+        );
     }
 
     @Override
@@ -29,7 +32,7 @@ public class LibrarySetup implements AbstractLibraryLoader<Library, BukkitLibrar
     }
 
     public Library createLibrary(LibraryObject libraryObject) {
-        return Library.builder().groupId(libraryObject.groupID()).artifactId(libraryObject.artifactID()).version(libraryObject.version()).relocate(libraryObject.oldRelocation(), libraryObject.newRelocation()).checksum("Base64-encoded SHA-256 checksum").build();
+        return Library.builder().groupId(libraryObject.groupID()).artifactId(libraryObject.artifactID()).version(libraryObject.version()).relocate(libraryObject.oldRelocation(), libraryObject.newRelocation()).build();
     }
 
 }
