@@ -36,11 +36,12 @@
     </repositories>
 
     <dependencies>
-        <!--<dependency>
+        <dependency>
             <groupId>com.github.Azim.libby</groupId>
             <artifactId>libby-bukkit</artifactId>
             <version>53954e3276</version>
-        </dependency>-->
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
@@ -69,7 +70,7 @@
         </dependency>
         <dependency>
             <groupId>net.byteflux</groupId>
-            <artifactId>libby-bukkit</artifactId> <!-- Replace bukkit if you're using another platform -->
+            <artifactId>libby-bukkit</artifactId>
             <version>1.2.0</version>
             <scope>compile</scope>
         </dependency>
@@ -125,6 +126,27 @@
 					 <outputDirectory>/home/wyatt/Desktop/server/plugins</outputDirectory>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>com.github.Azim</groupId>
+                <artifactId>azimdp-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <configuration>
+                    <ignoreVersions>true</ignoreVersions>
+                    <beautify>true</beautify>
+                    <path>AzimDP.json</path>
+                    <excludes>
+                        <exclude>groupId:artifactId:version</exclude>
+                        <exclude>com.github.Azim.libby:libby-bukkit:ignored</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate-dependency-list</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
 	</build>
 </project>

@@ -12,10 +12,10 @@ public class LibraryConfig {
     /*public static LibraryObject JAVACORD = new LibraryObject("org.javacord", "javacord", "3.8.0", "javacord_api",
             "org.javacord", "libs.org.javacord");*/
 
-    public static LibraryObject JAVACORD_API = new LibraryObject("org.javacord", "javacord-api", "3.8.0", "javacord_api",
+    public static LibraryObject JAVACORD_API = new LibraryObject("org.javacord", "javacord-api", "3.8.0",
             "org.javacord-api", "libs.org.javacord-api");
 
-    public static LibraryObject JAVACORD_CORE = new LibraryObject("org.javacord", "javacord-core", "3.8.0", "javacord_core",
+    public static LibraryObject JAVACORD_CORE = new LibraryObject("org.javacord", "javacord-core", "3.8.0",
             "org.javacord-core", "libs.org.javacord-core");
 
 }

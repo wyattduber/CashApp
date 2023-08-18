@@ -5,7 +5,7 @@ import doubleyoucash.cashapp.database.Database;
 import doubleyoucash.cashapp.libraries.LibrarySetup;
 import doubleyoucash.cashapp.listeners.LoginListener;
 import doubleyoucash.cashapp.listeners.VoteListener;
-//import net.byteflux.libby.BukkitLibraryManager;
+import net.byteflux.libby.BukkitLibraryManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,7 +45,6 @@ public class CashApp extends JavaPlugin {
         //loadDependencies();
         LibrarySetup librarySetup = new LibrarySetup();
         librarySetup.loadLibraries();
-
         /* Load and Initiate Configs */
         try {
             reloadCustomConfig();
