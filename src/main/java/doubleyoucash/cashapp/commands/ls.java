@@ -1,4 +1,4 @@
-package doubleyoucash.eaplugin.commands;
+package doubleyoucash.cashapp.commands;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;

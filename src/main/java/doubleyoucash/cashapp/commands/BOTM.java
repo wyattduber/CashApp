@@ -1,7 +1,7 @@
-package doubleyoucash.eaplugin.commands;
+package doubleyoucash.cashapp.commands;
 
-import doubleyoucash.eaplugin.CashApp;
-import doubleyoucash.eaplugin.JavacordStart;
+import doubleyoucash.cashapp.CashApp;
+import doubleyoucash.cashapp.JavacordStart;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

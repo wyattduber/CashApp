@@ -1,9 +1,11 @@
-package doubleyoucash.eaplugin;
+package doubleyoucash.cashapp;
 
-import doubleyoucash.eaplugin.commands.*;
-import doubleyoucash.eaplugin.database.Database;
-import doubleyoucash.eaplugin.listeners.LoginListener;
-import doubleyoucash.eaplugin.listeners.VoteListener;
+import doubleyoucash.cashapp.commands.*;
+import doubleyoucash.cashapp.database.Database;
+import doubleyoucash.cashapp.libraries.LibrarySetup;
+import doubleyoucash.cashapp.listeners.LoginListener;
+import doubleyoucash.cashapp.listeners.VoteListener;
+//import net.byteflux.libby.BukkitLibraryManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,7 +23,6 @@ public class CashApp extends JavaPlugin {
 
     public FileConfiguration config;
     public File customConfigFile;
-    public HashMap<UUID, File> voteFiles;
     public static String[] versions = new String[2];
     public List<String> modList;
     public List<String> modPlusList;
@@ -39,6 +40,11 @@ public class CashApp extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        /* Load Dependencies */
+        //loadDependencies();
+        LibrarySetup librarySetup = new LibrarySetup();
+        librarySetup.loadLibraries();
 
         /* Load and Initiate Configs */
         try {
@@ -81,6 +87,18 @@ public class CashApp extends JavaPlugin {
         }
     }
 
+    /*public void loadDependencies() {
+        BukkitLibraryManager manager = new BukkitLibraryManager(this); //depends on the server core you are using
+        manager.addMavenCentral(); //there are also methods for other repositories
+        manager.fromGeneratedResource(this.getResource("AzimDP.json")).forEach(library->{
+            try {
+                manager.loadLibrary(library);
+            }catch(RuntimeException e) { // in case some of the libraries cant be found or dont have .jar file or etc
+                getLogger().info("Skipping download of\""+library+"\", it either doesnt exist or has no .jar file");
+            }
+        });
+    }*/
+
     public void reload() {
         reloadCustomConfig();
         config = getCustomConfig();
@@ -88,7 +106,8 @@ public class CashApp extends JavaPlugin {
 
         /* Reload database if it's gone */
         try {
-            if (!db.testConnection()) db = new Database("cashapp.sqlite.db");
+            if (!db.testConnection())
+                if (db.getDbPath().isEmpty() || db.getDbPath() == null) new Database("cashapp.sqlite.db");
         } catch (SQLException e) {
             error("Error setting up database! Is there permissions issue preventing the database file creation?");
             e.printStackTrace();
@@ -103,21 +122,8 @@ public class CashApp extends JavaPlugin {
     }
 
     public void initListeners() {
-        try {
-            new UpdateChecker(this, 88409).getVersion(version -> {
-                // Initializes Login Listener when no Updates
-                if (!getDescription().getVersion().equalsIgnoreCase(version)) {
-                    versions[0] = version;
-                    versions[1] = this.getDescription().getVersion();
-                    getServer().getPluginManager().registerEvents(new LoginListener(true, versions), this);
-                } else {
-                    getServer().getPluginManager().registerEvents(new LoginListener(false, versions), this);
-                }
-                getServer().getPluginManager().registerEvents(new VoteListener(), this);
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        getServer().getPluginManager().registerEvents(new LoginListener(), this);
+        getServer().getPluginManager().registerEvents(new VoteListener(), this);
         log("Minecraft Listeners Loaded!");
     }
 

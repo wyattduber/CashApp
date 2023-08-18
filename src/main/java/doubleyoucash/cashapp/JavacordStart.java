@@ -1,4 +1,4 @@
-package doubleyoucash.eaplugin;
+package doubleyoucash.cashapp;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutionException;

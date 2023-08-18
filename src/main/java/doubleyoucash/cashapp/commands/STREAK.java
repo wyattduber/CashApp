@@ -1,7 +1,7 @@
-package doubleyoucash.eaplugin.commands;
+package doubleyoucash.cashapp.commands;
 
-import doubleyoucash.eaplugin.CashApp;
-import doubleyoucash.eaplugin.database.Database;
+import doubleyoucash.cashapp.CashApp;
+import doubleyoucash.cashapp.database.Database;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

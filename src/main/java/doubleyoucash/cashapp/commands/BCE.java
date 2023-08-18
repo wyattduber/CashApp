@@ -1,4 +1,4 @@
-package doubleyoucash.eaplugin.commands;
+package doubleyoucash.cashapp.commands;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import doubleyoucash.eaplugin.CashApp;
+import doubleyoucash.cashapp.CashApp;
 
 public class BCE implements CommandExecutor {
 

@@ -1,6 +1,6 @@
-package doubleyoucash.eaplugin.database;
+package doubleyoucash.cashapp.database;
 
-import doubleyoucash.eaplugin.CashApp;
+import doubleyoucash.cashapp.CashApp;
 
 import java.sql.*;
 import java.time.format.DateTimeFormatter;

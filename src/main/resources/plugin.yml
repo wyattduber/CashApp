@@ -1,7 +1,7 @@
 name: CashApp
-version: 1.1.0
-main: doubleyoucash.eaplugin.CashApp
-api-version: 1.18
+version: 1.2.0
+main: doubleyoucash.cashapp.CashApp
+api-version: 1.20
 author: Wcash
 website: https://www.github.com/DoubleYouCash/CashApp
 softdepend: [VotingPlugin]

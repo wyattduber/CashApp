@@ -1,17 +1,14 @@
-package doubleyoucash.eaplugin.commands;
+package doubleyoucash.cashapp.commands;
 
-import doubleyoucash.eaplugin.CashApp;
-import doubleyoucash.eaplugin.JavacordStart;
-import doubleyoucash.eaplugin.database.Database;
+import doubleyoucash.cashapp.CashApp;
+import doubleyoucash.cashapp.JavacordStart;
+import doubleyoucash.cashapp.database.Database;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.javacord.api.entity.user.User;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class SDU implements TabExecutor {

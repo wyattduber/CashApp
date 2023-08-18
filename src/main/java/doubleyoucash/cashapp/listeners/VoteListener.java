@@ -1,7 +1,7 @@
-package doubleyoucash.eaplugin.listeners;
+package doubleyoucash.cashapp.listeners;
 
-import doubleyoucash.eaplugin.CashApp;
-import doubleyoucash.eaplugin.database.Database;
+import doubleyoucash.cashapp.CashApp;
+import doubleyoucash.cashapp.database.Database;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
