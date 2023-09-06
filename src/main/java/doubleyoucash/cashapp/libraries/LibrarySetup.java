@@ -41,6 +41,9 @@ public class LibrarySetup implements AbstractLibraryLoader<Library, BukkitLibrar
     @Override
     public void loadLibraries() {
         bukkitLibraryManager.addMavenCentral();
+        bukkitLibraryManager.addMavenLocal();
+        bukkitLibraryManager.addJCenter();
+        bukkitLibraryManager.addJitPack();
         initLibraries().forEach(bukkitLibraryManager::loadLibrary);
         /*bukkitLibraryManager.fromGeneratedResource(ca.getResource("AzimDP.json")).forEach(library->{
             try {
