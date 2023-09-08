@@ -74,6 +74,13 @@
             <version>1.2.0</version>
             <scope>compile</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.2</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -97,6 +104,18 @@
                         <relocation>
                             <pattern>net.byteflux.libby</pattern>
                             <shadedPattern>libs.net.byteflux.libby</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.fasterxml.jackson</pattern>
+                            <shadedPattern>libs.com.fasterxml.jackson</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.javacord.javacord.api</pattern>
+                            <shadedPattern>relocated.org.javacord.javacord.api</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.javacord.javacord.core</pattern>
+                            <shadedPattern>relocated.org.javacord.javacord.core</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
