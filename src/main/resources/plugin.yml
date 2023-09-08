@@ -4,7 +4,7 @@ main: doubleyoucash.cashapp.CashApp
 api-version: 1.20
 author: Wcash
 website: https://www.github.com/DoubleYouCash/CashApp
-softdepend: [VotingPlugin]
+depend: [VotingPlugin]
 
 commands:
   ca:

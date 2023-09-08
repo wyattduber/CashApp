@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import doubleyoucash.cashapp.CashApp;
 import net.byteflux.libby.BukkitLibraryManager;
 import net.byteflux.libby.Library;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,6 +41,9 @@ public class LibrarySetup implements AbstractLibraryLoader<Library, BukkitLibrar
     @Override
     public void loadLibraries() {
         bukkitLibraryManager.addMavenCentral();
+        bukkitLibraryManager.addMavenLocal();
+        bukkitLibraryManager.addJCenter();
+        bukkitLibraryManager.addJitPack();
         initLibraries().forEach(bukkitLibraryManager::loadLibrary);
         /*bukkitLibraryManager.fromGeneratedResource(ca.getResource("AzimDP.json")).forEach(library->{
             try {
@@ -59,7 +60,7 @@ public class LibrarySetup implements AbstractLibraryLoader<Library, BukkitLibrar
     }
 
     public Library createLibrary(LibraryObject libraryObject) {
-        return Library.builder().groupId(libraryObject.groupID()).artifactId(libraryObject.artifactID()).version(libraryObject.version()).relocate(libraryObject.oldRelocation(), libraryObject.newRelocation()).build();
+        return Library.builder().groupId(libraryObject.groupId()).artifactId(libraryObject.artifactId()).version(libraryObject.version()).relocate(libraryObject.oldRelocation(), libraryObject.newRelocation()).build();
     }
 
     private File getAzimFile() throws IOException {
