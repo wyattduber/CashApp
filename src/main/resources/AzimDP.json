@@ -1,457 +1,121 @@
 [
   {
-    "groupID": "com.google.guava",
-    "artifactID": "guava",
-    "version": "31.1-jre",
-    "oldRelocation": "com.google.guava",
-    "newRelocation": "relocated.com.google.guava"
-  },
-  {
-    "groupID": "com.google.guava",
-    "artifactID": "failureaccess",
-    "version": "1.0.1",
-    "oldRelocation": "com.google.guava",
-    "newRelocation": "relocated.com.google.guava"
-  },
-  {
-    "groupID": "com.google.guava",
-    "artifactID": "listenablefuture",
-    "version": "9999.0-empty-to-avoid-conflict-with-guava",
-    "oldRelocation": "com.google.guava",
-    "newRelocation": "relocated.com.google.guava"
-  },
-  {
-    "groupID": "com.google.code.findbugs",
-    "artifactID": "jsr305",
-    "version": "3.0.2",
-    "oldRelocation": "com.google.code.findbugs",
-    "newRelocation": "relocated.com.google.code.findbugs"
-  },
-  {
-    "groupID": "com.google.errorprone",
-    "artifactID": "error_prone_annotations",
-    "version": "2.11.0",
-    "oldRelocation": "com.google.errorprone",
-    "newRelocation": "relocated.com.google.errorprone"
-  },
-  {
-    "groupID": "com.google.j2objc",
-    "artifactID": "j2objc-annotations",
-    "version": "1.3",
-    "oldRelocation": "com.google.j2objc",
-    "newRelocation": "relocated.com.google.j2objc"
-  },
-  {
-    "groupID": "com.google.code.gson",
-    "artifactID": "gson",
-    "version": "2.10",
-    "oldRelocation": "com.google.code.gson",
-    "newRelocation": "relocated.com.google.code.gson"
-  },
-  {
-    "groupID": "net.md-5",
-    "artifactID": "bungeecord-chat",
-    "version": "1.20-R0.1",
-    "oldRelocation": "net.md-5",
-    "newRelocation": "relocated.net.md-5"
-  },
-  {
-    "groupID": "org.yaml",
-    "artifactID": "snakeyaml",
-    "version": "2.0",
-    "oldRelocation": "org.yaml",
-    "newRelocation": "relocated.org.yaml"
-  },
-  {
-    "groupID": "org.joml",
-    "artifactID": "joml",
-    "version": "1.10.5",
-    "oldRelocation": "org.joml",
-    "newRelocation": "relocated.org.joml"
-  },
-  {
-    "groupID": "com.googlecode.json-simple",
-    "artifactID": "json-simple",
-    "version": "1.1.1",
-    "oldRelocation": "com.googlecode.json-simple",
-    "newRelocation": "relocated.com.googlecode.json-simple"
-  },
-  {
-    "groupID": "it.unimi.dsi",
-    "artifactID": "fastutil",
-    "version": "8.5.6",
-    "oldRelocation": "it.unimi.dsi",
-    "newRelocation": "relocated.it.unimi.dsi"
-  },
-  {
-    "groupID": "org.apache.logging.log4j",
-    "artifactID": "log4j-api",
-    "version": "2.17.1",
-    "oldRelocation": "org.apache.logging.log4j",
-    "newRelocation": "relocated.org.apache.logging.log4j"
-  },
-  {
-    "groupID": "org.slf4j",
-    "artifactID": "slf4j-api",
-    "version": "1.8.0-beta4",
-    "oldRelocation": "org.slf4j",
-    "newRelocation": "relocated.org.slf4j"
-  },
-  {
-    "groupID": "org.apache.maven",
-    "artifactID": "maven-resolver-provider",
-    "version": "3.8.5",
-    "oldRelocation": "org.apache.maven",
-    "newRelocation": "relocated.org.apache.maven"
-  },
-  {
-    "groupID": "org.apache.maven",
-    "artifactID": "maven-model",
-    "version": "3.8.5",
-    "oldRelocation": "org.apache.maven",
-    "newRelocation": "relocated.org.apache.maven"
-  },
-  {
-    "groupID": "org.apache.maven",
-    "artifactID": "maven-model-builder",
-    "version": "3.8.5",
-    "oldRelocation": "org.apache.maven",
-    "newRelocation": "relocated.org.apache.maven"
-  },
-  {
-    "groupID": "org.codehaus.plexus",
-    "artifactID": "plexus-interpolation",
-    "version": "1.26",
-    "oldRelocation": "org.codehaus.plexus",
-    "newRelocation": "relocated.org.codehaus.plexus"
-  },
-  {
-    "groupID": "org.apache.maven",
-    "artifactID": "maven-artifact",
-    "version": "3.8.5",
-    "oldRelocation": "org.apache.maven",
-    "newRelocation": "relocated.org.apache.maven"
-  },
-  {
-    "groupID": "org.apache.maven",
-    "artifactID": "maven-builder-support",
-    "version": "3.8.5",
-    "oldRelocation": "org.apache.maven",
-    "newRelocation": "relocated.org.apache.maven"
-  },
-  {
-    "groupID": "org.eclipse.sisu",
-    "artifactID": "org.eclipse.sisu.inject",
-    "version": "0.3.5",
-    "oldRelocation": "org.eclipse.sisu",
-    "newRelocation": "relocated.org.eclipse.sisu"
-  },
-  {
-    "groupID": "org.apache.maven",
-    "artifactID": "maven-repository-metadata",
-    "version": "3.8.5",
-    "oldRelocation": "org.apache.maven",
-    "newRelocation": "relocated.org.apache.maven"
-  },
-  {
-    "groupID": "org.apache.maven.resolver",
-    "artifactID": "maven-resolver-api",
-    "version": "1.6.3",
-    "oldRelocation": "org.apache.maven.resolver",
-    "newRelocation": "relocated.org.apache.maven.resolver"
-  },
-  {
-    "groupID": "org.apache.maven.resolver",
-    "artifactID": "maven-resolver-spi",
-    "version": "1.6.3",
-    "oldRelocation": "org.apache.maven.resolver",
-    "newRelocation": "relocated.org.apache.maven.resolver"
-  },
-  {
-    "groupID": "org.apache.maven.resolver",
-    "artifactID": "maven-resolver-util",
-    "version": "1.6.3",
-    "oldRelocation": "org.apache.maven.resolver",
-    "newRelocation": "relocated.org.apache.maven.resolver"
-  },
-  {
-    "groupID": "org.apache.maven.resolver",
-    "artifactID": "maven-resolver-impl",
-    "version": "1.6.3",
-    "oldRelocation": "org.apache.maven.resolver",
-    "newRelocation": "relocated.org.apache.maven.resolver"
-  },
-  {
-    "groupID": "org.apache.commons",
-    "artifactID": "commons-lang3",
-    "version": "3.8.1",
-    "oldRelocation": "org.apache.commons",
-    "newRelocation": "relocated.org.apache.commons"
-  },
-  {
-    "groupID": "org.codehaus.plexus",
-    "artifactID": "plexus-utils",
-    "version": "3.3.0",
-    "oldRelocation": "org.codehaus.plexus",
-    "newRelocation": "relocated.org.codehaus.plexus"
-  },
-  {
-    "groupID": "javax.inject",
-    "artifactID": "javax.inject",
-    "version": "1",
-    "oldRelocation": "javax.inject",
-    "newRelocation": "relocated.javax.inject"
-  },
-  {
-    "groupID": "net.kyori",
-    "artifactID": "adventure-api",
-    "version": "4.14.0",
-    "oldRelocation": "net.kyori",
-    "newRelocation": "relocated.net.kyori"
-  },
-  {
-    "groupID": "net.kyori",
-    "artifactID": "adventure-key",
-    "version": "4.14.0",
-    "oldRelocation": "net.kyori.adventure.key",
-    "newRelocation": "relocated.net.kyori.adventure.key"
-  },
-  {
-    "groupID": "net.kyori",
-    "artifactID": "examination-api",
-    "version": "1.3.0",
-    "oldRelocation": "net.kyori.examination.api",
-    "newRelocation": "relocated.net.kyori.examination.api"
-  },
-  {
-    "groupID": "net.kyori",
-    "artifactID": "examination-string",
-    "version": "1.3.0",
-    "oldRelocation": "net.kyori.examination.string",
-    "newRelocation": "relocated.net.kyori.examination.string"
-  },
-  {
-    "groupID": "net.kyori",
-    "artifactID": "adventure-text-minimessage",
-    "version": "4.14.0",
-    "oldRelocation": "net.kyori.adventure.text.minimessage",
-    "newRelocation": "relocated.net.kyori.adventure.text.minimessage"
-  },
-  {
-    "groupID": "net.kyori",
-    "artifactID": "adventure-text-serializer-gson",
-    "version": "4.14.0",
-    "oldRelocation": "net.kyori.adventure.text.serializer.gson",
-    "newRelocation": "relocated.net.kyori.adventure.text.serializer.gson"
-  },
-  {
-    "groupID": "net.kyori",
-    "artifactID": "adventure-text-serializer-json",
-    "version": "4.14.0",
-    "oldRelocation": "net.kyori.adventure.text.serializer.json",
-    "newRelocation": "relocated.net.kyori.adventure.text.serializer.json"
-  },
-  {
-    "groupID": "net.kyori",
-    "artifactID": "adventure-text-serializer-legacy",
-    "version": "4.14.0",
-    "oldRelocation": "net.kyori.adventure.text.serializer.legacy",
-    "newRelocation": "relocated.net.kyori.adventure.text.serializer.legacy"
-  },
-  {
-    "groupID": "net.kyori",
-    "artifactID": "adventure-text-serializer-plain",
-    "version": "4.14.0",
-    "oldRelocation": "net.kyori.adventure.text.serializer.plain",
-    "newRelocation": "relocated.net.kyori.adventure.text.serializer.plain"
-  },
-  {
-    "groupID": "net.kyori",
-    "artifactID": "adventure-text-logger-slf4j",
-    "version": "4.14.0",
-    "oldRelocation": "net.kyori.adventure.text.logger.slf4j",
-    "newRelocation": "relocated.net.kyori.adventure.text.logger.slf4j"
-  },
-  {
-    "groupID": "org.checkerframework",
-    "artifactID": "checker-qual",
-    "version": "3.21.0",
-    "oldRelocation": "org.checkerframework.checker.qual",
-    "newRelocation": "relocated.org.checkerframework.checker.qual"
-  },
-  {
-    "groupID": "org.ow2.asm",
-    "artifactID": "asm",
-    "version": "9.4",
-    "oldRelocation": "org.ow2.asm",
-    "newRelocation": "relocated.org.ow2.asm"
-  },
-  {
-    "groupID": "org.ow2.asm",
-    "artifactID": "asm-commons",
-    "version": "9.4",
-    "oldRelocation": "org.ow2.asm.commons",
-    "newRelocation": "relocated.org.ow2.asm.commons"
-  },
-  {
-    "groupID": "org.ow2.asm",
-    "artifactID": "asm-tree",
-    "version": "9.4",
-    "oldRelocation": "org.ow2.asm.tree",
-    "newRelocation": "relocated.org.ow2.asm.tree"
-  },
-  {
-    "groupID": "org.javacord",
-    "artifactID": "javacord-api",
+    "groupId": "org.javacord",
+    "artifactId": "javacord-api",
     "version": "3.8.0",
-    "oldRelocation": "org.javacord.javacord.api",
-    "newRelocation": "relocated.org.javacord.javacord.api"
+    "oldRelocation": "org.javacord.javacord-api",
+    "newRelocation": "lib.org.javacord.javacord-api"
   },
   {
-    "groupID": "org.javacord",
-    "artifactID": "javacord-core",
+    "groupId": "org.javacord",
+    "artifactId": "javacord-core",
     "version": "3.8.0",
-    "oldRelocation": "org.javacord.javacord.core",
-    "newRelocation": "relocated.org.javacord.javacord.core"
+    "oldRelocation": "org.javacord.javacord-core",
+    "newRelocation": "lib.org.javacord.javacord-core"
   },
   {
-    "groupID": "com.squareup.okhttp3",
-    "artifactID": "okhttp",
+    "groupId": "com.squareup.okhttp3",
+    "artifactId": "okhttp",
     "version": "4.9.3",
-    "oldRelocation": "com.squareup.okhttp3",
-    "newRelocation": "relocated.com.squareup.okhttp3"
+    "oldRelocation": "com.squareup.okhttp3.okhttp",
+    "newRelocation": "lib.com.squareup.okhttp3.okhttp"
   },
   {
-    "groupID": "com.squareup.okio",
-    "artifactID": "okio",
+    "groupId": "com.squareup.okio",
+    "artifactId": "okio",
     "version": "2.8.0",
-    "oldRelocation": "com.squareup.okio",
-    "newRelocation": "relocated.com.squareup.okio"
+    "oldRelocation": "com.squareup.okio.okio",
+    "newRelocation": "lib.com.squareup.okio.okio"
   },
   {
-    "groupID": "org.jetbrains.kotlin",
-    "artifactID": "kotlin-stdlib-common",
+    "groupId": "org.jetbrains.kotlin",
+    "artifactId": "kotlin-stdlib-common",
     "version": "1.4.0",
-    "oldRelocation": "org.jetbrains.kotlin.stdlib.common",
-    "newRelocation": "relocated.org.jetbrains.kotlin.stdlib.common"
+    "oldRelocation": "org.jetbrains.kotlin.kotlin-stdlib-common",
+    "newRelocation": "lib.org.jetbrains.kotlin.kotlin-stdlib-common"
   },
   {
-    "groupID": "org.jetbrains.kotlin",
-    "artifactID": "kotlin-stdlib",
+    "groupId": "org.jetbrains.kotlin",
+    "artifactId": "kotlin-stdlib",
     "version": "1.4.10",
-    "oldRelocation": "org.jetbrains.kotlin.stdlib",
-    "newRelocation": "relocated.org.jetbrains.kotlin.stdlib"
+    "oldRelocation": "org.jetbrains.kotlin.kotlin-stdlib",
+    "newRelocation": "lib.org.jetbrains.kotlin.kotlin-stdlib"
   },
   {
-    "groupID": "com.squareup.okhttp3",
-    "artifactID": "logging-interceptor",
+    "groupId": "com.squareup.okhttp3",
+    "artifactId": "logging-interceptor",
     "version": "4.9.3",
-    "oldRelocation": "com.squareup.okhttp3.logginginterceptor",
-    "newRelocation": "relocated.com.squareup.okhttp3.logginginterceptor"
+    "oldRelocation": "com.squareup.okhttp3.logging-interceptor",
+    "newRelocation": "lib.com.squareup.okhttp3.logging-interceptor"
   },
   {
-    "groupID": "org.jetbrains.kotlin",
-    "artifactID": "kotlin-stdlib-jdk8",
+    "groupId": "org.jetbrains.kotlin",
+    "artifactId": "kotlin-stdlib-jdk8",
     "version": "1.4.10",
-    "oldRelocation": "org.jetbrains.kotlin.stdlib.jdk8",
-    "newRelocation": "relocated.org.jetbrains.kotlin.stdlib.jdk8"
+    "oldRelocation": "org.jetbrains.kotlin.kotlin-stdlib-jdk8",
+    "newRelocation": "lib.org.jetbrains.kotlin.kotlin-stdlib-jdk8"
   },
   {
-    "groupID": "org.jetbrains.kotlin",
-    "artifactID": "kotlin-stdlib-jdk7",
+    "groupId": "org.jetbrains.kotlin",
+    "artifactId": "kotlin-stdlib-jdk7",
     "version": "1.4.10",
-    "oldRelocation": "org.jetbrains.kotlin.stdlib.jdk7",
-    "newRelocation": "relocated.org.jetbrains.kotlin.stdlib.jdk7"
+    "oldRelocation": "org.jetbrains.kotlin.kotlin-stdlib-jdk7",
+    "newRelocation": "lib.org.jetbrains.kotlin.kotlin-stdlib-jdk7"
   },
   {
-    "groupID": "com.fasterxml.jackson.core",
-    "artifactID": "jackson-databind",
-    "version": "2.12.7.1",
-    "oldRelocation": "com.fasterxml.jackson.databind",
-    "newRelocation": "relocated.com.fasterxml.jackson.databind"
-  },
-  {
-    "groupID": "com.fasterxml.jackson.core",
-    "artifactID": "jackson-annotations",
-    "version": "2.12.7",
-    "oldRelocation": "com.fasterxml.jackson.annotation",
-    "newRelocation": "relocated.com.fasterxml.jackson.annotation"
-  },
-  {
-    "groupID": "com.fasterxml.jackson.core",
-    "artifactID": "jackson-core",
-    "version": "2.12.7",
-    "oldRelocation": "com.fasterxml.jackson.core",
-    "newRelocation": "relocated.com.fasterxml.jackson.core"
-  },
-  {
-    "groupID": "com.neovisionaries",
-    "artifactID": "nv-websocket-client",
+    "groupId": "com.neovisionaries",
+    "artifactId": "nv-websocket-client",
     "version": "2.14",
-    "oldRelocation": "com.neovisionaries.ws.client",
-    "newRelocation": "relocated.com.neovisionaries.ws.client"
+    "oldRelocation": "com.neovisionaries.nv-websocket-client",
+    "newRelocation": "lib.com.neovisionaries.nv-websocket-client"
   },
   {
-    "groupID": "com.codahale",
-    "artifactID": "xsalsa20poly1305",
+    "groupId": "com.codahale",
+    "artifactId": "xsalsa20poly1305",
     "version": "0.11.0",
     "oldRelocation": "com.codahale.xsalsa20poly1305",
-    "newRelocation": "relocated.com.codahale.xsalsa20poly1305"
+    "newRelocation": "lib.com.codahale.xsalsa20poly1305"
   },
   {
-    "groupID": "io.vavr",
-    "artifactID": "vavr",
+    "groupId": "org.bouncycastle",
+    "artifactId": "bcprov-jdk15on",
+    "version": "1.60",
+    "oldRelocation": "org.bouncycastle.bcprov-jdk15on",
+    "newRelocation": "lib.org.bouncycastle.bcprov-jdk15on"
+  },
+  {
+    "groupId": "io.vavr",
+    "artifactId": "vavr",
     "version": "0.10.4",
-    "oldRelocation": "io.vavr",
-    "newRelocation": "relocated.io.vavr"
+    "oldRelocation": "io.vavr.vavr",
+    "newRelocation": "lib.io.vavr.vavr"
   },
   {
-    "groupID": "io.vavr",
-    "artifactID": "vavr-match",
+    "groupId": "io.vavr",
+    "artifactId": "vavr-match",
     "version": "0.10.4",
-    "oldRelocation": "io.vavr.match",
-    "newRelocation": "relocated.io.vavr.match"
+    "oldRelocation": "io.vavr.vavr-match",
+    "newRelocation": "lib.io.vavr.vavr-match"
   },
   {
-    "groupID": "org.bstats",
-    "artifactID": "bstats-velocity",
-    "version": "2.2.1",
-    "oldRelocation": "org.bstats.bstats.velocity",
-    "newRelocation": "relocated.org.bstats.bstats.velocity"
-  },
-  {
-    "groupID": "org.bstats",
-    "artifactID": "bstats-base",
-    "version": "2.2.1",
-    "oldRelocation": "org.bstats.bstats.base",
-    "newRelocation": "relocated.org.bstats.bstats.base"
-  },
-  {
-    "groupID": "com.zaxxer",
-    "artifactID": "HikariCP",
-    "version": "3.4.1",
-    "oldRelocation": "com.zaxxer.hikari",
-    "newRelocation": "relocated.com.zaxxer.hikari"
-  },
-  {
-    "groupID": "org.slf4j",
-    "artifactID": "slf4j-simple",
-    "version": "1.7.5",
-    "oldRelocation": "org.slf4j.simple",
-    "newRelocation": "relocated.org.slf4j.simple"
-  },
-  {
-    "groupID": "xyz.upperlevel.spigot.book",
-    "artifactID": "spigot-book-api",
-    "version": "1.6",
-    "oldRelocation": "xyz.upperlevel.spigot.book.api",
-    "newRelocation": "relocated.xyz.upperlevel.spigot.book.api"
-  },
-  {
-    "groupID": "org.jetbrains",
-    "artifactID": "annotations",
+    "groupId": "org.jetbrains",
+    "artifactId": "annotations",
     "version": "16.0.1",
     "oldRelocation": "org.jetbrains.annotations",
-    "newRelocation": "relocated.org.jetbrains.annotations"
+    "newRelocation": "lib.org.jetbrains.annotations"
+  },
+  {
+    "groupId": "com.fasterxml.jackson.core",
+    "artifactId": "jackson-databind",
+    "version": "2.15.2",
+    "oldRelocation": "com.fasterxml.jackson.core.jackson-databind",
+    "newRelocation": "lib.com.fasterxml.jackson.core.jackson-databind"
+  },
+  {
+    "groupId": "com.fasterxml.jackson.core",
+    "artifactId": "jackson-annotations",
+    "version": "2.15.2",
+    "oldRelocation": "com.fasterxml.jackson.core.jackson-annotations",
+    "newRelocation": "lib.com.fasterxml.jackson.core.jackson-annotations"
   }
 ]

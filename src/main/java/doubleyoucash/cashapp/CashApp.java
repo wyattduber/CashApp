@@ -5,7 +5,6 @@ import doubleyoucash.cashapp.database.Database;
 import doubleyoucash.cashapp.libraries.LibrarySetup;
 import doubleyoucash.cashapp.listeners.LoginListener;
 import doubleyoucash.cashapp.listeners.VoteListener;
-import net.byteflux.libby.BukkitLibraryManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,9 +41,9 @@ public class CashApp extends JavaPlugin {
     public void onEnable() {
 
         /* Load Dependencies */
-        //loadDependencies();
         LibrarySetup librarySetup = new LibrarySetup();
         librarySetup.loadLibraries();
+
         /* Load and Initiate Configs */
         try {
             reloadCustomConfig();
@@ -85,18 +84,6 @@ public class CashApp extends JavaPlugin {
             js.disableAPI();
         }
     }
-
-    /*public void loadDependencies() {
-        BukkitLibraryManager manager = new BukkitLibraryManager(this); //depends on the server core you are using
-        manager.addMavenCentral(); //there are also methods for other repositories
-        manager.fromGeneratedResource(this.getResource("AzimDP.json")).forEach(library->{
-            try {
-                manager.loadLibrary(library);
-            }catch(RuntimeException e) { // in case some of the libraries cant be found or dont have .jar file or etc
-                getLogger().info("Skipping download of\""+library+"\", it either doesnt exist or has no .jar file");
-            }
-        });
-    }*/
 
     public void reload() {
         reloadCustomConfig();
@@ -149,8 +136,8 @@ public class CashApp extends JavaPlugin {
         try {
             modList = getConfig().getStringList("mod-list");
             modPlusList = getConfig().getStringList("mod-plus-list");
-            System.out.println(Arrays.toString(modList.toArray()));
-            System.out.println(Arrays.toString(modPlusList.toArray()));
+            log("Mods loaded: " + Arrays.toString(modList.toArray()));
+            log("Mod+'s loaded: " + Arrays.toString(modPlusList.toArray()));
         } catch (Exception e) {
             saveDefaultConfig();
             warn("Invalid Staff List! Please enter a valid Staff List in config.yml and reload the plugin.");
@@ -204,7 +191,6 @@ public class CashApp extends JavaPlugin {
                 Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new RMD());
-            Objects.requireNonNull(this.getCommand("ls")).setExecutor((new ls()));
 
             if (enableVoteStreak) {
                 STREAK s = new STREAK();

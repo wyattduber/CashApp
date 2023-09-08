@@ -27,11 +27,6 @@ commands:
     usage: /rmd <username-1> <username-2> ... <username-n>
     permission: ca.rmd
     permission-message: §cYou do not have permission!
-  ls:
-    description: Command that allows a user to put text on a sign line longer than normally allowed
-    usage: /ls <line \#> <text...>
-    permission: ca.ls
-    permission-message: §cYou do not have permission!
   streak:
     description: Parent command for all streak-related commands
     usage: /streak <subcommand> <arg1> <arg2...>
@@ -68,9 +63,6 @@ permissions:
     default: op
   ca.rmd:
     description: Allows the use of the /rmd command
-    default: op
-  ca.ls:
-    description: Allows the use of the /ls command
     default: op
   ca.streak:
     description: Allows the use of the /streak base command

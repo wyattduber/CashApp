@@ -25,17 +25,13 @@ public class LibrarySetup implements AbstractLibraryLoader<Library, BukkitLibrar
 
             for (LibraryObject libraryObject : objectMapper.readValue(jsonFile, LibraryObject[].class)) {
                 list.add(createLibrary(libraryObject));
+                System.out.println("Loaded " + libraryObject.artifactId() + " " + libraryObject.version() + " from " + libraryObject.groupId());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return list;
-
-       /* return Arrays.asList(
-                createLibrary(LibraryConfig.JAVACORD_API),
-                createLibrary(LibraryConfig.JAVACORD_CORE)
-        );*/
     }
 
     @Override
@@ -45,13 +41,6 @@ public class LibrarySetup implements AbstractLibraryLoader<Library, BukkitLibrar
         bukkitLibraryManager.addJCenter();
         bukkitLibraryManager.addJitPack();
         initLibraries().forEach(bukkitLibraryManager::loadLibrary);
-        /*bukkitLibraryManager.fromGeneratedResource(ca.getResource("AzimDP.json")).forEach(library->{
-            try {
-                bukkitLibraryManager.loadLibrary(library);
-            }catch(RuntimeException e) { // in case some of the libraries cant be found or don't have .jar file or etc
-                ca.log("Skipping download of\""+library+"\", it either doesnt exist or has no .jar file");
-            }
-        });*/
     }
 
     @Override
