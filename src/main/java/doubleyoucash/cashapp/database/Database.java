@@ -357,11 +357,4 @@ public class Database {
         return Objects.requireNonNull(ca.getServer().getPlayer(minecraftID)).getName();
     }
 
-    // private void printDate(UUID id, long date) {
-    //     var zonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.of("Europe/Paris"));
-    //     var formatter = DateTimeFormatter.ofPattern("hh:mm:ss yyyy-M-d");
-    //     String result = zonedDateTime.format(formatter);
-    //     ca.log(id + "'s last vote is at " + result);
-    // }
-
 }
