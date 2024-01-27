@@ -43,7 +43,7 @@ public class Database {
             stmt.execute();
         } catch (SQLException e) {
             ca.error("Error inserting link for user " + getName(minecraftID) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
         }
     }
 
@@ -58,8 +58,6 @@ public class Database {
                 return streak;
             } else return -1;
         } catch (SQLException e) {
-            //ca.error("Error getting the streak for user " + getName(minecraftID) + "!");
-            //e.printStackTrace();
             return -1;
         }
     }
@@ -76,7 +74,7 @@ public class Database {
             }
         } catch (SQLException e) {
             ca.error("Error getting showStreak boolean for user " + getName(minecraftID) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
             return false;
         }
     }
@@ -91,7 +89,7 @@ public class Database {
             return getStreakStatus(minecraftID);
         } catch (SQLException e) {
             ca.error("Error setting streak status for user " + getName(minecraftID) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
             return false;
         }
     }
@@ -104,7 +102,7 @@ public class Database {
             stmt.execute();
         } catch (SQLException e) {
             ca.error("Error updating streak for user " + getName(minecraftID) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
         }
     }
 
@@ -121,7 +119,7 @@ public class Database {
             }
         } catch (SQLException e) {
             ca.error("Error checking for user " + getName(minecraftID) + " in database!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
             return false;
         }
     }
@@ -134,7 +132,7 @@ public class Database {
             stmt.execute();
         } catch (SQLException e) {
             ca.error("Error resetting streak for user " + getName(minecraftID) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
         }
     }
 
@@ -146,7 +144,7 @@ public class Database {
             stmt.execute();
         } catch (SQLException e) {
             ca.error("Error updating the last vote for user "  + getName(minecraftID) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
         }
     }
 
@@ -158,7 +156,7 @@ public class Database {
             return rs.getLong("lastVote");
         } catch (SQLException e) {
             //ca.error("Error getting the last vote time for user " + getName(minecraftID) + "!");
-            //e.printStackTrace();
+            //ca.error("Error Message: " + e.getMessage());
             return 0;
         }
     }
@@ -175,7 +173,7 @@ public class Database {
             addVoteToTotal(minecraftID);
         } catch (SQLException e) {
             ca.error("Error inserting a vote record for user " + getName(minecraftID) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
         }
     }
 
@@ -193,7 +191,7 @@ public class Database {
             return list;
         } catch (SQLException e) {
             ca.error("Error retrieving user " + getName(minecraftID) + "'s vote data!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
             return null;
         }
     }
@@ -205,24 +203,6 @@ public class Database {
         list.add(i + " - Date: " + date + "; Site: " + rs.getString("site"));
         i++;
         return i;
-    }
-
-    public ArrayList<String> getAllVotes(UUID minecraftID) {
-        ArrayList<String> list = new ArrayList<>();
-        try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT * FROM votes WHERE minecraftid=?");
-            ResultSet rs = stmt.executeQuery();
-            int total = 0;
-            while (rs.next()) {
-                total = addToList(rs, list, total);
-            }
-            list.add(0, "Votes for user " + getName(minecraftID) + " (Limit " + total + ")");
-            return list;
-        } catch (SQLException e) {
-            ca.error("Error retrieving user " + getName(minecraftID) + "'s vote data!");
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public int getTotalVotes(UUID minecraftID) {
@@ -238,7 +218,7 @@ public class Database {
             }
         } catch (SQLException e) {
             ca.error("Error fetching total vote number for user " + getName(minecraftID) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
             return 0;
         }
     }
@@ -251,7 +231,7 @@ public class Database {
             stmt.execute();
         } catch (SQLException e) {
             ca.error("Error adding a vote to the total votes for user " + getName(minecraftID) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
         }
     }
 
@@ -277,7 +257,7 @@ public class Database {
             stmt.execute();
         } catch (SQLException e) {
             ca.error("Error adding a sync record for user " + getName(minecraftid) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
         }
     }
 
@@ -291,18 +271,7 @@ public class Database {
             stmt.execute();
         } catch (SQLException e) {
             ca.error("Error updating a sync record for user " + getName(minecraftid) + "!");
-            e.printStackTrace();
-        }
-    }
-
-    public void removeSyncRecord(UUID minecraftid) {
-        try {
-            PreparedStatement stmt = dbcon.prepareStatement("DELETE FROM usernameSync WHERE minecraftid=?");
-            stmt.setString(1, minecraftid.toString());
-            stmt.execute();
-        } catch (SQLException e) {
-            ca.error("Error removing a sync record for user " + getName(minecraftid) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
         }
     }
 
@@ -314,7 +283,7 @@ public class Database {
             return rs.getBoolean("isSynced");
         } catch (SQLException e) {
             ca.error("Error fetching sync status for user " + getName(minecraftid) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
             return false;
         }
     }
@@ -328,7 +297,7 @@ public class Database {
             return rs.next();
         } catch (SQLException e) {
             ca.error("Error fetching sync status for user " + getName(minecraftid) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
             return false;
         }
     }
@@ -346,7 +315,7 @@ public class Database {
             }
         } catch (SQLException e) {
             ca.error("Error fetching synced Discord ID for user " + getName(minecraftid) + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
             return 0;
         }
     }

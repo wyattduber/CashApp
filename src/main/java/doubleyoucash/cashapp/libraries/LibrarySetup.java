@@ -9,12 +9,11 @@ import java.io.*;
 import java.util.Collections;
 import java.util.List;
 
-public class LibrarySetup implements AbstractLibraryLoader<Library, BukkitLibraryManager> {
+public class LibrarySetup implements AbstractLibraryLoader<Library> {
 
     private final BukkitLibraryManager bukkitLibraryManager = new BukkitLibraryManager(CashApp.getPlugin(CashApp.class));
     private final CashApp ca = CashApp.getPlugin();
 
-    @Override
     public List<Library> initLibraries() {
 
         List<Library> list = new java.util.ArrayList<>(Collections.emptyList());
@@ -28,24 +27,18 @@ public class LibrarySetup implements AbstractLibraryLoader<Library, BukkitLibrar
                 System.out.println("Loaded " + libraryObject.artifactId() + " " + libraryObject.version() + " from " + libraryObject.groupId());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            ca.error(e.getMessage());
         }
 
         return list;
     }
 
-    @Override
     public void loadLibraries() {
         bukkitLibraryManager.addMavenCentral();
         bukkitLibraryManager.addMavenLocal();
         bukkitLibraryManager.addJCenter();
         bukkitLibraryManager.addJitPack();
         initLibraries().forEach(bukkitLibraryManager::loadLibrary);
-    }
-
-    @Override
-    public BukkitLibraryManager getLibraryManager() {
-        return bukkitLibraryManager;
     }
 
     public Library createLibrary(LibraryObject libraryObject) {
@@ -62,6 +55,7 @@ public class LibrarySetup implements AbstractLibraryLoader<Library, BukkitLibrar
         try (FileOutputStream outputStream = new FileOutputStream(tempFile)) {
             byte[] buffer = new byte[1024];
             int bytesRead;
+            assert inputStream != null;
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);
             }

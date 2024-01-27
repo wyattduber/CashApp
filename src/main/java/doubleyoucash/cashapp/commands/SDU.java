@@ -64,86 +64,82 @@ public class SDU implements TabExecutor {
             return true;
         }
 
-        switch (args[1].toLowerCase()) {
-            case "unsync" -> {
-                if (player.hasPermission("ca.sdu")) {
-                    if (ca.usersCurrentlySyncing.containsKey(sender.getName())) {
-                        sender.sendMessage("§cYou are already syncing your username! Please check your DM's for a code from the bot.");
-                        return true;
-                    }
-                    String username = player.getName();
-                    User user = js.checkUserExists(args[0]);
-                    if (user == null) {
-                        player.sendMessage("§cYou are not linked to a Discord account! Please contact an admin.");
-                        return true;
-                    }
-                    if (!db.isSynced(player.getUniqueId())) {
-                        player.sendMessage("§cYou are not synced to a Discord account!");
-                        return true;
-                    }
-                    if (!Long.toString(db.getSyncedDiscordID(player.getUniqueId())).equals(user.getIdAsString())) {
-                        player.sendMessage("§cYou are not synced to that account!");
-                        return true;
-                    }
-                    js.unsyncUsername(user);
-                    db.updateSyncRecord(player.getUniqueId(), username, user.getId(), false);
-                    player.sendMessage("Your username has been unsynced!");
-                    return true;
-                } else  {
-                    player.sendMessage("§cYou don't have permission to use this command!");
+        if (args[1].equalsIgnoreCase("unsync")) {
+            if (player.hasPermission("ca.sdu")) {
+                if (ca.usersCurrentlySyncing.containsKey(sender.getName())) {
+                    sender.sendMessage("§cYou are already syncing your username! Please check your DM's for a code from the bot.");
                     return true;
                 }
-            }
-            default -> {
-                if (player.hasPermission("ca.sdu")) {
-                    String username = player.getName();
-                    User user = js.checkUserExists(args[0]);
-                    if (user == null) {
-                        player.sendMessage("§cThat Discord account does not exist!");
-                        return true;
-                    }
-                    if (db.isSynced(player.getUniqueId())) {
-                        player.sendMessage("§cThat Discord account is already synced to a Minecraft account!");
-                        return true;
-                    }
-                    if (!ca.usersCurrentlySyncing.containsKey(username)) {
-                        player.sendMessage("§cYou are not syncing your username!");
-                        return true;
-                    }
-                    int code = 0;
-                    try {
-                        code = Integer.parseInt(args[1]);
-                    } catch (NumberFormatException e) {
-                        player.sendMessage("§cThe code you entered is not a number! Please check your DM's for a code from the bot.");
-                        return true;
-                    }
-                    int savedCode = ca.usersCurrentlySyncing.get(username);
-                    if (code == savedCode) {
-                        try {
-                            js.syncUsername(user, player.getName());
-                        } catch (Exception e) {
-                            player.sendMessage("§cAn error occurred while syncing your username! Please contact an admin.");
-                            return true;
-                        }
-                        ca.usersCurrentlySyncing.remove(username);
-                        if (!db.userExistsInSync(player.getUniqueId())) {
-                            ca.log("Returned false! " + db.userExistsInStreaks(player.getUniqueId()));
-                            db.addSyncRecord(player.getUniqueId(), player.getName(), user.getId(), true);
-                        } else {
-                            ca.log("Returned true! " + db.userExistsInStreaks(player.getUniqueId()));
-                            db.updateSyncRecord(player.getUniqueId(), player.getName(), user.getId(), true);
-                        }
-                        player.sendMessage("Your username has been synced!");
-                        return true;
-                    } else  {
-                        player.sendMessage("§cThe code you entered is incorrect! Please check your DM's for a code from the bot.");
-                        return true;
-                    }
-                } else  {
-                    player.sendMessage("§cYou don't have permission to use this command!");
+                String username = player.getName();
+                User user = js.checkUserExists(args[0]);
+                if (user == null) {
+                    player.sendMessage("§cYou are not linked to a Discord account! Please contact an admin.");
                     return true;
                 }
+                if (!db.isSynced(player.getUniqueId())) {
+                    player.sendMessage("§cYou are not synced to a Discord account!");
+                    return true;
+                }
+                if (!Long.toString(db.getSyncedDiscordID(player.getUniqueId())).equals(user.getIdAsString())) {
+                    player.sendMessage("§cYou are not synced to that account!");
+                    return true;
+                }
+                js.unsyncUsername(user);
+                db.updateSyncRecord(player.getUniqueId(), username, user.getId(), false);
+                player.sendMessage("Your username has been unsynced!");
+                return true;
+            } else {
+                player.sendMessage("§cYou don't have permission to use this command!");
+                return true;
             }
+        }
+        if (player.hasPermission("ca.sdu")) {
+            String username = player.getName();
+            User user = js.checkUserExists(args[0]);
+            if (user == null) {
+                player.sendMessage("§cThat Discord account does not exist!");
+                return true;
+            }
+            if (db.isSynced(player.getUniqueId())) {
+                player.sendMessage("§cThat Discord account is already synced to a Minecraft account!");
+                return true;
+            }
+            if (!ca.usersCurrentlySyncing.containsKey(username)) {
+                player.sendMessage("§cYou are not syncing your username!");
+                return true;
+            }
+            int code = 0;
+            try {
+                code = Integer.parseInt(args[1]);
+            } catch (NumberFormatException e) {
+                player.sendMessage("§cThe code you entered is not a number! Please check your DM's for a code from the bot.");
+                return true;
+            }
+            int savedCode = ca.usersCurrentlySyncing.get(username);
+            if (code == savedCode) {
+                try {
+                    js.syncUsername(user, player.getName());
+                } catch (Exception e) {
+                    player.sendMessage("§cAn error occurred while syncing your username! Please contact an admin.");
+                    return true;
+                }
+                ca.usersCurrentlySyncing.remove(username);
+                if (!db.userExistsInSync(player.getUniqueId())) {
+                    ca.log("Returned false! " + db.userExistsInStreaks(player.getUniqueId()));
+                    db.addSyncRecord(player.getUniqueId(), player.getName(), user.getId(), true);
+                } else {
+                    ca.log("Returned true! " + db.userExistsInStreaks(player.getUniqueId()));
+                    db.updateSyncRecord(player.getUniqueId(), player.getName(), user.getId(), true);
+                }
+                player.sendMessage("Your username has been synced!");
+                return true;
+            } else {
+                player.sendMessage("§cThe code you entered is incorrect! Please check your DM's for a code from the bot.");
+                return true;
+            }
+        } else {
+            player.sendMessage("§cYou don't have permission to use this command!");
+            return true;
         }
     }
 

@@ -42,6 +42,7 @@ public class BCE implements CommandExecutor {
 
         /*
          * Dictionary:
+         * -1 = Stall Re-Rental Message Alert
          * 0 = Custom Title (Mod+)
          * 1 = Custom Title Replacement (Mod+)
          * 2 = Custom Weapon Name/Lore (Mod+)

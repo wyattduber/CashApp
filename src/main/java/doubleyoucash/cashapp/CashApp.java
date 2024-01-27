@@ -22,7 +22,6 @@ public class CashApp extends JavaPlugin {
 
     public FileConfiguration config;
     public File customConfigFile;
-    public static String[] versions = new String[2];
     public List<String> modList;
     public List<String> modPlusList;
     public String botToken;
@@ -31,6 +30,7 @@ public class CashApp extends JavaPlugin {
     public boolean enableUsernameSync;
     public boolean enableVoteStreak;
     public boolean enableBuycraftMessages;
+    public List<String> botmBannedWords;
     public HashMap<String, Integer> usersCurrentlySyncing;
     public JavacordStart js;
     public Database db;
@@ -59,8 +59,8 @@ public class CashApp extends JavaPlugin {
              log("Database Found! Path is " + db.getDbPath());
          } catch (SQLException e) {
              error("Error setting up database! Is there permissions issue preventing the database file creation?");
-             e.printStackTrace();
-             error(e.getSQLState());
+             error("Exception Message:" + e.getMessage());
+             error("SQL State: " + e.getSQLState());
          }
 
         /* Config Parsing */
@@ -93,11 +93,11 @@ public class CashApp extends JavaPlugin {
         /* Reload database if it's gone */
         try {
             if (!db.testConnection())
-                if (db.getDbPath().isEmpty() || db.getDbPath() == null) new Database("cashapp.sqlite.db");
+                if (db.getDbPath().isEmpty() || db.getDbPath().isBlank() || db.getDbPath() == null) new Database("cashapp.sqlite.db");
         } catch (SQLException e) {
-            error("Error setting up database! Is there permissions issue preventing the database file creation?");
-            e.printStackTrace();
-            error(e.getSQLState());
+            error("Error setting up database! Is there permissions issue preventing the database file creation? View the following error message:");
+            error("Error Message: " + e.getMessage());
+            error("SQL State: " + e.getSQLState());
         }
 
         if (parseConfig() || js == null) {
@@ -179,6 +179,15 @@ public class CashApp extends JavaPlugin {
             warn("Invalid Buycraft Messages Setting! Please set the enable-buycraft-messages in the config.yml!");
         }
 
+        try {
+            botmBannedWords = getConfig().getStringList("botm-banned-words");
+            log("BOTM Message Banned Words list loaded! Not listing here for obvious reasons.");
+        } catch (Exception e) {
+            saveDefaultConfig();
+            warn("Invalid banned words list! Please make sure the list is valid in the config.yml and doesn't contain syntax errors.");
+            return false;
+        }
+
         log("Config loaded!");
         return true;
     }
@@ -205,7 +214,7 @@ public class CashApp extends JavaPlugin {
                 usersCurrentlySyncing = new HashMap<String, Integer>();
             }
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            error(e.getMessage());
         }
     }
 
@@ -226,7 +235,7 @@ public class CashApp extends JavaPlugin {
         try {
             defConfigStream = new InputStreamReader(Objects.requireNonNull(this.getResource("config.yml")), StandardCharsets.UTF_8);
         } catch (Exception e) {
-            e.printStackTrace();
+            error(e.getMessage());
         }
         if (defConfigStream != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);

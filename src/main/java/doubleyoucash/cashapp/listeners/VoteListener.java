@@ -27,7 +27,7 @@ public class VoteListener implements Listener {
             player = ca.getServer().getPlayer(event.getPlayer());
         } catch (NullPointerException e) {
             ca.error("Error getting player named + " + event.getPlayer() + "!");
-            e.printStackTrace();
+            ca.error("Error Message: " + e.getMessage());
             return;
         }
         assert player != null;

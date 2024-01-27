@@ -2,12 +2,10 @@ package doubleyoucash.cashapp.libraries;
 
 import java.util.List;
 
-public interface AbstractLibraryLoader<Library, LibraryManager> {
+public interface AbstractLibraryLoader<Library> {
 
-    public abstract List<Library> initLibraries();
+    List<Library> initLibraries();
 
-    public abstract void loadLibraries();
-
-    public abstract LibraryManager getLibraryManager();
+    void loadLibraries();
 
 }

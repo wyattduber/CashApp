@@ -2,23 +2,96 @@ bot-token: "BOTTOKEN"
 server-id: "000000000000000000"
 
 mod-list: 
-  - Anjulah
-  - PenguinPlays1235
-  - Mc_BoogyWoogy
-  - OceanSkys2222
-  - scoutblade
-  - Tand_
-  - PokedonGCG
+  - Mod1
+  - Mod2
+  - Mod3
 
 mod-plus-list:
-  - EchoingStar
-  - GreenCreepyGhost
-  - Cubemaster02
-  - Cobethel
-  - Nindroid
+  - ModPlus1
+  - ModPlus2
+  - Admin1
+  - Admin2
 
 mall-remind-msg: Hello, mall re-rental has begun! Please contact an online staff member to re-rent your stall, or do nothing and your stall will be emptied."
 
 enable-username-sync: false
 enable-vote-streaks: false
 enable-buycraft-messages: false
+
+botm-banned-words:
+  - anal
+  - ass
+  - asshole
+  - ballsack
+  - bastard
+  - bitch
+  - biatch
+  - blowjob
+  - boner
+  - boob
+  - boobs
+  - bullshit
+  - buttplug
+  - clitoris
+  - cock
+  - crackwhore
+  - cunt
+  - cum
+  - cyka
+  - dick
+  - dildo
+  - dipshit
+  - doggystyle
+  - douche
+  - dyke
+  - earrape
+  - fag
+  - faggot
+  - fuck
+  - fucker
+  - jerk
+  - jizz
+  - knobend
+  - knobhead
+  - knobjockey
+  - marijuana
+  - meth
+  - minge
+  - motherfucker
+  - muff
+  - penis
+  - þorn
+  - þornography
+  - prick
+  - pussy
+  - queer
+  - rape
+  - retard
+  - retarded
+  - scrotum
+  - slut
+  - sperm
+  - spunk
+  - shit
+  - shite
+  - shitty
+  - sussy
+  - tit
+  - tosser
+  - turd
+  - twat
+  - penis
+  - vagina
+  - vibrator
+  - wank
+  - wanker
+  - whore
+  - omfg
+  - wtf
+  - uwu
+  - onision
+  - owo
+  - 0w0
+  - pussy
+  - pussys
+  - pussies
