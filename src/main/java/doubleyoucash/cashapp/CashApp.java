@@ -3,6 +3,7 @@ package doubleyoucash.cashapp;
 import doubleyoucash.cashapp.commands.*;
 import doubleyoucash.cashapp.database.Database;
 import doubleyoucash.cashapp.libraries.LibrarySetup;
+import doubleyoucash.cashapp.listeners.BlockBreakListener;
 import doubleyoucash.cashapp.listeners.LoginListener;
 import doubleyoucash.cashapp.listeners.VoteListener;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -108,6 +109,7 @@ public class CashApp extends JavaPlugin {
     }
 
     public void initListeners() {
+        getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
         getServer().getPluginManager().registerEvents(new LoginListener(), this);
         getServer().getPluginManager().registerEvents(new VoteListener(), this);
         log("Minecraft Listeners Loaded!");

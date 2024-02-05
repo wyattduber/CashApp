@@ -26,6 +26,10 @@ public class Database {
         stmt.execute();
         stmt = dbcon.prepareStatement("CREATE TABLE IF NOT EXISTS usernameSync(minecraftid TEXT NOT NULL, mcusername TEXT NOT NULL, discordid TEXT NOT NULL, isSynced BIT NOT NULL)");
         stmt.execute();
+        stmt = dbcon.prepareStatement("CREATE TABLE IF NOT EXISTS wgAllowedPlaceBlocks(id INT IDENTITY(1,1) PRIMARY KEY, regionName STRING NOT NULL, regionId TEXT NOT NULL, block TEXT NOT NULL)");
+        stmt.execute();
+        stmt = dbcon.prepareStatement("CREATE TABLE IF NOT EXISTS wgAllowedBreakBlocks(id INT IDENTITY(1,1) PRIMARY KEY, regionName STRING NOT NULL, regionId TEXT NOT NULL, block TEXT NOT NULL)");
+        stmt.execute();
     }
 
     public String getDbPath() { return dbPath; }
@@ -317,6 +321,118 @@ public class Database {
             ca.error("Error fetching synced Discord ID for user " + getName(minecraftid) + "!");
             ca.error("Error Message: " + e.getMessage());
             return 0;
+        }
+    }
+
+    /* WorldGuard Extension Methods */
+
+    public void addAllowedPlaceBlock(String regionName, String regionId, String block) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO wgAllowedPlaceBlocks(regionName,regionId,block) VALUES (?,?,?)");
+            stmt.setString(1, regionName);
+            stmt.setString(2, regionId);
+            stmt.setString(3, block);
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error adding an allowed place block for region " + regionName + ":" + e.getMessage());
+        }
+    }
+
+    public void addAllowedBreakBlock(String regionName, String regionId, String block) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO wgAllowedBreakBlocks(regionName,regionId,block) VALUES (?,?,?)");
+            stmt.setString(1, regionName);
+            stmt.setString(2, regionId);
+            stmt.setString(3, block);
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error adding an allowed break block for region " + regionName + ":" + e.getMessage());
+        }
+    }
+
+    public boolean isBlockAllowedToPlace(String regionName, String regionId, String block) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT block FROM wgAllowedPlaceBlocks WHERE regionName=? AND regionId=? AND block=?");
+            stmt.setString(1, regionName);
+            stmt.setString(2, regionId);
+            stmt.setString(3, block);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            ca.error("Error checking if block is allowed to be placed in region " + regionName + ":" + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean isBlockAllowedToBreak(String regionName, String regionId, String block) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT block FROM wgAllowedBreakBlocks WHERE regionName=? AND regionId=? AND block=?");
+            stmt.setString(1, regionName);
+            stmt.setString(2, regionId);
+            stmt.setString(3, block);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            ca.error("Error checking if block is allowed to be broken in region " + regionName + ":" + e.getMessage());
+            return false;
+        }
+    }
+
+    public void removeAllowedPlaceBlock(String regionName, String regionId, String block) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("DELETE FROM wgAllowedPlaceBlocks WHERE regionName=? AND regionId=? AND block=?");
+            stmt.setString(1, regionName);
+            stmt.setString(2, regionId);
+            stmt.setString(3, block);
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error removing an allowed place block for region " + regionName + ":" + e.getMessage());
+        }
+    }
+
+    public void removeAllowedBreakBlock(String regionName, String regionId, String block) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("DELETE FROM wgAllowedBreakBlocks WHERE regionName=? AND regionId=? AND block=?");
+            stmt.setString(1, regionName);
+            stmt.setString(2, regionId);
+            stmt.setString(3, block);
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error removing an allowed break block for region " + regionName + ":" + e.getMessage());
+        }
+    }
+
+    public ArrayList<String> getAllowedPlaceBlocks(String regionName, String regionId) {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT block FROM wgAllowedPlaceBlocks WHERE regionName=? AND regionId=?");
+            stmt.setString(1, regionName);
+            stmt.setString(2, regionId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(rs.getString("block"));
+            }
+            return list;
+        } catch (SQLException e) {
+            ca.error("Error fetching allowed place blocks for region " + regionName + ":" + e.getMessage());
+            return null;
+        }
+    }
+
+    public ArrayList<String> getAllowedBreakBlocks(String regionName, String regionId) {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT block FROM wgAllowedBreakBlocks WHERE regionName=? AND regionId=?");
+            stmt.setString(1, regionName);
+            stmt.setString(2, regionId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(rs.getString("block"));
+            }
+            return list;
+        } catch (SQLException e) {
+            ca.error("Error fetching allowed break blocks for region " + regionName + ":" + e.getMessage());
+            return null;
         }
     }
 
