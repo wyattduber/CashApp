@@ -1,6 +1,6 @@
-package doubleyoucash.cashapp.commands;
+package wyattduber.cashapp.commands;
 
-import doubleyoucash.cashapp.CashApp;
+import wyattduber.cashapp.CashApp;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

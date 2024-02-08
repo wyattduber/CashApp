@@ -1,9 +1,9 @@
-package doubleyoucash.cashapp.javacord;
+package wyattduber.cashapp.javacord;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutionException;
 
-import doubleyoucash.cashapp.CashApp;
+import wyattduber.cashapp.CashApp;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.TextChannel;

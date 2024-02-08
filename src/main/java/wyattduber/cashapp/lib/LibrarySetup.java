@@ -1,7 +1,7 @@
-package doubleyoucash.cashapp.lib;
+package wyattduber.cashapp.lib;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import doubleyoucash.cashapp.CashApp;
+import wyattduber.cashapp.CashApp;
 import net.byteflux.libby.BukkitLibraryManager;
 import net.byteflux.libby.Library;
 

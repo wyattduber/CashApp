@@ -1,11 +1,10 @@
-package doubleyoucash.cashapp;
+package wyattduber.cashapp;
 
-import doubleyoucash.cashapp.commands.*;
-import doubleyoucash.cashapp.database.Database;
-import doubleyoucash.cashapp.javacord.JavacordHelper;
-import doubleyoucash.cashapp.lib.LibrarySetup;
-import doubleyoucash.cashapp.listeners.BlockBreakListener;
-import doubleyoucash.cashapp.listeners.LoginListener;
+import wyattduber.cashapp.commands.*;
+import wyattduber.cashapp.database.Database;
+import wyattduber.cashapp.javacord.JavacordHelper;
+import wyattduber.cashapp.lib.LibrarySetup;
+import wyattduber.cashapp.listeners.LoginListener;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,6 +27,7 @@ public class CashApp extends JavaPlugin {
     public String botToken;
     public String serverID;
     public String mallMsg;
+    public String syncReminderMsg;
     public boolean enableUsernameSync;
     public boolean enableBuycraftMessages;
     public List<String> botmBannedWords;
@@ -66,7 +66,14 @@ public class CashApp extends JavaPlugin {
         /* Config Parsing */
         if (parseConfig()) {
             initListeners();
-            js = new JavacordHelper();
+
+            if (enableUsernameSync) {
+                js = new JavacordHelper();
+            }
+
+            if (enableBuycraftMessages) {
+                js = new JavacordHelper();
+            }
         }
 
         /* Commands */
@@ -108,9 +115,8 @@ public class CashApp extends JavaPlugin {
     }
 
     public void initListeners() {
-        getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
         getServer().getPluginManager().registerEvents(new LoginListener(), this);
-        log("Minecraft Listeners Loaded!");
+        log("Listeners Loaded!");
     }
 
     public boolean parseConfig() {
@@ -150,6 +156,14 @@ public class CashApp extends JavaPlugin {
         } catch (Exception e) {
             saveDefaultConfig();
             warn("Invalid Mall Reminder Message! Please set the mall-remind-msg in the config.yml!");
+        }
+
+        try {
+            syncReminderMsg = getConfigString("sync-reminder-msg");
+            log("Sync Reminder Message Loaded!");
+        } catch (Exception e) {
+            saveDefaultConfig();
+            warn("Invalid Sync Reminder Message! Please set the sync-reminder-msg in the config.yml!");
         }
 
         try {
@@ -196,7 +210,7 @@ public class CashApp extends JavaPlugin {
                 SyncDiscordUsernameCMD u = new SyncDiscordUsernameCMD();
                 Objects.requireNonNull(this.getCommand("sdu")).setExecutor(u);
                 Objects.requireNonNull(this.getCommand("sdu")).setTabCompleter(u);
-                usersCurrentlySyncing = new HashMap<String, Integer>();
+                usersCurrentlySyncing = new HashMap<>();
             }
         } catch (NullPointerException e) {
             error(e.getMessage());

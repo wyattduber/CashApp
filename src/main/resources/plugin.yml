@@ -1,10 +1,10 @@
 name: CashApp
 version: 1.3.0
-main: doubleyoucash.cashapp.CashApp
+main: wyattduber.cashapp.CashApp
 api-version: 1.20
-author: Wcash
-website: https://www.github.com/DoubleYouCash/CashApp
-softdepend: [VotingPlugin, WorldGuard]
+author: wyattduber
+website: https://www.github.com/wyattduber/CashApp
+softdepend: [WorldGuard]
 
 commands:
   ca:
@@ -26,11 +26,6 @@ commands:
     description: Command to send all of the current users a reminder /mail
     usage: /rmd <username-1> <username-2> ... <username-n>
     permission: ca.rmd
-    permission-message: §cYou do not have permission!
-  streak:
-    description: Parent command for all streak-related commands
-    usage: /streak <subcommand> <arg1> <arg2...>
-    permission: ca.streak
     permission-message: §cYou do not have permission!
   sdu:
     description: Discord username sync command
@@ -63,56 +58,6 @@ permissions:
     default: op
   ca.rmd:
     description: Allows the use of the /rmd command
-    default: op
-  ca.streak:
-    description: Allows the use of the /streak base command
-    default: op
-  ca.streak.basic:
-    description: Allows the use of the basic commands
-    default: op
-    children:
-      ca.streak.togglelogin: true
-      ca.streak.totalvotes: true
-      ca.streak.getvotes: true
-      ca.streak.lastvote: true
-  ca.streak.admin:
-    description: Allows the use of admin commands
-    default: op
-    children:
-      ca.streak.getvotes.others: true
-      ca.streak.togglelogin.others: true
-      ca.streak.totalvotes.others: true
-      ca.streak.getstreak.others: true
-      ca.streak.lastvote.others: true
-  ca.streak.togglelogin:
-    description: Allows the use of the togglelogin command
-    default: op
-  ca.streak.togglelogin.others:
-    description: Allwos the use of the togglelogin command on other players
-    default: op
-  ca.streak.totalvotes:
-    description: Allows the use of the totalvotes command
-    default: op
-  ca.streak.totalvotes.others:
-    description: Allows the use of the totalvotes command on other players
-    default: op
-  ca.streak.getvotes:
-    description: Allows the use of the getvotes command
-    default: op
-  ca.streak.getvotes.others:
-    description: Allows the use of the getvotes command on other players
-    default: op
-  ca.streak.getstreak:
-    description: Allows the use of the getstreak command
-    default: op
-  ca.streak.getstreak.others:
-    description: Allows the use of the getstreak command on other players
-    default: op
-  ca.streak.lastvote:
-    description: Allows the use of the lastvote command
-    default: op
-  ca.streak.lastvote.others:
-    description: Allows the use of the lastvote command on others
     default: op
   ca.sdu:
     description: Allows the use of the /sdu command

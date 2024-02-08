@@ -1,7 +1,7 @@
-package doubleyoucash.cashapp.listeners;
+package wyattduber.cashapp.listeners;
 
-import doubleyoucash.cashapp.CashApp;
-import doubleyoucash.cashapp.database.Database;
+import wyattduber.cashapp.CashApp;
+import wyattduber.cashapp.database.Database;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,14 +19,13 @@ public class LoginListener implements Listener {
     public LoginListener() {
         ca = CashApp.getPlugin();
         db = ca.db;
-
     }
 
     @EventHandler
     public void onLogin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (ca.enableUsernameSync && db.getSyncReminderStatus(player.getUniqueId())) {
+        if (ca.enableUsernameSync && db.getSyncReminderStatus(player.getUniqueId()) && db.isSynced(player.getUniqueId())) {
             UUID uuid = player.getUniqueId();
             String discordUsername = getSynchedDiscordUsername(uuid);
             if (!Objects.equals(discordUsername, player.getName())) {
@@ -34,7 +33,7 @@ public class LoginListener implements Listener {
                     @Override
                     public void run() {
                         /* If the username is not the same as the discord username, then notify the player to update their username */
-                        player.sendMessage("§f[§aCash§bApp§f] §7Your Discord Username is currently §a" + discordUsername + ". If you wish to update your username to match discord, use §a/sdu§7. To disable this warning, use §a/sdu reminder off§7.");
+                        player.sendMessage(ca.syncReminderMsg.replaceAll("%DISCORDUSERNAME%", discordUsername));
                     }
                 }.runTaskLater(ca, 2);
             }

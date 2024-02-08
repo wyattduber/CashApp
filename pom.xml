@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>DoubleYouCash</groupId>
+    <groupId>wyattduber</groupId>
     <artifactId>cashapp</artifactId>
     <version>1.3.0</version>
     <name>CashApp</name>
@@ -14,7 +14,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
-    <url>https://www.github.com/DoubleYouCash</url>
+    <url>https://www.github.com/wyattduber</url>
 
     <repositories>
         <repository>
@@ -32,10 +32,6 @@
         <repository>
             <id>AlessioDP</id>
             <url>https://repo.alessiodp.com/releases/</url>
-        </repository>
-        <repository>
-            <id>sk89q-repo</id>
-            <url>https://maven.enginehub.org/repo/</url>
         </repository>
     </repositories>
 
@@ -84,12 +80,6 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.15.2</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.sk89q.worldguard</groupId>
-            <artifactId>worldguard-bukkit</artifactId>
-            <version>7.1.0-SNAPSHOT</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 

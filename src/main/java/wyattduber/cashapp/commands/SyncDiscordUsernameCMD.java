@@ -1,8 +1,8 @@
-package doubleyoucash.cashapp.commands;
+package wyattduber.cashapp.commands;
 
-import doubleyoucash.cashapp.CashApp;
-import doubleyoucash.cashapp.javacord.JavacordHelper;
-import doubleyoucash.cashapp.database.Database;
+import wyattduber.cashapp.CashApp;
+import wyattduber.cashapp.javacord.JavacordHelper;
+import wyattduber.cashapp.database.Database;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.javacord.api.entity.user.User;

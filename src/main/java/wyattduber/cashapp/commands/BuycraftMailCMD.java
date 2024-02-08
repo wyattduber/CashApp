@@ -1,4 +1,4 @@
-package doubleyoucash.cashapp.commands;
+package wyattduber.cashapp.commands;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import doubleyoucash.cashapp.CashApp;
+import wyattduber.cashapp.CashApp;
 
 public class BuycraftMailCMD implements CommandExecutor {
 
