@@ -66,3 +66,11 @@ public class LibrarySetup implements AbstractLibraryLoader<Library> {
     }
 
 }
+
+record LibraryObject(String groupId, String artifactId, String version, String oldRelocation, String newRelocation) {
+    public LibraryObject {
+        if (groupId == null || artifactId == null || version == null) {
+            throw new IllegalArgumentException("LibraryObject cannot have null groupId, artifactId, or version");
+        }
+    }
+}

@@ -33,7 +33,7 @@ public class LoginListener implements Listener {
                     @Override
                     public void run() {
                         /* If the username is not the same as the discord username, then notify the player to update their username */
-                        player.sendMessage(ca.syncReminderMsg.replaceAll("%DISCORDUSERNAME%", discordUsername));
+                        ca.sendMessage(player, ca.syncReminderMsg.replaceAll("%DISCORDUSERNAME%", discordUsername));
                     }
                 }.runTaskLater(ca, 2);
             }

@@ -36,7 +36,7 @@ public class BuycraftMailCMD implements CommandExecutor {
 
         //Check to make sure that only console is executing the command
         if (sender instanceof Player player) {
-            player.sendMessage("§cCommand must be executed from console!");
+            ca.sendMessage(player, "§cCommand must be executed from console!");
             return true;
         }
 
@@ -100,7 +100,7 @@ public class BuycraftMailCMD implements CommandExecutor {
             }
         }
 
-        sender.sendMessage("Buycraft Event " + args[0] + " Sent!");
+        ca.sendMessage(sender, "Buycraft Event " + args[0] + " Sent!");
         return true;
     }
 

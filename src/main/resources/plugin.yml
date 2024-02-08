@@ -4,7 +4,6 @@ main: wyattduber.cashapp.CashApp
 api-version: 1.20
 author: wyattduber
 website: https://www.github.com/wyattduber/CashApp
-softdepend: [WorldGuard]
 
 commands:
   ca:
@@ -49,9 +48,6 @@ permissions:
     default: op
   ca.ca:
     description: Allows the use of the /ca command
-    default: op
-  ca.update:
-    description: Allows the user to see if the plugin can update
     default: op
   ca.bce:
     description: Allows the use of the /bce command

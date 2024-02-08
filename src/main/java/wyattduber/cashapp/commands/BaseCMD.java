@@ -1,10 +1,11 @@
 package wyattduber.cashapp.commands;
 
+import org.bukkit.command.*;
 import wyattduber.cashapp.CashApp;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseCMD implements CommandExecutor {
 
@@ -20,11 +21,10 @@ public class BaseCMD implements CommandExecutor {
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase("reload")) { // reload command
                 ca.reload();
-                sender.sendMessage("§f[§aCash§bApp§f] Configuration Reloaded!");
+                ca.sendMessage(sender, "Configuration Reloaded!");
                 return true;
             }
         }
         return false;
     }
-
 }

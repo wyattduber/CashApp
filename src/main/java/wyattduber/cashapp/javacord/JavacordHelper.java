@@ -21,8 +21,6 @@ public class JavacordHelper {
 
     public JavacordHelper() {
         parseConfig();
-        if (api.getTextChannelById(569228321175371776L).isPresent())
-            botmChannel = api.getTextChannelById(569228321175371776L).get();
     }
 
     public void disableAPI() {
@@ -60,6 +58,14 @@ public class JavacordHelper {
             ca.log("Connected to " + discordServer.getName() + " Discord Server!");
         } catch (Exception e) {
             ca.warn("Server not Found! Please enter a valid Server ID in config.yml and reload the plugin.");
+        }
+
+        try {
+            if (api.getTextChannelById(ca.botmChannelID).isPresent())
+                botmChannel = api.getTextChannelById(ca.botmChannelID).get();
+            ca.log("Connected to BOTM Channel " + ca.botmChannelID + "!");
+        } catch (Exception e) {
+            ca.warn("BOTM Channel not Found! Please enter a valid Channel ID in config.yml and reload the plugin.");
         }
 
     }

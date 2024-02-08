@@ -10,13 +10,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class BuildOfTheMonthCMD implements CommandExecutor {
 
+    private final CashApp ca;
     private final JavacordHelper js;
 
-    // This is a string of words that
-    String bannedWords = "anal ass asshole ballsack bastard bitch biatch blowjob boner boob boobs bullshit buttplug clitoris cock crackwhore cunt cum cyka dick dildo dipshit doggystyle douche dyke earrape fag faggot fuck fucker jerk jizz knobend knobhead knobjockey marijuana meth minge motherfucker muff penis þorn þornography prick pussy queer rape retard retarded scrotum slut sperm spunk shit shite shitty sussy tit tosser turd twat penis vagina vibrator wank wanker whore omfg wtf uwu onision owo 0w0 pussy pussys pussies";
-
     public BuildOfTheMonthCMD() {
-        CashApp ca = CashApp.getPlugin();
+        ca = CashApp.getPlugin();
         js = ca.js;
     }
 
@@ -43,10 +41,9 @@ public class BuildOfTheMonthCMD implements CommandExecutor {
                 message.append(args[i]).append(" ");
             }
 
-            String[] bwords = bannedWords.split(" ");
-            for (String bword : bwords) {
+            for (String bword : ca.botmBannedWords) {
                 if (message.toString().contains(bword) || username.contains(bword) || world.contains(bword) || x.contains(bword) || y.contains(bword) || z.contains(bword)) {
-                    sender.sendMessage("§cKeep your message kid-friendly!");
+                    ca.sendMessage(sender, "§cKeep your message kid-friendly!");
                     return true;
                 }
             }
@@ -57,14 +54,14 @@ public class BuildOfTheMonthCMD implements CommandExecutor {
         // Check if player is who they say they are when sending the command
         if (sender instanceof Player player) {
             if (!player.getName().equals(username)) {
-                player.sendMessage("§cUsernames do not match!");
+                ca.sendMessage(player, "§cUsernames do not match!");
                 return true;
             }
         }
 
         // If all the above conditions check out, then send the message to the javacord handler
         js.sendBOTMMessage(username, world, x, y, z, message.toString());
-        sender.sendMessage("BOTM Message Sent!");
+        ca.sendMessage(sender, "BOTM Message Sent!");
 
         return true;
     }

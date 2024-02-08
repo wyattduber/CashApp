@@ -1,6 +1,10 @@
 package wyattduber.cashapp;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import wyattduber.cashapp.commands.*;
+import wyattduber.cashapp.commands.tabcomplete.BaseTC;
+import wyattduber.cashapp.commands.tabcomplete.SyncDiscordUsernameTC;
 import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.javacord.JavacordHelper;
 import wyattduber.cashapp.lib.LibrarySetup;
@@ -30,6 +34,7 @@ public class CashApp extends JavaPlugin {
     public String syncReminderMsg;
     public boolean enableUsernameSync;
     public boolean enableBuycraftMessages;
+    public String botmChannelID;
     public List<String> botmBannedWords;
     public HashMap<String, Integer> usersCurrentlySyncing;
     public JavacordHelper js;
@@ -151,7 +156,7 @@ public class CashApp extends JavaPlugin {
         }
 
         try {
-            mallMsg = getConfigString("mall-remind-msg");
+            mallMsg = replaceColors(getConfigString("mall-remind-msg"));
             log("Mall Reminder Message Loaded!");
         } catch (Exception e) {
             saveDefaultConfig();
@@ -159,7 +164,7 @@ public class CashApp extends JavaPlugin {
         }
 
         try {
-            syncReminderMsg = getConfigString("sync-reminder-msg");
+            syncReminderMsg = replaceColors(getConfigString("sync-reminder-msg"));
             log("Sync Reminder Message Loaded!");
         } catch (Exception e) {
             saveDefaultConfig();
@@ -185,6 +190,15 @@ public class CashApp extends JavaPlugin {
         }
 
         try {
+            botmChannelID = getConfigString("botm-channel-id");
+            if (getConfigString("botm-channel-id").equalsIgnoreCase("000000000000000000") || getConfigString("botm-channel-id").equalsIgnoreCase("")) throw new Exception();
+        } catch (Exception e) {
+            saveDefaultConfig();
+            warn("Invalid BOTM Channel ID! Please enter a valid Bot Token in config.yml and reload the plugin.");
+            return false;
+        }
+
+        try {
             botmBannedWords = getConfig().getStringList("botm-banned-words");
             log("BOTM Message Banned Words list loaded! Not listing here for obvious reasons.");
         } catch (Exception e) {
@@ -200,16 +214,17 @@ public class CashApp extends JavaPlugin {
     public void initCommands() {
         try {
             Objects.requireNonNull(this.getCommand("ca")).setExecutor(new BaseCMD());
+            Objects.requireNonNull(this.getCommand("ca")).setTabCompleter(new BaseTC());
             Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BuildOfTheMonthCMD());
-            if (enableBuycraftMessages)
+
+            if (enableBuycraftMessages) {
                 Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
-            Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
-            Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
+                Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
+            }
             
             if (enableUsernameSync) {
-                SyncDiscordUsernameCMD u = new SyncDiscordUsernameCMD();
-                Objects.requireNonNull(this.getCommand("sdu")).setExecutor(u);
-                Objects.requireNonNull(this.getCommand("sdu")).setTabCompleter(u);
+                Objects.requireNonNull(this.getCommand("sdu")).setExecutor(new SyncDiscordUsernameCMD());
+                Objects.requireNonNull(this.getCommand("sdu")).setTabCompleter(new SyncDiscordUsernameTC());
                 usersCurrentlySyncing = new HashMap<>();
             }
         } catch (NullPointerException e) {
@@ -280,6 +295,56 @@ public class CashApp extends JavaPlugin {
 
     public void error(String message) {
         this.getLogger().log(Level.SEVERE, message);
+    }
+
+    public void sendMessage(CommandSender sender, String message) {
+        if (sender instanceof Player) {
+            sender.sendMessage("§f[§aCash§bApp§f] " + replaceColors(message));
+        } else {
+            log(message);
+        }
+    }
+
+    /**
+     * The escape sequence for minecraft special chat codes
+     */
+    public static final char ESCAPE = '§';
+
+    /**
+     * Replace all of the color codes (prepended with &) with the corresponding color code.
+     * This uses raw char arrays so it can be considered to be extremely fast.
+     *
+     * @param text the text to replace the color codes in
+     * @return string with color codes replaced
+     */
+    public String replaceColors(String text) {
+        char[] chrarray = text.toCharArray();
+
+        for (int index = 0; index < chrarray.length; index ++) {
+            char chr = chrarray[index];
+
+            // Ignore anything that we don't want
+            if (chr != '&') {
+                continue;
+            }
+
+            if ((index + 1) == chrarray.length) {
+                // we are at the end of the array
+                break;
+            }
+
+            // get the forward char
+            char forward = chrarray[index + 1];
+
+            // is it in range?
+            if ((forward >= '0' && forward <= '9') || (forward >= 'a' && forward <= 'f') || (forward >= 'k' && forward <= 'r')) {
+                // It is! Replace the char we are at now with the escape sequence
+                chrarray[index] = ESCAPE;
+            }
+        }
+
+        // Rebuild the string and return it
+        return new String(chrarray);
     }
 
 }
