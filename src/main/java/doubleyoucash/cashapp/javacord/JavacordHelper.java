@@ -1,8 +1,9 @@
-package doubleyoucash.cashapp;
+package doubleyoucash.cashapp.javacord;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutionException;
 
+import doubleyoucash.cashapp.CashApp;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.TextChannel;
@@ -10,7 +11,7 @@ import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.util.logging.ExceptionLogger;
 
-public class JavacordStart {
+public class JavacordHelper {
 
     public DiscordApi api;
     public Server discordServer;
@@ -18,7 +19,7 @@ public class JavacordStart {
 
     private final CashApp ca = CashApp.getPlugin();
 
-    public JavacordStart() {
+    public JavacordHelper() {
         parseConfig();
         if (api.getTextChannelById(569228321175371776L).isPresent())
             botmChannel = api.getTextChannelById(569228321175371776L).get();
@@ -93,6 +94,18 @@ public class JavacordStart {
 
     public void unsyncUsername(User user) {
         discordServer.updateNickname(user, "", "Username Unsync").exceptionally(ExceptionLogger.get());
+    }
+
+    public String getUserName(User user) {
+        return user.getDisplayName(discordServer);
+    }
+
+    public String getUserName(long discordId) {
+        try {
+            return api.getCachedUserById(discordId).get().getDisplayName(discordServer);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

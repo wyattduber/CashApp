@@ -6,11 +6,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-public class CA implements CommandExecutor {
+public class BaseCMD implements CommandExecutor {
 
     private final CashApp ca;
 
-    public CA() {
+    public BaseCMD() {
         ca = CashApp.getPlugin();
     }
 

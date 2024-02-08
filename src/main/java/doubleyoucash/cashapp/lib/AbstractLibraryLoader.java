@@ -1,4 +1,4 @@
-package doubleyoucash.cashapp.libraries;
+package doubleyoucash.cashapp.lib;
 
 import java.util.List;
 

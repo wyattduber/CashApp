@@ -1,21 +1,21 @@
 package doubleyoucash.cashapp.commands;
 
 import doubleyoucash.cashapp.CashApp;
-import doubleyoucash.cashapp.JavacordStart;
+import doubleyoucash.cashapp.javacord.JavacordHelper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class BOTM implements CommandExecutor {
+public class BuildOfTheMonthCMD implements CommandExecutor {
 
-    private final JavacordStart js;
+    private final JavacordHelper js;
 
     // This is a string of words that
     String bannedWords = "anal ass asshole ballsack bastard bitch biatch blowjob boner boob boobs bullshit buttplug clitoris cock crackwhore cunt cum cyka dick dildo dipshit doggystyle douche dyke earrape fag faggot fuck fucker jerk jizz knobend knobhead knobjockey marijuana meth minge motherfucker muff penis þorn þornography prick pussy queer rape retard retarded scrotum slut sperm spunk shit shite shitty sussy tit tosser turd twat penis vagina vibrator wank wanker whore omfg wtf uwu onision owo 0w0 pussy pussys pussies";
 
-    public BOTM() {
+    public BuildOfTheMonthCMD() {
         CashApp ca = CashApp.getPlugin();
         js = ca.js;
     }

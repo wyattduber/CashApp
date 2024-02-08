@@ -1,7 +1,7 @@
 package doubleyoucash.cashapp.commands;
 
 import doubleyoucash.cashapp.CashApp;
-import doubleyoucash.cashapp.JavacordStart;
+import doubleyoucash.cashapp.javacord.JavacordHelper;
 import doubleyoucash.cashapp.database.Database;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -11,13 +11,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SDU implements TabExecutor {
+public class SyncDiscordUsernameCMD implements TabExecutor {
 
     private final CashApp ca;
-    private final JavacordStart js;
+    private final JavacordHelper js;
     private final Database db;
 
-    public SDU() {
+    public SyncDiscordUsernameCMD() {
         ca = CashApp.getPlugin();
         js = ca.js;
         db = ca.db;
@@ -39,9 +39,11 @@ public class SDU implements TabExecutor {
                 - Then you will receive a DM from the bot with a code.
                 - Then you will run "/sdu wcash <code>" in game, and your username will be synced.
                 - If you want to unsync your username, run "/sdu wcash unsync" in game.
+                
+                To toggle the login reminder, use §a/sdu reminder [on/off]§7.
                 """;
 
-        if (args.length > 2 || args.length == 0) {
+        if (args.length > 3 || args.length == 0) {
             sender.sendMessage(BASIC_HELP_MESSAGE);
             return true;
         }
@@ -92,7 +94,31 @@ public class SDU implements TabExecutor {
                 player.sendMessage("§cYou don't have permission to use this command!");
                 return true;
             }
+        } else if (args[1].equalsIgnoreCase("reminder")) {
+            if (player.hasPermission("ca.sdu")) {
+                if (args.length < 3) {
+                    String status = db.getSyncReminderStatus(player.getUniqueId()) ? "§aON" : "§cOFF";
+                    player.sendMessage("§aReminder Status: " + status);
+                    return true;
+                }
+                if (args[2].equalsIgnoreCase("on")) {
+                    db.setSyncReminderStatus(player.getUniqueId(), true);
+                    player.sendMessage("§aUsername Sync Reminder turned on!");
+                    return true;
+                } else if (args[2].equalsIgnoreCase("off")) {
+                    db.setSyncReminderStatus(player.getUniqueId(), false);
+                    player.sendMessage("§aUsername Sync Reminder turned off!");
+                    return true;
+                } else {
+                    player.sendMessage("§cInvalid argument! Please use §a/sdu reminder [on/off]§c.");
+                    return true;
+                }
+            } else {
+                player.sendMessage("§cYou don't have permission to use this command!");
+                return true;
+            }
         }
+
         if (player.hasPermission("ca.sdu")) {
             String username = player.getName();
             User user = js.checkUserExists(args[0]);
@@ -125,10 +151,10 @@ public class SDU implements TabExecutor {
                 }
                 ca.usersCurrentlySyncing.remove(username);
                 if (!db.userExistsInSync(player.getUniqueId())) {
-                    ca.log("Returned false! " + db.userExistsInStreaks(player.getUniqueId()));
+                    ca.log("Returned false! " + username + " " + user.getId() + " " + player.getUniqueId() + " " + player.getName());
                     db.addSyncRecord(player.getUniqueId(), player.getName(), user.getId(), true);
                 } else {
-                    ca.log("Returned true! " + db.userExistsInStreaks(player.getUniqueId()));
+                    ca.log("Returned false! " + username + " " + user.getId() + " " + player.getUniqueId() + " " + player.getName());
                     db.updateSyncRecord(player.getUniqueId(), player.getName(), user.getId(), true);
                 }
                 player.sendMessage("Your username has been synced!");

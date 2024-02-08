@@ -12,14 +12,14 @@ import org.jetbrains.annotations.NotNull;
 
 import doubleyoucash.cashapp.CashApp;
 
-public class BCE implements CommandExecutor {
+public class BuycraftMailCMD implements CommandExecutor {
 
     private final CashApp ca;
     private final List<String> modList;
     private final List<String> modPlusList;
     private final ConsoleCommandSender console;
 
-    public BCE() {
+    public BuycraftMailCMD() {
         ca = CashApp.getPlugin();
         console = Bukkit.getServer().getConsoleSender();
         modList = ca.modList;

@@ -30,13 +30,23 @@ public class WorldGuardHelper {
         }
     }
 
-    public boolean isWorldguardEnabled() {
-        return ca.getServer().getPluginManager().getPlugin("WorldGuard") != null;
+    public void start() {
+        ca.log("WorldGuardHelper started");
+    }
+
+    public boolean canPlayerBuildInRegion(String region, String worldName, String playerName) {
+        ProtectedRegion reg;
+        try {
+            reg = regions.get(worldName).getRegion(region);
+        } catch (Exception e) {
+            ca.error("Error when getting region \"" + region + "\" in world \"" + worldName + "\": " + e.getMessage());
+            return false;
+        }
+
+        return reg != null && (reg.isMember(playerName) || reg.isOwner(playerName));
     }
 
     public boolean isPlayerInRegion(String region, String worldName, int x, int y, int z) {
-        if (!isWorldguardEnabled()) return false;
-
         ProtectedRegion reg;
         try {
             reg = regions.get(worldName).getRegion(region);

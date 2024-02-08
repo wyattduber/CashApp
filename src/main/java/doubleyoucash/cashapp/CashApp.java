@@ -2,10 +2,10 @@ package doubleyoucash.cashapp;
 
 import doubleyoucash.cashapp.commands.*;
 import doubleyoucash.cashapp.database.Database;
-import doubleyoucash.cashapp.libraries.LibrarySetup;
+import doubleyoucash.cashapp.javacord.JavacordHelper;
+import doubleyoucash.cashapp.lib.LibrarySetup;
 import doubleyoucash.cashapp.listeners.BlockBreakListener;
 import doubleyoucash.cashapp.listeners.LoginListener;
-import doubleyoucash.cashapp.listeners.VoteListener;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,11 +29,10 @@ public class CashApp extends JavaPlugin {
     public String serverID;
     public String mallMsg;
     public boolean enableUsernameSync;
-    public boolean enableVoteStreak;
     public boolean enableBuycraftMessages;
     public List<String> botmBannedWords;
     public HashMap<String, Integer> usersCurrentlySyncing;
-    public JavacordStart js;
+    public JavacordHelper js;
     public Database db;
 
     public static CashApp getPlugin() { return getPlugin(CashApp.class); }
@@ -67,7 +66,7 @@ public class CashApp extends JavaPlugin {
         /* Config Parsing */
         if (parseConfig()) {
             initListeners();
-            js = new JavacordStart();
+            js = new JavacordHelper();
         }
 
         /* Commands */
@@ -102,7 +101,7 @@ public class CashApp extends JavaPlugin {
         }
 
         if (parseConfig() || js == null) {
-            js = new JavacordStart();
+            js = new JavacordHelper();
         } else {
             js.reload();
         }
@@ -111,7 +110,6 @@ public class CashApp extends JavaPlugin {
     public void initListeners() {
         getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
         getServer().getPluginManager().registerEvents(new LoginListener(), this);
-        getServer().getPluginManager().registerEvents(new VoteListener(), this);
         log("Minecraft Listeners Loaded!");
     }
 
@@ -164,15 +162,6 @@ public class CashApp extends JavaPlugin {
         }
 
         try {
-            enableVoteStreak = getConfigBoolean("enable-vote-streak");
-            if (enableVoteStreak) log("Vote Streak Enabled!");
-            else log("Vote Streak Disabled!");
-        } catch (Exception e) {
-            saveDefaultConfig();
-            warn("Invalid Vote Streak Setting! Please set the enable-vote-streak in the config.yml!");
-        }
-
-        try {
             enableBuycraftMessages = getConfigBoolean("enable-buycraft-messages");
             if (enableBuycraftMessages) log("Buycraft Messages Enabled!");
             else log("Buycraft Messages Disabled!");
@@ -196,21 +185,15 @@ public class CashApp extends JavaPlugin {
 
     public void initCommands() {
         try {
-            Objects.requireNonNull(this.getCommand("ca")).setExecutor(new CA());
-            Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BOTM());
+            Objects.requireNonNull(this.getCommand("ca")).setExecutor(new BaseCMD());
+            Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BuildOfTheMonthCMD());
             if (enableBuycraftMessages)
-                Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
-            Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BCE());
-            Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new RMD());
-
-            if (enableVoteStreak) {
-                STREAK s = new STREAK();
-                Objects.requireNonNull(this.getCommand("streak")).setExecutor(s);
-                Objects.requireNonNull(this.getCommand("streak")).setTabCompleter(s);
-            }
+                Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
+            Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
+            Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
             
             if (enableUsernameSync) {
-                SDU u = new SDU();
+                SyncDiscordUsernameCMD u = new SyncDiscordUsernameCMD();
                 Objects.requireNonNull(this.getCommand("sdu")).setExecutor(u);
                 Objects.requireNonNull(this.getCommand("sdu")).setTabCompleter(u);
                 usersCurrentlySyncing = new HashMap<String, Integer>();

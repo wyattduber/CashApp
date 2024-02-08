@@ -8,12 +8,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.NotNull;
 
-public class RMD implements CommandExecutor {
+public class StallRemindCMD implements CommandExecutor {
 
     private final CashApp ca;
     private final ConsoleCommandSender console;
 
-    public RMD() {
+    public StallRemindCMD() {
         ca = CashApp.getPlugin();
         console = Bukkit.getServer().getConsoleSender();
     }

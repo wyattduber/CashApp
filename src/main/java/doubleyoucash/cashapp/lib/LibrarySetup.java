@@ -1,4 +1,4 @@
-package doubleyoucash.cashapp.libraries;
+package doubleyoucash.cashapp.lib;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import doubleyoucash.cashapp.CashApp;
