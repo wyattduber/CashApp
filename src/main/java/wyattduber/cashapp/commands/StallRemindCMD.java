@@ -25,9 +25,20 @@ public class StallRemindCMD implements CommandExecutor {
             return false;
         }
 
+        boolean flag = true;
         for (String arg : strings) {
             String cmd = "cmi mail send " + arg + " " + ca.mallMsg;
-            Bukkit.dispatchCommand(console, cmd);
+            flag = Bukkit.dispatchCommand(console, cmd);
+
+            if (!flag) {
+                flag = false;
+            }
+        }
+
+        if (flag) {
+            ca.sendMessage(commandSender, "§aMessage sent to all players!");
+        } else {
+            ca.sendMessage(commandSender, "§cMessage failed to send to all players! One or more of the usernames were incorrect or couldn't be found.");
         }
 
         Bukkit.dispatchCommand(console, "bce -1 " + commandSender.getName());

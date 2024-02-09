@@ -21,8 +21,15 @@ public class BuildOfTheMonthCMD implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
+        // Argument Check
         if (args.length < 5) {
             return false;
+        }
+
+        // Check if the server is connected to Discord
+        if (!ca.discordConnected) {
+            ca.sendMessage(sender, "&cThe server is not connected to Discord!");
+            return true;
         }
 
         // Declare variables and assign initial arguments

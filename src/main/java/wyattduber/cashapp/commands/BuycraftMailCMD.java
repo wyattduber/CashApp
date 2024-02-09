@@ -34,6 +34,14 @@ public class BuycraftMailCMD implements CommandExecutor {
             return false;
         }
 
+        // Confirm that argument is an integer
+        try {
+            Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {
+            ca.sendMessage(sender, "§cFirst argument must be an integer!");
+            return true;
+        }
+
         //Check to make sure that only console is executing the command
         if (sender instanceof Player player) {
             ca.sendMessage(player, "§cCommand must be executed from console!");
@@ -50,8 +58,8 @@ public class BuycraftMailCMD implements CommandExecutor {
          * 4 = Warp Move/Rename (Mod/Mod+)
          * 5 = Mob Spawner (Mod/Mod+)
          */
-        switch (args[0]) {
-            case "-1" -> {
+        switch (BuycraftMailType.fromInt(Integer.parseInt(args[0]))) {
+            case STALL_RE_RENTAL_MESSAGE_ALERT -> {
                 for (String value : modList) {
                     Bukkit.dispatchCommand(console, "cmi mail send " + value + " " + args[1] + " reminded mall renters of re-rental period.");
                 }
@@ -59,22 +67,22 @@ public class BuycraftMailCMD implements CommandExecutor {
                     Bukkit.dispatchCommand(console, "cmi mail send " + value + " " + args[1] + " reminded mall renters of re-rental period.");
                 }
             }
-            case "0" -> {
+            case CUSTOM_TITLE -> {
                 for (String value : modPlusList) {
                     Bukkit.dispatchCommand(console, "cmi mail send " + value + " " + args[1] + " has purchased a Custom Title.");
                 }
             }
-            case "1" -> {
+            case CUSTOM_TITLE_REPLACEMENT -> {
                 for (String user : modPlusList) {
                     Bukkit.dispatchCommand(console, "cmi mail send " + user + " " + args[1] + " has purchased a Custom Title Replacement.");
                 }
             }
-            case "2" -> {
+            case CUSTOM_WEAPON_NAME_LORE -> {
                 for (String permissionUser : modPlusList) {
                     Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Custom Weapon Name/Lore.");
                 }
             }
-            case "3" -> {
+            case PUBLIC_WARP -> {
                 for (String permissionUser : modPlusList) {
                     Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp.");
                 }
@@ -82,7 +90,7 @@ public class BuycraftMailCMD implements CommandExecutor {
                     Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp.");
                 }
             }
-            case "4" -> {
+            case WARP_MOVE_RENAME -> {
                 for (String permissionUser : modPlusList) {
                     Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp Move/Rename.");
                 }
@@ -90,7 +98,7 @@ public class BuycraftMailCMD implements CommandExecutor {
                     Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Public Warp Move/Rename.");
                 }
             }
-            case "5" -> {
+            case MOB_SPAWNER -> {
                 for (String permissionUser : modPlusList) {
                     Bukkit.dispatchCommand(console, "cmi mail send " + permissionUser + " " + args[1] + " has purchased a Mob Spawner.");
                 }
@@ -100,8 +108,37 @@ public class BuycraftMailCMD implements CommandExecutor {
             }
         }
 
-        ca.sendMessage(sender, "Buycraft Event " + args[0] + " Sent!");
+        ca.sendMessage(sender, "Buycraft Event " + BuycraftMailType.fromInt(Integer.parseInt(args[0])) + " Sent!");
         return true;
     }
 
+}
+
+enum BuycraftMailType {
+    STALL_RE_RENTAL_MESSAGE_ALERT (-1),
+    CUSTOM_TITLE (0),
+    CUSTOM_TITLE_REPLACEMENT (1),
+    CUSTOM_WEAPON_NAME_LORE(2),
+    PUBLIC_WARP(3),
+    WARP_MOVE_RENAME(4),
+    MOB_SPAWNER(5);
+
+    private final int value;
+
+    BuycraftMailType(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public static BuycraftMailType fromInt(int value) {
+        for (BuycraftMailType enumValue : BuycraftMailType.values()) {
+            if (enumValue.getValue() == value) {
+                return enumValue;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant with value " + value);
+    }
 }

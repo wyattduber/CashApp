@@ -25,7 +25,7 @@ public class LoginListener implements Listener {
     public void onLogin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (ca.enableUsernameSync && db.getSyncReminderStatus(player.getUniqueId()) && db.isSynced(player.getUniqueId())) {
+        if (db.getSyncReminderStatus(player.getUniqueId()) && db.isSynced(player.getUniqueId())) {
             UUID uuid = player.getUniqueId();
             String discordUsername = getSynchedDiscordUsername(uuid);
             if (!Objects.equals(discordUsername, player.getName())) {

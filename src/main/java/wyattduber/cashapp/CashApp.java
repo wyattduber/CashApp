@@ -1,9 +1,12 @@
 package wyattduber.cashapp;
 
+import io.vavr.Tuple2;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import wyattduber.cashapp.commands.*;
 import wyattduber.cashapp.commands.tabcomplete.BaseTC;
+import wyattduber.cashapp.commands.tabcomplete.BuildOfTheMonthTC;
+import wyattduber.cashapp.commands.tabcomplete.StallRemindTC;
 import wyattduber.cashapp.commands.tabcomplete.SyncDiscordUsernameTC;
 import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.javacord.JavacordHelper;
@@ -32,13 +35,12 @@ public class CashApp extends JavaPlugin {
     public String serverID;
     public String mallMsg;
     public String syncReminderMsg;
-    public boolean enableUsernameSync;
-    public boolean enableBuycraftMessages;
     public String botmChannelID;
     public List<String> botmBannedWords;
     public HashMap<String, Integer> usersCurrentlySyncing;
     public JavacordHelper js;
     public Database db;
+    public boolean discordConnected;
 
     public static CashApp getPlugin() { return getPlugin(CashApp.class); }
 
@@ -68,17 +70,12 @@ public class CashApp extends JavaPlugin {
              error("SQL State: " + e.getSQLState());
          }
 
+         /* Load Listeners */
+         initListeners();
+
         /* Config Parsing */
         if (parseConfig()) {
-            initListeners();
-
-            if (enableUsernameSync) {
-                js = new JavacordHelper();
-            }
-
-            if (enableBuycraftMessages) {
-                js = new JavacordHelper();
-            }
+            js = new JavacordHelper();
         }
 
         /* Commands */
@@ -125,13 +122,15 @@ public class CashApp extends JavaPlugin {
     }
 
     public boolean parseConfig() {
+        boolean flag = true;
+
         try {
             botToken = getConfigString("bot-token");
             if (getConfigString("bot-token").equalsIgnoreCase("BOTTOKEN") || getConfigString("bot-token").equalsIgnoreCase("")) throw new Exception();
         } catch (Exception e) {
             saveDefaultConfig();
             warn("Invalid Bot Token! Please enter a valid Bot Token in config.yml and reload the plugin.");
-            return false;
+            discordConnected = false;
         }
 
         try {
@@ -141,18 +140,22 @@ public class CashApp extends JavaPlugin {
         } catch (Exception e) {
             saveDefaultConfig();
             warn("Invalid Server ID! Please enter a valid Server ID in config.yml and reload the plugin.");
-            return false;
+            discordConnected = false;
         }
 
         try {
             modList = getConfig().getStringList("mod-list");
             modPlusList = getConfig().getStringList("mod-plus-list");
+
+            if (modList == null || modList.isEmpty()) throw new Exception();
+            if (modPlusList == null || modPlusList.isEmpty()) throw new Exception();
+
             log("Mods loaded: " + Arrays.toString(modList.toArray()));
             log("Mod+'s loaded: " + Arrays.toString(modPlusList.toArray()));
         } catch (Exception e) {
             saveDefaultConfig();
             warn("Invalid Staff List! Please enter a valid Staff List in config.yml and reload the plugin.");
-            return false;
+            flag = false;
         }
 
         try {
@@ -172,30 +175,12 @@ public class CashApp extends JavaPlugin {
         }
 
         try {
-            enableUsernameSync = getConfigBoolean("enable-username-sync");
-            if (enableUsernameSync) log("Username Sync Enabled!");
-            else log("Username Sync Disabled!");
-        } catch (Exception e) {
-            saveDefaultConfig();
-            warn("Invalid Username Setting! Please set the enable-username-sync in the config.yml!");
-        }
-
-        try {
-            enableBuycraftMessages = getConfigBoolean("enable-buycraft-messages");
-            if (enableBuycraftMessages) log("Buycraft Messages Enabled!");
-            else log("Buycraft Messages Disabled!");
-        } catch (Exception e) {
-            saveDefaultConfig();
-            warn("Invalid Buycraft Messages Setting! Please set the enable-buycraft-messages in the config.yml!");
-        }
-
-        try {
             botmChannelID = getConfigString("botm-channel-id");
             if (getConfigString("botm-channel-id").equalsIgnoreCase("000000000000000000") || getConfigString("botm-channel-id").equalsIgnoreCase("")) throw new Exception();
         } catch (Exception e) {
             saveDefaultConfig();
             warn("Invalid BOTM Channel ID! Please enter a valid Bot Token in config.yml and reload the plugin.");
-            return false;
+            discordConnected = false;
         }
 
         try {
@@ -204,29 +189,33 @@ public class CashApp extends JavaPlugin {
         } catch (Exception e) {
             saveDefaultConfig();
             warn("Invalid banned words list! Please make sure the list is valid in the config.yml and doesn't contain syntax errors.");
-            return false;
+            flag = false;
         }
 
         log("Config loaded!");
-        return true;
+        discordConnected = true;
+        return flag;
     }
 
     public void initCommands() {
         try {
             Objects.requireNonNull(this.getCommand("ca")).setExecutor(new BaseCMD());
             Objects.requireNonNull(this.getCommand("ca")).setTabCompleter(new BaseTC());
-            Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BuildOfTheMonthCMD());
 
-            if (enableBuycraftMessages) {
-                Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
-                Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
-            }
-            
-            if (enableUsernameSync) {
-                Objects.requireNonNull(this.getCommand("sdu")).setExecutor(new SyncDiscordUsernameCMD());
-                Objects.requireNonNull(this.getCommand("sdu")).setTabCompleter(new SyncDiscordUsernameTC());
-                usersCurrentlySyncing = new HashMap<>();
-            }
+            Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BuildOfTheMonthCMD());
+            Objects.requireNonNull(this.getCommand("botm")).setTabCompleter(new BuildOfTheMonthTC());
+
+            // Doesn't need tab completer as it is a console only command
+            Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
+
+            Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
+            Objects.requireNonNull(this.getCommand("rmd")).setTabCompleter(new StallRemindTC());
+
+            Objects.requireNonNull(this.getCommand("sdu")).setExecutor(new SyncDiscordUsernameCMD());
+            Objects.requireNonNull(this.getCommand("sdu")).setTabCompleter(new SyncDiscordUsernameTC());
+            usersCurrentlySyncing = new HashMap<>();
+
+            log("Commands Loaded!");
         } catch (NullPointerException e) {
             error(e.getMessage());
         }
@@ -234,10 +223,6 @@ public class CashApp extends JavaPlugin {
 
     public String getConfigString(String entryName) {
         return config.getString(entryName);
-    }
-
-    public boolean getConfigBoolean(String entryName) {
-        return config.getBoolean(entryName);
     }
 
     public void reloadCustomConfig() {

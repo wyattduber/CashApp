@@ -8,9 +8,6 @@ import org.bukkit.entity.Player;
 import org.javacord.api.entity.user.User;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SyncDiscordUsernameCMD implements CommandExecutor {
 
     private final CashApp ca;
@@ -41,11 +38,19 @@ public class SyncDiscordUsernameCMD implements CommandExecutor {
                 To toggle the login reminder, use &a/sdu reminder [on/off]&7.
                 """;
 
+        // Check if the server is connected to discord
+        if (!ca.discordConnected) {
+            ca.sendMessage(sender, "&cThe server is not connected to Discord!");
+            return true;
+        }
+
+        // Check args length
         if (args.length > 3 || args.length == 0) {
             ca.sendMessage(sender, BASIC_HELP_MESSAGE);
             return true;
         }
 
+        // Check if the command is being executed by the console
         if (sender instanceof ConsoleCommandSender) {
             ca.sendMessage(sender, "&cYou must be a player to use this command!");
             return true;

@@ -47,7 +47,7 @@ public class JavacordHelper {
         try {
             api = new DiscordApiBuilder().setToken(ca.botToken).setAllIntents().login().join();
             ca.log("Connected to " + api.getYourself().getName() + " Bot!");
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             ca.warn("Could not connect to API! Please enter a valid Bot Token in config.yml and reload the plugin.");
             ca.warn("If the bot-token is valid, please file an issue on our GitHub.");
         }
@@ -102,16 +102,13 @@ public class JavacordHelper {
         discordServer.updateNickname(user, "", "Username Unsync").exceptionally(ExceptionLogger.get());
     }
 
-    public String getUserName(User user) {
-        return user.getDisplayName(discordServer);
-    }
-
     public String getUserName(long discordId) {
         try {
-            return api.getCachedUserById(discordId).get().getDisplayName(discordServer);
+            if (api.getCachedUserById(discordId).isPresent())
+                return api.getCachedUserById(discordId).get().getDisplayName(discordServer);
+            else throw new Exception();
         } catch (Exception e) {
             return null;
         }
     }
-
 }
