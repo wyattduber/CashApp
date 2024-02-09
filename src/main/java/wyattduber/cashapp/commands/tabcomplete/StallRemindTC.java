@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class StallRemindTC implements TabCompleter {
@@ -23,11 +24,8 @@ public class StallRemindTC implements TabCompleter {
 
         ArrayList<String> tabs = new ArrayList<>();
 
-        for (int i = 0; i < args.length; i++) {
-            tabs.add("Username " + (i + 1));
-        }
+        tabs.add("Username-" + args.length);
 
         return tabs;
     }
-
 }

@@ -38,5 +38,4 @@ public class SyncDiscordUsernameTC implements TabCompleter {
             default -> tabs;
         };
     }
-
 }
