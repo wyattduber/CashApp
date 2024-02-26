@@ -24,7 +24,7 @@ public class LibrarySetup implements AbstractLibraryLoader<Library> {
 
             for (LibraryObject libraryObject : objectMapper.readValue(jsonFile, LibraryObject[].class)) {
                 list.add(createLibrary(libraryObject));
-                System.out.println("Loaded " + libraryObject.artifactId() + " " + libraryObject.version() + " from " + libraryObject.groupId());
+                if (ca.debugMode) ca.debug("Loaded " + libraryObject.artifactId() + " " + libraryObject.version() + " from " + libraryObject.groupId());
             }
         } catch (IOException e) {
             ca.error(e.getMessage());

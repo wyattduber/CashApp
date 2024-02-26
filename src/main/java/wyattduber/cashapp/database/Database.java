@@ -156,21 +156,21 @@ public class Database {
             }
             if (needsUpdate) {
                 // Table structure is up to date
-                ca.log("Table '" + tableName + "' structure is up to date.");
+                if (ca.debugMode) ca.debug("Table '" + tableName + "' structure is up to date.");
             } else {
                 // Table structure needs updating
-                ca.log("Updating table '" + tableName + "' structure...");
+                if (ca.debugMode) ca.debug("Updating table '" + tableName + "' structure...");
                 Statement stmt = dbcon.createStatement();
                 stmt.executeUpdate("DROP TABLE " + tableName);
                 stmt.executeUpdate(createTableQuery);
-                ca.log("Table '" + tableName + "' structure updated successfully.");
+                if (ca.debugMode) ca.debug("Table '" + tableName + "' structure updated successfully.");
             }
         } else {
             // Table does not exist, create it
-            ca.log("Creating table '" + tableName + "'...");
+            if (ca.debugMode) ca.debug("Creating table '" + tableName + "'...");
             Statement stmt = dbcon.createStatement();
             stmt.executeUpdate(createTableQuery);
-            ca.log("Table '" + tableName + "' created successfully.");
+            if (ca.debugMode) ca.debug("Table '" + tableName + "' created successfully.");
         }
     }
 

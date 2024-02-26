@@ -1,8 +1,13 @@
 package wyattduber.cashapp;
 
 import io.vavr.Tuple2;
+import org.apache.commons.lang3.ObjectUtils;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
 import wyattduber.cashapp.commands.*;
 import wyattduber.cashapp.commands.tabcomplete.BaseTC;
 import wyattduber.cashapp.commands.tabcomplete.BuildOfTheMonthTC;
@@ -20,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.*;
@@ -29,12 +35,20 @@ public class CashApp extends JavaPlugin {
 
     public FileConfiguration config;
     public File customConfigFile;
+    public boolean debugMode;
+    public List<String> commands;
     public List<String> modList;
     public List<String> modPlusList;
     public String botToken;
     public String serverID;
     public String mallMsg;
     public String syncReminderMsg;
+    public boolean useFirstTimeMessage;
+    public int messageDelayTicks;
+    public String firstTimeMessage;
+    public String[] messageNames;
+    public HashMap<String, String> messages = new HashMap<>();
+    public LoginListener ll;
     public String botmChannelID;
     public List<String> botmBannedWords;
     public HashMap<String, Integer> usersCurrentlySyncing;
@@ -79,8 +93,16 @@ public class CashApp extends JavaPlugin {
         }
 
         /* Commands */
+        // Init master commands list
+        commands = new ArrayList<>();
+        commands.add("ca");
+        commands.add("botm");
+        commands.add("bce");
+        commands.add("rmd");
+        commands.add("sdu");
+
         try {
-            initCommands();
+            registerCommands();
         } catch (Exception e) {
             error("Error setting up commands! Contact the developer if you cannot fix this issue.");
         }
@@ -95,9 +117,22 @@ public class CashApp extends JavaPlugin {
     }
 
     public void reload() {
-        reloadCustomConfig();
-        config = getCustomConfig();
-        saveCustomConfig();
+        // Un-Register Listeners
+        PlayerJoinEvent.getHandlerList().unregister(ll);
+
+        /* Un-Register Commands */
+        for (String cmd : commands) {
+            unRegisterCommand(this.getCommand(cmd));
+        }
+
+        /* Load and Initiate Configs */
+        try {
+            reloadCustomConfig();
+            config = getCustomConfig();
+            saveCustomConfig();
+        } catch (Exception e) {
+            error("Error setting up the config! Contact the developer if you cannot fix this issue.");
+        }
 
         /* Reload database if it's gone */
         try {
@@ -114,10 +149,13 @@ public class CashApp extends JavaPlugin {
         } else {
             js.reload();
         }
+
+        initListeners();
     }
 
     public void initListeners() {
-        getServer().getPluginManager().registerEvents(new LoginListener(), this);
+        ll = new LoginListener();
+        getServer().getPluginManager().registerEvents(ll, this);
         log("Listeners Loaded!");
     }
 
@@ -125,10 +163,16 @@ public class CashApp extends JavaPlugin {
         boolean flag = true;
 
         try {
+            debugMode = getConfigBool("debug");
+        } catch (Exception e) {
+            warn("Invalid Debug Mode setting! Please set a valid boolean entry for the debug mode and reload the plugin.");
+            flag = false;
+        }
+
+        try {
             botToken = getConfigString("bot-token");
             if (getConfigString("bot-token").equalsIgnoreCase("BOTTOKEN") || getConfigString("bot-token").equalsIgnoreCase("")) throw new Exception();
         } catch (Exception e) {
-            saveDefaultConfig();
             warn("Invalid Bot Token! Please enter a valid Bot Token in config.yml and reload the plugin.");
             discordConnected = false;
         }
@@ -138,7 +182,6 @@ public class CashApp extends JavaPlugin {
             if (getConfigString("server-id").equalsIgnoreCase("000000000000000000") || getConfigString("server-id").equalsIgnoreCase("")) throw new Exception();
             log("Discord Server Found!");
         } catch (Exception e) {
-            saveDefaultConfig();
             warn("Invalid Server ID! Please enter a valid Server ID in config.yml and reload the plugin.");
             discordConnected = false;
         }
@@ -153,7 +196,6 @@ public class CashApp extends JavaPlugin {
             log("Mods loaded: " + Arrays.toString(modList.toArray()));
             log("Mod+'s loaded: " + Arrays.toString(modPlusList.toArray()));
         } catch (Exception e) {
-            saveDefaultConfig();
             warn("Invalid Staff List! Please enter a valid Staff List in config.yml and reload the plugin.");
             flag = false;
         }
@@ -162,7 +204,6 @@ public class CashApp extends JavaPlugin {
             mallMsg = replaceColors(getConfigString("mall-remind-msg"));
             log("Mall Reminder Message Loaded!");
         } catch (Exception e) {
-            saveDefaultConfig();
             warn("Invalid Mall Reminder Message! Please set the mall-remind-msg in the config.yml!");
         }
 
@@ -170,15 +211,49 @@ public class CashApp extends JavaPlugin {
             syncReminderMsg = replaceColors(getConfigString("sync-reminder-msg"));
             log("Sync Reminder Message Loaded!");
         } catch (Exception e) {
-            saveDefaultConfig();
             warn("Invalid Sync Reminder Message! Please set the sync-reminder-msg in the config.yml!");
+        }
+
+        try {
+            messageDelayTicks = getConfigInt("message-delay");
+        } catch (NullPointerException e) {
+            error("Cannot Find \"message-delay\" Boolean in Config! Make sure it's there and reload the plugin.");
+        }
+
+        try {
+            StringBuilder message = new StringBuilder();
+            useFirstTimeMessage = getConfigBool("enable-first-time-message");
+            String[] tempAdd = new String[config.getStringList("first-time-message").size()];
+            tempAdd = config.getStringList("first-time-message").toArray(tempAdd);
+            parseColorCodesOld(message, tempAdd);
+            firstTimeMessage = message.toString();
+        } catch (NullPointerException e) {
+            error(e.getMessage());
+            error("Cannot Find \"enable-first-time-message\" Boolean in Config! Make sure it's there and reload the plugin.");
+        }
+
+        /* Parse Message Names and Messages by Permission Node */
+        try {
+            messageNames = new String[config.getStringList("messages").size()]; // Initialize the Array as an Template
+            messageNames = config.getStringList("messages").toArray(messageNames); // Fill the array using itself as a template
+
+            for (String messageName : messageNames) {
+                StringBuilder message = new StringBuilder();
+                String[] tempAdd = new String[config.getStringList(messageName).size()];
+                tempAdd = config.getStringList(messageName).toArray(tempAdd);
+                parseColorCodesOld(message, tempAdd);
+                messages.put("lm.message." + messageName, message.toString());
+            }
+
+        } catch (NullPointerException e) {
+            error(e.getMessage());
+            error("Error with the Message Section in the Config! Make sure it's set properly and reload the plugin.");
         }
 
         try {
             botmChannelID = getConfigString("botm-channel-id");
             if (getConfigString("botm-channel-id").equalsIgnoreCase("000000000000000000") || getConfigString("botm-channel-id").equalsIgnoreCase("")) throw new Exception();
         } catch (Exception e) {
-            saveDefaultConfig();
             warn("Invalid BOTM Channel ID! Please enter a valid Bot Token in config.yml and reload the plugin.");
             discordConnected = false;
         }
@@ -187,47 +262,93 @@ public class CashApp extends JavaPlugin {
             botmBannedWords = getConfig().getStringList("botm-banned-words");
             log("BOTM Message Banned Words list loaded! Not listing here for obvious reasons.");
         } catch (Exception e) {
-            saveDefaultConfig();
             warn("Invalid banned words list! Please make sure the list is valid in the config.yml and doesn't contain syntax errors.");
             flag = false;
         }
 
         log("Config loaded!");
-        discordConnected = true;
         return flag;
     }
 
-    public void initCommands() {
+    private void parseColorCodesOld(StringBuilder message, String[] tempAdd) {
+        for (int i = 0; i < tempAdd.length; i++) {
+            tempAdd[i] = tempAdd[i].replaceAll("&", "§");
+            if (i == 0) {
+                message.append(tempAdd[i]);
+            } else {
+                message.append("\n").append(tempAdd[i]);
+            }
+        }
+    }
+
+    public void registerCommands() {
         try {
-            Objects.requireNonNull(this.getCommand("ca")).setExecutor(new BaseCMD());
-            Objects.requireNonNull(this.getCommand("ca")).setTabCompleter(new BaseTC());
+            this.getCommand("ca").setExecutor(new BaseCMD());
+            this.getCommand("ca").setTabCompleter(new BaseTC());
 
-            Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BuildOfTheMonthCMD());
-            Objects.requireNonNull(this.getCommand("botm")).setTabCompleter(new BuildOfTheMonthTC());
+            this.getCommand("botm").setExecutor(new BuildOfTheMonthCMD());
+            this.getCommand("botm").setTabCompleter(new BuildOfTheMonthTC());
 
-            // Doesn't need tab completer as it is a console only command
-            Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
+            this.getCommand("bce").setExecutor(new BuycraftMailCMD());
 
-            Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
-            Objects.requireNonNull(this.getCommand("rmd")).setTabCompleter(new StallRemindTC());
+            this.getCommand("rmd").setExecutor(new StallRemindCMD());
+            this.getCommand("rmd").setTabCompleter(new StallRemindTC());
 
-            Objects.requireNonNull(this.getCommand("sdu")).setExecutor(new SyncDiscordUsernameCMD());
-            Objects.requireNonNull(this.getCommand("sdu")).setTabCompleter(new SyncDiscordUsernameTC());
-            usersCurrentlySyncing = new HashMap<>();
+            this.getCommand("sdu").setExecutor(new SyncDiscordUsernameCMD());
+            this.getCommand("sdu").setTabCompleter(new SyncDiscordUsernameTC());
 
-            log("Commands Loaded!");
+            log("Commands Registered Successfully!");
         } catch (NullPointerException e) {
             error(e.getMessage());
         }
+    }
+
+    public void unRegisterCommand(PluginCommand cmd) {
+        try {
+            Object result = getPrivateField(this.getServer().getPluginManager(), "commandMap");
+            SimpleCommandMap commandMap = (SimpleCommandMap) result;
+            Object map = getPrivateField(commandMap, "knownCommands");
+            @SuppressWarnings("unchecked")
+            HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
+            knownCommands.remove(cmd.getName());
+            for (String alias : cmd.getAliases()){
+                if(knownCommands.containsKey(alias) && knownCommands.get(alias).toString().contains(this.getName())){
+                    knownCommands.remove(alias);
+                }
+            }
+
+            if (debugMode) debug("Command " + cmd.getName() + " Un-Registered Successfully!");
+        } catch (NullPointerException | NoSuchFieldException | IllegalAccessException e) {
+            error(e.getMessage());
+        }
+    }
+
+    private Object getPrivateField(Object object, String field)throws SecurityException,
+            NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Class<?> clazz = object.getClass();
+        Field objectField = clazz.getDeclaredField(field);
+        objectField.setAccessible(true);
+        Object result = objectField.get(object);
+        objectField.setAccessible(false);
+        return result;
     }
 
     public String getConfigString(String entryName) {
         return config.getString(entryName);
     }
 
+    public int getConfigInt(String entryName) {
+        return config.getInt(entryName);
+    }
+
+    public boolean getConfigBool(String entryName) {
+        return config.getBoolean(entryName);
+    }
+
     public void reloadCustomConfig() {
         saveDefaultConfig();
         config = YamlConfiguration.loadConfiguration(customConfigFile);
+        config.options().copyDefaults(true);
 
         // Look for defaults in the jar
         Reader defConfigStream = null;
@@ -280,6 +401,10 @@ public class CashApp extends JavaPlugin {
 
     public void error(String message) {
         this.getLogger().log(Level.SEVERE, message);
+    }
+
+    public void debug(String message) {
+        this.getLogger().log(Level.FINE, message);
     }
 
     public void sendMessage(CommandSender sender, String message) {

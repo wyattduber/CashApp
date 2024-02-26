@@ -1,3 +1,5 @@
+debug: false
+
 bot-token: "BOTTOKEN"
 server-id: "000000000000000000"
 
@@ -15,6 +17,13 @@ mod-plus-list:
 mall-remind-msg: Hello, mall re-rental has begun! Please contact an online staff member to re-rent your stall, or do nothing and your stall will be emptied."
 
 sync-reminder-msg: &7Your Discord Username is currently &a %DISCORDUSERNAME%. If you wish to update your username to match discord, use &a/sdu&7. To disable this warning, use &a/sdu reminder off&7.
+
+message-delay: 0
+messages:
+  - "example"
+enable-first-time-message: false
+first-time-message:
+  - "&d&lWelcome to the Server, &a%PLAYER%&d!"
 
 botm-channel-id: "000000000000000000"
 botm-banned-words:
