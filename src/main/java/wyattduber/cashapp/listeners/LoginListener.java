@@ -66,16 +66,14 @@ public class LoginListener implements Listener {
                         /* If the username is not the same as the discord username, then notify the player to update their username */
                         ca.sendMessage(player, ca.syncReminderMsg.replaceAll("%DISCORDUSERNAME%", discordUsername));
                     }
-                }.runTaskLater(ca, 2);
+                }.runTaskLater(ca, ca.messageDelayTicks + 2);
             }
         }
     }
 
     private void sendFirstMessage(Player player) {
         String message = ca.firstTimeMessage;
-        message = message.replaceAll("%PLAYER%", player.getName());
-        message = message.replaceAll("%ONLINE%", Integer.toString(ca.getServer().getOnlinePlayers().size()));
-        message = message.replaceAll("%MAXPLAYERS%",  Integer.toString(ca.getServer().getMaxPlayers()));
+        message = parsePlaceholders(message, player);
         Objects.requireNonNull(player.getPlayer()).sendMessage(message);
     }
 
@@ -83,13 +81,18 @@ public class LoginListener implements Listener {
         for (String messageName : messageNames) {
             if (player.hasPermission("lm.message." + messageName)) {
                 String message = messages.get("lm.message." + messageName);
-                message = message.replaceAll("%PLAYER%", player.getName());
-                message = message.replaceAll("%ONLINE%", Integer.toString(ca.getServer().getOnlinePlayers().size()));
-                message = message.replaceAll("%MAXPLAYERS%",  Integer.toString(ca.getServer().getMaxPlayers()));
-
+                message = parsePlaceholders(message, player);
                 player.sendMessage(message);
             }
         }
+    }
+
+    private String parsePlaceholders(String message, Player player) {
+        message = message.replaceAll("%PLAYER%", player.getName());
+        message = message.replaceAll("%ONLINE%", Integer.toString(ca.getServer().getOnlinePlayers().size()));
+        message = message.replaceAll("%MAXPLAYERS%",  Integer.toString(ca.getServer().getMaxPlayers()));
+
+        return message;
     }
 
     private String getSyncedDiscordUsername(UUID uuid) {
