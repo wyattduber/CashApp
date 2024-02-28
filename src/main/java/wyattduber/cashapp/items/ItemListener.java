@@ -21,10 +21,6 @@ public class ItemListener implements Listener {
     public void onEggBreak(ThrownEggHatchEvent event) {
         if (event.getEgg().getShooter() instanceof Player) {
             if (Objects.requireNonNull(event.getEgg().getItem()).getItemMeta().equals(ItemManager.egg.getItemMeta())) {
-                // Get Player
-                Player player = (Player) event.getEgg().getShooter();
-                player.sendMessage(ca.replaceColors("&cBOOOOOM!"));
-
                 // Make sure that the egg never actually hatches
                 event.setHatching(false);
 
