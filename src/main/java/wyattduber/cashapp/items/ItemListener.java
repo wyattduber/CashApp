@@ -1,4 +1,4 @@
-package wyattduber.cashapp.item;
+package wyattduber.cashapp.items;
 
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import org.bukkit.Location;

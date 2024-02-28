@@ -1,14 +1,12 @@
-package wyattduber.cashapp.item;
+package wyattduber.cashapp.items;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.item.customenchants.CustomPower;
 
 import java.util.ArrayList;
 import java.util.List;
