@@ -1,7 +1,6 @@
 package wyattduber.cashapp;
 
-import io.vavr.Tuple2;
-import org.apache.commons.lang3.ObjectUtils;
+import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -9,11 +8,10 @@ import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import wyattduber.cashapp.commands.*;
-import wyattduber.cashapp.commands.tabcomplete.BaseTC;
-import wyattduber.cashapp.commands.tabcomplete.BuildOfTheMonthTC;
-import wyattduber.cashapp.commands.tabcomplete.StallRemindTC;
-import wyattduber.cashapp.commands.tabcomplete.SyncDiscordUsernameTC;
+import wyattduber.cashapp.commands.tabcomplete.*;
 import wyattduber.cashapp.database.Database;
+import wyattduber.cashapp.item.ItemListener;
+import wyattduber.cashapp.item.ItemManager;
 import wyattduber.cashapp.javacord.JavacordHelper;
 import wyattduber.cashapp.lib.LibrarySetup;
 import wyattduber.cashapp.listeners.LoginListener;
@@ -49,6 +47,7 @@ public class CashApp extends JavaPlugin {
     public String[] messageNames;
     public HashMap<String, String> messages = new HashMap<>();
     public LoginListener ll;
+    public ItemListener il;
     public String botmChannelID;
     public List<String> botmBannedWords;
     public HashMap<String, Integer> usersCurrentlySyncing;
@@ -100,6 +99,7 @@ public class CashApp extends JavaPlugin {
         commands.add("bce");
         commands.add("rmd");
         commands.add("sdu");
+        commands.add("getAnarchyItem");
 
         try {
             registerCommands();
@@ -107,6 +107,8 @@ public class CashApp extends JavaPlugin {
             error("Error setting up commands! Contact the developer if you cannot fix this issue.");
         }
 
+        /* Register Custom Items */
+        ItemManager.init();
     }
 
     @Override
@@ -119,6 +121,7 @@ public class CashApp extends JavaPlugin {
     public void reload() {
         // Un-Register Listeners
         PlayerJoinEvent.getHandlerList().unregister(ll);
+        ThrownEggHatchEvent.getHandlerList().unregister(il);
 
         /* Un-Register Commands */
         for (String cmd : commands) {
@@ -153,13 +156,17 @@ public class CashApp extends JavaPlugin {
         initListeners();
     }
 
-    public void initListeners() {
+    private void initListeners() {
         ll = new LoginListener();
         getServer().getPluginManager().registerEvents(ll, this);
+
+        il = new ItemListener();
+        getServer().getPluginManager().registerEvents(il, this);
+
         log("Listeners Loaded!");
     }
 
-    public boolean parseConfig() {
+    private boolean parseConfig() {
         boolean flag = true;
 
         try {
@@ -281,7 +288,7 @@ public class CashApp extends JavaPlugin {
         }
     }
 
-    public void registerCommands() {
+    private void registerCommands() {
         try {
             this.getCommand("ca").setExecutor(new BaseCMD());
             this.getCommand("ca").setTabCompleter(new BaseTC());
@@ -297,13 +304,16 @@ public class CashApp extends JavaPlugin {
             this.getCommand("sdu").setExecutor(new SyncDiscordUsernameCMD());
             this.getCommand("sdu").setTabCompleter(new SyncDiscordUsernameTC());
 
+            this.getCommand("getAnarchyItem").setExecutor(new AnarchyItemsCMD());
+            this.getCommand("getAnarchyItem").setTabCompleter(new AnarchyItemsTC());
+
             log("Commands Registered Successfully!");
         } catch (NullPointerException e) {
             error(e.getMessage());
         }
     }
 
-    public void unRegisterCommand(PluginCommand cmd) {
+    private void unRegisterCommand(PluginCommand cmd) {
         try {
             Object result = getPrivateField(this.getServer().getPluginManager(), "commandMap");
             SimpleCommandMap commandMap = (SimpleCommandMap) result;
@@ -333,19 +343,19 @@ public class CashApp extends JavaPlugin {
         return result;
     }
 
-    public String getConfigString(String entryName) {
+    private String getConfigString(String entryName) {
         return config.getString(entryName);
     }
 
-    public int getConfigInt(String entryName) {
+    private int getConfigInt(String entryName) {
         return config.getInt(entryName);
     }
 
-    public boolean getConfigBool(String entryName) {
+    private boolean getConfigBool(String entryName) {
         return config.getBoolean(entryName);
     }
 
-    public void reloadCustomConfig() {
+    private void reloadCustomConfig() {
         saveDefaultConfig();
         config = YamlConfiguration.loadConfiguration(customConfigFile);
         config.options().copyDefaults(true);
@@ -363,14 +373,14 @@ public class CashApp extends JavaPlugin {
         }
     }
 
-    public FileConfiguration getCustomConfig() {
+    private FileConfiguration getCustomConfig() {
         if (config == null) {
             reloadCustomConfig();
         }
         return config;
     }
 
-    public void saveCustomConfig() {
+    private void saveCustomConfig() {
         if (config == null || customConfigFile == null) {
             return;
         }

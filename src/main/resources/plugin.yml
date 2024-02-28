@@ -31,6 +31,11 @@ commands:
     usage: /sdu <username> [#/unsync]
     permission: ca.sdu
     permission-message: §cYou do not have permission!
+  getAnarchyItem:
+    description: Get one of the custom anarchy items
+    usage: /getAnarchyItem <item>
+    permission: ca.getAnarchyItem
+    permission-message: §cYou do not have permission!
 
 permissions:
   ca.*:
@@ -43,6 +48,7 @@ permissions:
       ca.rmd: true
       ca.ls: true
       ca.streak: true
+      ca.getAnarchyItem: true
   ca.botm:
     description: Allows the use of the BOTM command
     default: op
@@ -57,4 +63,7 @@ permissions:
     default: op
   ca.sdu:
     description: Allows the use of the /sdu command
+    default: op
+  ca.getAnarchyItem:
+    description: Allows the use of the /getAnarchyItem command
     default: op
