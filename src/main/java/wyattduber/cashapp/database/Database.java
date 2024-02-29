@@ -4,6 +4,7 @@ import wyattduber.cashapp.CashApp;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ public class Database {
         updateTableStructure("usernameSync",
                 "CREATE TABLE usernameSync (minecraftid TEXT NOT NULL, mcusername TEXT NOT NULL, discordid TEXT NOT NULL, isSynced BIT NOT NULL, syncReminder BIT NOT NULL)");
 
-        }
+    }
 
     public String getDbPath() { return dbPath; }
 
@@ -142,37 +143,51 @@ public class Database {
     private void updateTableStructure(String tableName, String createTableQuery) throws SQLException {
         DatabaseMetaData meta = dbcon.getMetaData();
         ResultSet rs = meta.getTables(null, null, tableName, null);
+
         if (rs.next()) {
-            // Table exists, check if structure needs updating
+            // Table exists
             ResultSet columns = meta.getColumns(null, null, tableName, null);
-            boolean needsUpdate = true;
+            List<String> existingColumns = new ArrayList<>();
+
             while (columns.next()) {
-                // Check if all required columns exist
-                if (!createTableQuery.contains(columns.getString("COLUMN_NAME"))) {
-                    // Table structure doesn't match, alter the table
-                    needsUpdate = false;
-                    break;
-                }
+                existingColumns.add(columns.getString("COLUMN_NAME"));
             }
-            if (needsUpdate) {
-                // Table structure is up to date
-                if (ca.debugMode) ca.debug("Table '" + tableName + "' structure is up to date.");
-            } else {
-                // Table structure needs updating
-                if (ca.debugMode) ca.debug("Updating table '" + tableName + "' structure...");
-                Statement stmt = dbcon.createStatement();
-                stmt.executeUpdate("DROP TABLE " + tableName);
-                stmt.executeUpdate(createTableQuery);
-                if (ca.debugMode) ca.debug("Table '" + tableName + "' structure updated successfully.");
+
+            // Check for columns to add
+            try (Statement stmt = dbcon.createStatement()) {
+                String[] createTableParts = createTableQuery.split("\\(");
+                String columnsPart = createTableParts[1];
+                columnsPart = columnsPart.substring(0, columnsPart.length() - 1); // Remove trailing ')'
+                String[] requiredColumns = columnsPart.split(",");
+
+                for (String requiredColumn : requiredColumns) {
+                    requiredColumn = requiredColumn.trim().split("\\s+")[0]; // Get only the column name
+                    if (!existingColumns.contains(requiredColumn)) {
+                        // Column doesn't exist, add it
+                        stmt.executeUpdate("ALTER TABLE " + tableName + " ADD COLUMN " + requiredColumn);
+                        if (ca.debugMode) ca.debug("Added column '" + requiredColumn + "' to table '" + tableName + "'.");
+                    }
+                }
+
+                // Check for columns to remove
+                for (String existingColumn : existingColumns) {
+                    if (!createTableQuery.contains(existingColumn)) {
+                        // Column exists in the table but not in the required structure, remove it
+                        stmt.executeUpdate("ALTER TABLE " + tableName + " DROP COLUMN " + existingColumn);
+                        if (ca.debugMode) ca.debug("Removed column '" + existingColumn + "' from table '" + tableName + "'.");
+                    }
+                }
             }
         } else {
             // Table does not exist, create it
             if (ca.debugMode) ca.debug("Creating table '" + tableName + "'...");
-            Statement stmt = dbcon.createStatement();
-            stmt.executeUpdate(createTableQuery);
-            if (ca.debugMode) ca.debug("Table '" + tableName + "' created successfully.");
+            try (Statement stmt = dbcon.createStatement()) {
+                stmt.executeUpdate(createTableQuery);
+                if (ca.debugMode) ca.debug("Table '" + tableName + "' created successfully.");
+            }
         }
     }
+
 
     private String getName(UUID minecraftID) {
         return Objects.requireNonNull(ca.getServer().getPlayer(minecraftID)).getName();

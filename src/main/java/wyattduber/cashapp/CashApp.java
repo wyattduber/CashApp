@@ -241,7 +241,7 @@ public class CashApp extends JavaPlugin {
 
         /* Parse Message Names and Messages by Permission Node */
         try {
-            messageNames = new String[config.getStringList("messages").size()]; // Initialize the Array as an Template
+            messageNames = new String[config.getStringList("messages").size()]; // Initialize the Array as a Template
             messageNames = config.getStringList("messages").toArray(messageNames); // Fill the array using itself as a template
 
             for (String messageName : messageNames) {

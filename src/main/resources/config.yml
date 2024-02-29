@@ -24,6 +24,8 @@ messages:
 enable-first-time-message: false
 first-time-message:
   - "&d&lWelcome to the Server, &a%PLAYER%&d!"
+example:
+  - "This is an example message."
 
 botm-channel-id: "000000000000000000"
 botm-banned-words:

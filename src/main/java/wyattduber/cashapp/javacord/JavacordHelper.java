@@ -61,9 +61,10 @@ public class JavacordHelper {
         }
 
         try {
-            if (api.getTextChannelById(ca.botmChannelID).isPresent())
+            if (api.getTextChannelById(ca.botmChannelID).isPresent()) {
                 botmChannel = api.getTextChannelById(ca.botmChannelID).get();
-            ca.log("Connected to BOTM Channel " + ca.botmChannelID + "!");
+                ca.log("Connected to BOTM Channel!");
+            }
         } catch (Exception e) {
             ca.warn("BOTM Channel not Found! Please enter a valid Channel ID in config.yml and reload the plugin.");
         }
