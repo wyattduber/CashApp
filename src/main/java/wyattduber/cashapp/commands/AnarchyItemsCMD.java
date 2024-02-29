@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.items.ItemManager;
+import wyattduber.cashapp.customitems.ItemManager;
 
 public class AnarchyItemsCMD implements CommandExecutor {
 

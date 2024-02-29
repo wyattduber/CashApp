@@ -10,8 +10,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import wyattduber.cashapp.commands.*;
 import wyattduber.cashapp.commands.tabcomplete.*;
 import wyattduber.cashapp.database.Database;
-import wyattduber.cashapp.items.ItemListener;
-import wyattduber.cashapp.items.ItemManager;
+import wyattduber.cashapp.customitems.ItemListener;
+import wyattduber.cashapp.customitems.ItemManager;
 import wyattduber.cashapp.javacord.JavacordHelper;
 import wyattduber.cashapp.lib.LibrarySetup;
 import wyattduber.cashapp.listeners.LoginListener;
@@ -108,7 +108,7 @@ public class CashApp extends JavaPlugin {
         }
 
         /* Register Custom Items */
-        ItemManager.init();
+        ItemManager.registerCustomItems();
     }
 
     @Override
@@ -197,8 +197,8 @@ public class CashApp extends JavaPlugin {
             modList = getConfig().getStringList("mod-list");
             modPlusList = getConfig().getStringList("mod-plus-list");
 
-            if (modList == null || modList.isEmpty()) throw new Exception();
-            if (modPlusList == null || modPlusList.isEmpty()) throw new Exception();
+            if (modList.isEmpty()) throw new Exception();
+            if (modPlusList.isEmpty()) throw new Exception();
 
             log("Mods loaded: " + Arrays.toString(modList.toArray()));
             log("Mod+'s loaded: " + Arrays.toString(modPlusList.toArray()));
@@ -437,7 +437,7 @@ public class CashApp extends JavaPlugin {
      * @param text the text to replace the color codes in
      * @return string with color codes replaced
      */
-    public String replaceColors(String text) {
+    public static String replaceColors(String text) {
         char[] chrarray = text.toCharArray();
 
         for (int index = 0; index < chrarray.length; index ++) {
