@@ -99,7 +99,7 @@ public class CashApp extends JavaPlugin {
         commands.add("bce");
         commands.add("rmd");
         commands.add("sdu");
-        commands.add("getAnarchyItem");
+        commands.add("getanarchyitem");
 
         try {
             registerCommands();
@@ -304,8 +304,8 @@ public class CashApp extends JavaPlugin {
             this.getCommand("sdu").setExecutor(new SyncDiscordUsernameCMD());
             this.getCommand("sdu").setTabCompleter(new SyncDiscordUsernameTC());
 
-            this.getCommand("getAnarchyItem").setExecutor(new AnarchyItemsCMD());
-            this.getCommand("getAnarchyItem").setTabCompleter(new AnarchyItemsTC());
+            this.getCommand("getanarchyitem").setExecutor(new AnarchyItemsCMD());
+            this.getCommand("getanarchyitem").setTabCompleter(new AnarchyItemsTC());
 
             log("Commands Registered Successfully!");
         } catch (NullPointerException e) {

@@ -25,7 +25,7 @@ public class ItemManager {
     }
 
     private static void createEgg() {
-        ItemStack item = new ItemStack(Material.EGG, 1);
+        ItemStack item = new ItemStack(Material.EGG, 64);
         ItemMeta eggMeta = item.getItemMeta();
 
         // Set Name
