@@ -24,7 +24,7 @@ public class ItemListener implements Listener {
 
                 // Set off the explosion
                 Location eggHitLocation = event.getEgg().getLocation();
-                eggHitLocation.createExplosion(2);
+                eggHitLocation.createExplosion(4f, true, true);
             }
         }
     }
