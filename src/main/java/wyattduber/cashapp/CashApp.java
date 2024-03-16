@@ -163,6 +163,7 @@ public class CashApp extends JavaPlugin {
 
     private boolean parseConfig() {
         boolean flag = true;
+        discordConnected = true;
 
         try {
             debugMode = getConfigBool("debug");
