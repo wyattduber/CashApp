@@ -123,11 +123,6 @@ public class CashApp extends JavaPlugin {
         PlayerJoinEvent.getHandlerList().unregister(ll);
         ThrownEggHatchEvent.getHandlerList().unregister(il);
 
-        /* Un-Register Commands */
-        for (String cmd : commands) {
-            unRegisterCommand(this.getCommand(cmd));
-        }
-
         /* Load and Initiate Configs */
         try {
             reloadCustomConfig();
@@ -311,36 +306,6 @@ public class CashApp extends JavaPlugin {
         } catch (NullPointerException e) {
             error(e.getMessage());
         }
-    }
-
-    private void unRegisterCommand(PluginCommand cmd) {
-        try {
-            Object result = getPrivateField(this.getServer().getPluginManager(), "commandMap");
-            SimpleCommandMap commandMap = (SimpleCommandMap) result;
-            Object map = getPrivateField(commandMap, "knownCommands");
-            @SuppressWarnings("unchecked")
-            HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
-            knownCommands.remove(cmd.getName());
-            for (String alias : cmd.getAliases()){
-                if(knownCommands.containsKey(alias) && knownCommands.get(alias).toString().contains(this.getName())){
-                    knownCommands.remove(alias);
-                }
-            }
-
-            if (debugMode) debug("Command " + cmd.getName() + " Un-Registered Successfully!");
-        } catch (NullPointerException | NoSuchFieldException | IllegalAccessException e) {
-            error(e.getMessage());
-        }
-    }
-
-    private Object getPrivateField(Object object, String field)throws SecurityException,
-            NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Class<?> clazz = object.getClass();
-        Field objectField = clazz.getDeclaredField(field);
-        objectField.setAccessible(true);
-        Object result = objectField.get(object);
-        objectField.setAccessible(false);
-        return result;
     }
 
     private String getConfigString(String entryName) {

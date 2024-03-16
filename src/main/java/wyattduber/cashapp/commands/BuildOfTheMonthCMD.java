@@ -28,7 +28,12 @@ public class BuildOfTheMonthCMD implements CommandExecutor {
 
         // Check if the server is connected to Discord
         if (!ca.discordConnected) {
-            ca.sendMessage(sender, "&cThe server is not connected to Discord!");
+            ca.sendMessage(sender, "&cThe server is not connected to Discord! Contact an admin.");
+            return true;
+        }
+
+        if (ca.js.botmChannel == null) {
+            ca.sendMessage(sender, "&cThe build of the month channel is not properly connected! Contact an admin.");
             return true;
         }
 
