@@ -1,10 +1,7 @@
 package wyattduber.cashapp;
 
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import wyattduber.cashapp.commands.*;
@@ -23,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.*;
@@ -34,7 +30,6 @@ public class CashApp extends JavaPlugin {
     public FileConfiguration config;
     public File customConfigFile;
     public boolean debugMode;
-    public List<String> commands;
     public List<String> modList;
     public List<String> modPlusList;
     public String botToken;
@@ -92,15 +87,6 @@ public class CashApp extends JavaPlugin {
         }
 
         /* Commands */
-        // Init master commands list
-        commands = new ArrayList<>();
-        commands.add("ca");
-        commands.add("botm");
-        commands.add("bce");
-        commands.add("rmd");
-        commands.add("sdu");
-        commands.add("getanarchyitem");
-
         try {
             registerCommands();
         } catch (Exception e) {
@@ -286,22 +272,22 @@ public class CashApp extends JavaPlugin {
 
     private void registerCommands() {
         try {
-            this.getCommand("ca").setExecutor(new BaseCMD());
-            this.getCommand("ca").setTabCompleter(new BaseTC());
+            Objects.requireNonNull(this.getCommand("ca")).setExecutor(new BaseCMD());
+            Objects.requireNonNull(this.getCommand("ca")).setTabCompleter(new BaseTC());
 
-            this.getCommand("botm").setExecutor(new BuildOfTheMonthCMD());
-            this.getCommand("botm").setTabCompleter(new BuildOfTheMonthTC());
+            Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BuildOfTheMonthCMD());
+            Objects.requireNonNull(this.getCommand("botm")).setTabCompleter(new BuildOfTheMonthTC());
 
-            this.getCommand("bce").setExecutor(new BuycraftMailCMD());
+            Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
 
-            this.getCommand("rmd").setExecutor(new StallRemindCMD());
-            this.getCommand("rmd").setTabCompleter(new StallRemindTC());
+            Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
+            Objects.requireNonNull(this.getCommand("rmd")).setTabCompleter(new StallRemindTC());
 
-            this.getCommand("sdu").setExecutor(new SyncDiscordUsernameCMD());
-            this.getCommand("sdu").setTabCompleter(new SyncDiscordUsernameTC());
+            Objects.requireNonNull(this.getCommand("sdu")).setExecutor(new SyncDiscordUsernameCMD());
+            Objects.requireNonNull(this.getCommand("sdu")).setTabCompleter(new SyncDiscordUsernameTC());
 
-            this.getCommand("getanarchyitem").setExecutor(new AnarchyItemsCMD());
-            this.getCommand("getanarchyitem").setTabCompleter(new AnarchyItemsTC());
+            Objects.requireNonNull(this.getCommand("getanarchyitem")).setExecutor(new AnarchyItemsCMD());
+            Objects.requireNonNull(this.getCommand("getanarchyitem")).setTabCompleter(new AnarchyItemsTC());
 
             log("Commands Registered Successfully!");
         } catch (NullPointerException e) {
@@ -397,8 +383,8 @@ public class CashApp extends JavaPlugin {
     public static final char ESCAPE = '§';
 
     /**
-     * Replace all of the color codes (prepended with &) with the corresponding color code.
-     * This uses raw char arrays so it can be considered to be extremely fast.
+     * Replace all the color codes (prepended with &) with the corresponding color code.
+     * This uses raw char arrays, so it can be considered to be extremely fast.
      *
      * @param text the text to replace the color codes in
      * @return string with color codes replaced
