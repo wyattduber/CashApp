@@ -4,13 +4,29 @@ import org.bukkit.inventory.ItemStack;
 import wyattduber.cashapp.customitems.items.Eggsplosion;
 import wyattduber.cashapp.customitems.items.WithersPenanceBow;
 import wyattduber.cashapp.customitems.items.WithersPenanceCrossbow;
-
+import wyattduber.cashapp.customitems.items.trophies.*;
 
 public class ItemManager {
 
     public static ItemStack egg;
     public static ItemStack bow;
     public static ItemStack crossBow;
+    public static ItemStack boogysPorkchop;
+    public static ItemStack brokenDrillBit;
+    public static ItemStack bucketOfFrost;
+    public static ItemStack chaosCore;
+    public static ItemStack crownShard;
+    public static ItemStack defusedEggBomb;
+    public static ItemStack demolitionistFlintStriker;
+    public static ItemStack gambitCoin;
+    public static ItemStack greenysPetEgg;
+    public static ItemStack naturesGem;
+    public static ItemStack nemo;
+    public static ItemStack partyCake;
+    public static ItemStack scoutsIntrusiveThoughts;
+    public static ItemStack tandsFavoritePotato;
+    public static ItemStack toxicVial;
+    public static ItemStack witherKnightSkull;
 
     public static void registerCustomItems() {
         // Eggsplosion
@@ -21,6 +37,24 @@ public class ItemManager {
 
         // Wither's Penance Crossbow
         crossBow = WithersPenanceCrossbow.create();
+
+        /* Trophy Items */
+        boogysPorkchop = BoogysPorkchop.create();
+        brokenDrillBit = BrokenDrillBit.create();
+        bucketOfFrost = BucketOfFrost.create();
+        chaosCore = ChaosCore.create();
+        crownShard = CrownShard.create();
+        defusedEggBomb = DefusedEggBomb.create();
+        demolitionistFlintStriker = DemolitionistFlintStriker.create();
+        gambitCoin = GambitCoin.create();
+        greenysPetEgg = GreenysPetEgg.create();
+        naturesGem = NaturesGem.create();
+        nemo = Nemo.create();
+        partyCake = PartyCake.create();
+        scoutsIntrusiveThoughts = ScoutsIntrusiveThoughts.create();
+        tandsFavoritePotato = TandsFavoritePotato.create();
+        toxicVial = ToxicVial.create();
+        witherKnightSkull = WitherKnightSkull.create();
     }
 
 }
