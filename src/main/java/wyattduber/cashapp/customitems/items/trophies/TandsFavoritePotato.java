@@ -15,7 +15,7 @@ import java.util.List;
 public class TandsFavoritePotato {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.POTATO, 64);
+        ItemStack item = new ItemStack(Material.POTATO, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

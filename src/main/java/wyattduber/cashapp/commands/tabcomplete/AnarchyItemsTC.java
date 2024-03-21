@@ -23,10 +23,36 @@ public class AnarchyItemsTC implements TabCompleter {
 
         ArrayList<String> tabs = new ArrayList<>();
 
-        tabs.add("Egg");
-        tabs.add("Bow");
-        tabs.add("Crossbow");
-
-        return tabs;
+        return switch (args.length) {
+            case 1 -> {
+                tabs.add("Egg");
+                tabs.add("Bow");
+                tabs.add("Crossbow");
+                tabs.add("Trophy");
+                yield tabs;
+            }
+            case 2 -> {
+                if (args[0].equalsIgnoreCase("Trophy")) {
+                    tabs.add("BoogysPorkchop");
+                    tabs.add("BrokenDrillBit");
+                    tabs.add("BucketOfFrost");
+                    tabs.add("ChaosCore");
+                    tabs.add("CrownShard");
+                    tabs.add("DefusedEggBomb");
+                    tabs.add("DemolitionistFlintStriker");
+                    tabs.add("GambitCoin");
+                    tabs.add("GreenysPetEgg");
+                    tabs.add("NaturesGem");
+                    tabs.add("Nemo");
+                    tabs.add("PartyCake");
+                    tabs.add("ScoutsIntrusiveThoughts");
+                    tabs.add("TandsFavoritePotato");
+                    tabs.add("ToxicVial");
+                    tabs.add("WitherKnightSkull");
+                }
+                yield tabs;
+            }
+            default -> tabs;
+        };
     }
 }

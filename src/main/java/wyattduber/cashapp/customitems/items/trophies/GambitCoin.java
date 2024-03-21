@@ -15,7 +15,7 @@ import java.util.List;
 public class GambitCoin {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.GOLD_NUGGET, 64);
+        ItemStack item = new ItemStack(Material.GOLD_NUGGET, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

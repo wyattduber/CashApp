@@ -16,7 +16,7 @@ import java.util.List;
 public class BucketOfFrost {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.POWDER_SNOW_BUCKET, 64);
+        ItemStack item = new ItemStack(Material.POWDER_SNOW_BUCKET, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

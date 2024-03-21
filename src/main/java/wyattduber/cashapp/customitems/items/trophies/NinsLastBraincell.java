@@ -15,7 +15,7 @@ import java.util.List;
 public class NinsLastBraincell {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.POPPED_CHORUS_FRUIT, 64);
+        ItemStack item = new ItemStack(Material.POPPED_CHORUS_FRUIT, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

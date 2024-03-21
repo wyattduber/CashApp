@@ -15,7 +15,7 @@ import java.util.List;
 public class BrokenDrillBit {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.POINTED_DRIPSTONE, 64);
+        ItemStack item = new ItemStack(Material.POINTED_DRIPSTONE, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

@@ -15,7 +15,7 @@ import java.util.List;
 public class NaturesGem {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.EMERALD, 64);
+        ItemStack item = new ItemStack(Material.EMERALD, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

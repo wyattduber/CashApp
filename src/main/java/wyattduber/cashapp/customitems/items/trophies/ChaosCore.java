@@ -15,7 +15,7 @@ import java.util.List;
 public class ChaosCore {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.NETHER_STAR, 64);
+        ItemStack item = new ItemStack(Material.NETHER_STAR, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

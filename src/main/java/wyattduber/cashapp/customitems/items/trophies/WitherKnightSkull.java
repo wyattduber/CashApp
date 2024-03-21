@@ -15,7 +15,7 @@ import java.util.List;
 public class WitherKnightSkull {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.WITHER_SKELETON_SKULL, 64);
+        ItemStack item = new ItemStack(Material.WITHER_SKELETON_SKULL, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

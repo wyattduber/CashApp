@@ -14,7 +14,7 @@ import java.util.List;
 public class BoogysPorkchop {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.COOKED_PORKCHOP, 64);
+        ItemStack item = new ItemStack(Material.COOKED_PORKCHOP, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

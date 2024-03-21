@@ -15,7 +15,7 @@ import java.util.List;
 public class ToxicVial {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.POTION, 64);
+        ItemStack item = new ItemStack(Material.POTION, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

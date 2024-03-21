@@ -15,7 +15,7 @@ import java.util.List;
 public class ScoutsIntrusiveThoughts {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.BOOK, 64);
+        ItemStack item = new ItemStack(Material.BOOK, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

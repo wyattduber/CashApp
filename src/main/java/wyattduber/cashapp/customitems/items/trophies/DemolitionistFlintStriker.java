@@ -15,7 +15,7 @@ import java.util.List;
 public class DemolitionistFlintStriker {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.FLINT, 64);
+        ItemStack item = new ItemStack(Material.FLINT, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

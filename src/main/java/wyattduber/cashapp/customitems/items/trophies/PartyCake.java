@@ -15,7 +15,7 @@ import java.util.List;
 public class PartyCake {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.CAKE, 64);
+        ItemStack item = new ItemStack(Material.CAKE, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

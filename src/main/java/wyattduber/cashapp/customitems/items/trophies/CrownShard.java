@@ -15,7 +15,7 @@ import java.util.List;
 public class CrownShard {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.AMETHYST_SHARD, 64);
+        ItemStack item = new ItemStack(Material.AMETHYST_SHARD, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

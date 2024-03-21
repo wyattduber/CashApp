@@ -15,7 +15,7 @@ import java.util.List;
 public class Nemo {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.TROPICAL_FISH, 64);
+        ItemStack item = new ItemStack(Material.TROPICAL_FISH, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

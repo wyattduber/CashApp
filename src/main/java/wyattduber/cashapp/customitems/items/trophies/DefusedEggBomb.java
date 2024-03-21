@@ -15,7 +15,7 @@ import java.util.List;
 public class DefusedEggBomb {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.EGG, 64);
+        ItemStack item = new ItemStack(Material.EGG, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name

@@ -18,7 +18,7 @@ public class AnarchyItemsCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length != 1) return false;
+        if (args.length < 1 || args.length > 2) return false;
         if (!(sender instanceof Player)) {
             sender.sendMessage("Command can only be run by a player!");
         }
@@ -27,11 +27,34 @@ public class AnarchyItemsCMD implements CommandExecutor {
         Player player = (Player) sender;
 
         // Assign item based off of argument
-        switch (args[0].toLowerCase()) {
-            case "egg" -> player.getInventory().addItem(ItemManager.egg);
-            case "bow" -> player.getInventory().addItem(ItemManager.bow);
-            case "crossbow" -> player.getInventory().addItem(ItemManager.crossBow);
-            default -> ca.sendMessage(player, "&cValid item options are: Egg, Bow, Crossbow");
+        if (args.length == 1) {
+            switch (args[0].toLowerCase()) {
+                case "egg" -> player.getInventory().addItem(ItemManager.egg);
+                case "bow" -> player.getInventory().addItem(ItemManager.bow);
+                case "crossbow" -> player.getInventory().addItem(ItemManager.crossBow);
+                case "trophy" -> ca.sendMessage(player, "&cValid trophy options are: BoogysPorkchop, BrokenDrillBit, BucketOfFrost, ChaosCore, CrownShard, DefusedEggBomb, DemolitionistFlintStriker, GambitCoin, GreenysPetEgg, NaturesGem, Nemo, PartyCake, ScoutsIntrusiveThoughts, TandsFavoritePotato, ToxicVial, WitherKnightSkull");
+                default -> ca.sendMessage(player, "&cValid item options are: Egg, Bow, Crossbow");
+            }
+        } else if (args[0].equalsIgnoreCase("trophy")) {
+            switch (args[1].toLowerCase()) {
+                case "boogysporkchop" -> player.getInventory().addItem(ItemManager.boogysPorkchop);
+                case "brokendrillbit" -> player.getInventory().addItem(ItemManager.brokenDrillBit);
+                case "bucketoffrost" -> player.getInventory().addItem(ItemManager.bucketOfFrost);
+                case "chaoscore" -> player.getInventory().addItem(ItemManager.chaosCore);
+                case "crownshard" -> player.getInventory().addItem(ItemManager.crownShard);
+                case "defusedeggbomb" -> player.getInventory().addItem(ItemManager.defusedEggBomb);
+                case "demolitionistflintstriker" -> player.getInventory().addItem(ItemManager.demolitionistFlintStriker);
+                case "gambitcoin" -> player.getInventory().addItem(ItemManager.gambitCoin);
+                case "greenyspetegg" -> player.getInventory().addItem(ItemManager.greenysPetEgg);
+                case "naturesgem" -> player.getInventory().addItem(ItemManager.naturesGem);
+                case "nemo" -> player.getInventory().addItem(ItemManager.nemo);
+                case "partycake" -> player.getInventory().addItem(ItemManager.partyCake);
+                case "scoutsintrusivethoughts" -> player.getInventory().addItem(ItemManager.scoutsIntrusiveThoughts);
+                case "tandsfavoritepotato" -> player.getInventory().addItem(ItemManager.tandsFavoritePotato);
+                case "toxicvial" -> player.getInventory().addItem(ItemManager.toxicVial);
+                case "witherknightskull" -> player.getInventory().addItem(ItemManager.witherKnightSkull);
+                default -> ca.sendMessage(player, "&cValid trophy options are: BoogysPorkchop, BrokenDrillBit, BucketOfFrost, ChaosCore, CrownShard, DefusedEggBomb, DemolitionistFlintStriker, GambitCoin, GreenysPetEgg, NaturesGem, Nemo, PartyCake, ScoutsIntrusiveThoughts, TandsFavoritePotato, ToxicVial, WitherKnightSkull");
+            }
         }
 
         return true;

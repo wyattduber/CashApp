@@ -15,7 +15,7 @@ import java.util.List;
 public class GreenysPetEgg {
 
     public static ItemStack create() {
-        ItemStack item = new ItemStack(Material.TURTLE_EGG, 64);
+        ItemStack item = new ItemStack(Material.TURTLE_EGG, 1);
         ItemMeta meta = item.getItemMeta();
 
         // Set Name
