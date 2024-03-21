@@ -15,23 +15,22 @@ public class BoogysPorkchop {
 
     public static ItemStack create() {
         ItemStack item = new ItemStack(Material.COOKED_PORKCHOP, 64);
-        ItemMeta eggMeta = item.getItemMeta();
+        ItemMeta meta = item.getItemMeta();
 
         // Set Name
-        eggMeta.displayName(Component.text("Eggsplosion", NamedTextColor.DARK_RED));
+        meta.displayName(Component.text("Boogy's Porkchop", NamedTextColor.DARK_RED));
 
         // Set Lore
         List<Component> lore = new ArrayList<>();
         lore.add(Component.text("microwaved for 5 minutes, be careful"));
-        eggMeta.lore(lore);
+        meta.lore(lore);
 
         // Set Enchantment Glow
-        eggMeta.addEnchant(Enchantment.LUCK, 1, false);
-        eggMeta.addEnchant(Enchantment.VANISHING_CURSE, 1, false);
-        eggMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addEnchant(Enchantment.LUCK, 1, false);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         // Set the finished modified meta and set the egg item to the created item
-        item.setItemMeta(eggMeta);
+        item.setItemMeta(meta);
         return item;
     }
 

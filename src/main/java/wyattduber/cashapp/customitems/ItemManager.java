@@ -1,10 +1,13 @@
 package wyattduber.cashapp.customitems;
 
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import wyattduber.cashapp.customitems.items.Eggsplosion;
 import wyattduber.cashapp.customitems.items.WithersPenanceBow;
 import wyattduber.cashapp.customitems.items.WithersPenanceCrossbow;
 import wyattduber.cashapp.customitems.items.trophies.*;
+
+import java.util.List;
 
 public class ItemManager {
 
@@ -27,6 +30,7 @@ public class ItemManager {
     public static ItemStack tandsFavoritePotato;
     public static ItemStack toxicVial;
     public static ItemStack witherKnightSkull;
+    public static List<ItemMeta> trophyItemMetas;
 
     public static void registerCustomItems() {
         // Eggsplosion
@@ -55,6 +59,23 @@ public class ItemManager {
         tandsFavoritePotato = TandsFavoritePotato.create();
         toxicVial = ToxicVial.create();
         witherKnightSkull = WitherKnightSkull.create();
+
+        trophyItemMetas.add(boogysPorkchop.getItemMeta());
+        trophyItemMetas.add(brokenDrillBit.getItemMeta());
+        trophyItemMetas.add(bucketOfFrost.getItemMeta());
+        trophyItemMetas.add(chaosCore.getItemMeta());
+        trophyItemMetas.add(crownShard.getItemMeta());
+        trophyItemMetas.add(defusedEggBomb.getItemMeta());
+        trophyItemMetas.add(demolitionistFlintStriker.getItemMeta());
+        trophyItemMetas.add(gambitCoin.getItemMeta());
+        trophyItemMetas.add(greenysPetEgg.getItemMeta());
+        trophyItemMetas.add(naturesGem.getItemMeta());
+        trophyItemMetas.add(nemo.getItemMeta());
+        trophyItemMetas.add(partyCake.getItemMeta());
+        trophyItemMetas.add(scoutsIntrusiveThoughts.getItemMeta());
+        trophyItemMetas.add(tandsFavoritePotato.getItemMeta());
+        trophyItemMetas.add(toxicVial.getItemMeta());
+        trophyItemMetas.add(witherKnightSkull.getItemMeta());
     }
 
 }

@@ -1,5 +1,6 @@
 package wyattduber.cashapp.customitems;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import org.bukkit.Location;
@@ -8,7 +9,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.Objects;
@@ -55,6 +60,15 @@ public class ItemListener implements Listener {
                 // Replace arrow with a sped-up wither skull
                 spawnWitherSkullProjectile(player);
             }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDeath(EntityDeathEvent event) {
+        if (event.getEntityType() == EntityType.DROPPED_ITEM) {
+            ItemStack item = event.getEntity().getActiveItem();
+            if (ItemManager.trophyItemMetas.contains(item.getItemMeta()))
+                event.setCancelled(true); // Cancel the destruction caused by liquids
         }
     }
 
