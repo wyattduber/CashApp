@@ -7,6 +7,7 @@ import wyattduber.cashapp.customitems.items.WithersPenanceBow;
 import wyattduber.cashapp.customitems.items.WithersPenanceCrossbow;
 import wyattduber.cashapp.customitems.items.trophies.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemManager {
@@ -30,7 +31,7 @@ public class ItemManager {
     public static ItemStack tandsFavoritePotato;
     public static ItemStack toxicVial;
     public static ItemStack witherKnightSkull;
-    public static List<ItemMeta> trophyItemMetas;
+    public static List<ItemMeta> trophyItemMetas = new ArrayList<>();
 
     public static void registerCustomItems() {
         // Eggsplosion

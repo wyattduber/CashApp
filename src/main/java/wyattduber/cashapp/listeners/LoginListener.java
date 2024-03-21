@@ -9,21 +9,16 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 public class LoginListener implements Listener {
 
     private final CashApp ca;
-    private final Database db;
-    public String[] messageNames;
-    public HashMap<String, String> messages;
 
     public LoginListener() {
         ca = CashApp.getPlugin();
-        db = ca.db;
-        messages = ca.messages;
-        messageNames = ca.messageNames;
     }
 
     @EventHandler
@@ -56,7 +51,7 @@ public class LoginListener implements Listener {
         }
 
 
-        if (db.getSyncReminderStatus(player.getUniqueId()) && db.isSynced(player.getUniqueId())) {
+        if (ca.db.getSyncReminderStatus(player.getUniqueId()) && ca.db.isSynced(player.getUniqueId())) {
             UUID uuid = player.getUniqueId();
             String discordUsername = getSyncedDiscordUsername(uuid);
             if (!Objects.equals(discordUsername, player.getName())) {
@@ -78,9 +73,9 @@ public class LoginListener implements Listener {
     }
 
     private void sendCustomMessages(Player player) {
-        for (String messageName : messageNames) {
-            if (player.hasPermission("lm.message." + messageName)) {
-                String message = messages.get("lm.message." + messageName);
+        for (String messageName : ca.messageNames) {
+            if (player.hasPermission("ca.message." + messageName)) {
+                String message = ca.messages.get("ca.message." + messageName);
                 message = parsePlaceholders(message, player);
                 player.sendMessage(message);
             }
@@ -96,7 +91,7 @@ public class LoginListener implements Listener {
     }
 
     private String getSyncedDiscordUsername(UUID uuid) {
-        long discordId = db.getSyncedDiscordID(uuid);
+        long discordId = ca.db.getSyncedDiscordID(uuid);
         return ca.js.getUserName(discordId);
     }
 

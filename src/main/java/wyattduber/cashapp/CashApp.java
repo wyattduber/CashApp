@@ -39,7 +39,7 @@ public class CashApp extends JavaPlugin {
     public boolean useFirstTimeMessage;
     public int messageDelayTicks;
     public String firstTimeMessage;
-    public String[] messageNames;
+    public List<String> messageNames;
     public HashMap<String, String> messages = new HashMap<>();
     public LoginListener ll;
     public ItemListener il;
@@ -68,6 +68,9 @@ public class CashApp extends JavaPlugin {
             error("Error setting up the config! Contact the developer if you cannot fix this issue.");
         }
 
+        /* Register Custom Items */
+        ItemManager.registerCustomItems();
+
         /* Load Database */
          try {
              db = new Database("cashapp.sqlite.db");
@@ -92,9 +95,6 @@ public class CashApp extends JavaPlugin {
         } catch (Exception e) {
             error("Error setting up commands! Contact the developer if you cannot fix this issue.");
         }
-
-        /* Register Custom Items */
-        ItemManager.registerCustomItems();
     }
 
     @Override
@@ -205,6 +205,7 @@ public class CashApp extends JavaPlugin {
 
         try {
             messageDelayTicks = getConfigInt("message-delay");
+            log("Message Delay Loaded!");
         } catch (NullPointerException e) {
             error("Cannot Find \"message-delay\" Boolean in Config! Make sure it's there and reload the plugin.");
         }
@@ -216,6 +217,8 @@ public class CashApp extends JavaPlugin {
             tempAdd = config.getStringList("first-time-message").toArray(tempAdd);
             parseColorCodesOld(message, tempAdd);
             firstTimeMessage = message.toString();
+
+            log("First Time Message Loaded!");
         } catch (NullPointerException e) {
             error(e.getMessage());
             error("Cannot Find \"enable-first-time-message\" Boolean in Config! Make sure it's there and reload the plugin.");
@@ -223,17 +226,17 @@ public class CashApp extends JavaPlugin {
 
         /* Parse Message Names and Messages by Permission Node */
         try {
-            messageNames = new String[config.getStringList("messages").size()]; // Initialize the Array as a Template
-            messageNames = config.getStringList("messages").toArray(messageNames); // Fill the array using itself as a template
+            messageNames = config.getStringList("messages"); // Initialize the Array as a Template
 
             for (String messageName : messageNames) {
                 StringBuilder message = new StringBuilder();
                 String[] tempAdd = new String[config.getStringList(messageName).size()];
                 tempAdd = config.getStringList(messageName).toArray(tempAdd);
                 parseColorCodesOld(message, tempAdd);
-                messages.put("lm.message." + messageName, message.toString());
+                messages.put("ca.message." + messageName, message.toString());
             }
 
+            log("Messages Loaded!");
         } catch (NullPointerException e) {
             error(e.getMessage());
             error("Error with the Message Section in the Config! Make sure it's set properly and reload the plugin.");
