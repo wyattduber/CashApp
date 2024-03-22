@@ -2,19 +2,19 @@ package wyattduber.cashapp;
 
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 import wyattduber.cashapp.commands.*;
 import wyattduber.cashapp.commands.tabcomplete.*;
-import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.customitems.ItemListener;
 import wyattduber.cashapp.customitems.ItemManager;
+import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.javacord.JavacordHelper;
 import wyattduber.cashapp.lib.LibrarySetup;
 import wyattduber.cashapp.listeners.LoginListener;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,10 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class CashApp extends JavaPlugin {

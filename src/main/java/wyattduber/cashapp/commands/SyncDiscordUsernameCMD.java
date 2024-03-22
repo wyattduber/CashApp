@@ -1,12 +1,15 @@
 package wyattduber.cashapp.commands;
 
-import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.javacord.JavacordHelper;
-import wyattduber.cashapp.database.Database;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.javacord.api.entity.user.User;
 import org.jetbrains.annotations.NotNull;
+import wyattduber.cashapp.CashApp;
+import wyattduber.cashapp.database.Database;
+import wyattduber.cashapp.javacord.JavacordHelper;
 
 public class SyncDiscordUsernameCMD implements CommandExecutor {
 

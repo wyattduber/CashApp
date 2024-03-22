@@ -1,15 +1,12 @@
 package wyattduber.cashapp.listeners;
 
-import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.database.Database;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import wyattduber.cashapp.CashApp;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 

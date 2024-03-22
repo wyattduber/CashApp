@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class StallRemindTC implements TabCompleter {

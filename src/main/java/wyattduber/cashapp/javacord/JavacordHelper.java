@@ -1,15 +1,15 @@
 package wyattduber.cashapp.javacord;
 
-import java.util.NoSuchElementException;
-import java.util.concurrent.ExecutionException;
-
-import wyattduber.cashapp.CashApp;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.util.logging.ExceptionLogger;
+import wyattduber.cashapp.CashApp;
+
+import java.util.NoSuchElementException;
+import java.util.concurrent.ExecutionException;
 
 public class JavacordHelper {
 

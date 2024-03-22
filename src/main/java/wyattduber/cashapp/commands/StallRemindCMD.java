@@ -1,12 +1,12 @@
 package wyattduber.cashapp.commands;
 
-import wyattduber.cashapp.CashApp;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.NotNull;
+import wyattduber.cashapp.CashApp;
 
 public class StallRemindCMD implements CommandExecutor {
 

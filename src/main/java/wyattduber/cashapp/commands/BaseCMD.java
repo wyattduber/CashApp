@@ -1,11 +1,10 @@
 package wyattduber.cashapp.commands;
 
-import org.bukkit.command.*;
-import wyattduber.cashapp.CashApp;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
+import wyattduber.cashapp.CashApp;
 
 public class BaseCMD implements CommandExecutor {
 
