@@ -1,12 +1,12 @@
 package wyattduber.cashapp.customitems.items;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import wyattduber.cashapp.CashApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +18,11 @@ public class Eggsplosion {
         ItemMeta eggMeta = item.getItemMeta();
 
         // Set Name
-        eggMeta.displayName(Component.text(CashApp.replaceColors("&eEggsplosion")));
+        eggMeta.displayName(Component.text("&eEggsplosion", NamedTextColor.YELLOW));
 
         // Set Lore
         List<Component> lore = new ArrayList<>();
-        lore.add(Component.text(CashApp.replaceColors("&8microwaved for 5 minutes, be careful")));
+        lore.add(Component.text("microwaved for 5 minutes, be careful", NamedTextColor.DARK_GRAY));
         eggMeta.lore(lore);
 
         // Set Enchantment Glow

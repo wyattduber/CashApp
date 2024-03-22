@@ -20,10 +20,11 @@ public class ScoutsIntrusiveThoughts {
 
         // Set Name
         meta.displayName(Component.text("Scout's Intrusive Thoughts", TextColor.fromHexString("#000FFB")));
-
         // Set Lore
         List<Component> lore = new ArrayList<>();
-        lore.add(Component.text(CashApp.replaceColors("&8microwaved for 5 minutes, be careful")));
+        lore.add(Component.text("A reward for killing a Hunter. Somewhat useless except for decoration", TextColor.fromHexString("#4f1880")));
+        lore.add(Component.text("but a very unique way to show your strength.", TextColor.fromHexString("#4f1880")));
+        lore.add(Component.text("But also can make you at target. Hope you are ready for the storm to come.", TextColor.fromHexString("#4f1880")));
         meta.lore(lore);
 
         // Set Enchantment Glow

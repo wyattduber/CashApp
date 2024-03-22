@@ -1,11 +1,11 @@
 package wyattduber.cashapp.customitems.items;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import wyattduber.cashapp.CashApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +17,11 @@ public class WithersPenanceBow {
         ItemMeta bowMeta = bow.getItemMeta();
 
         // Set Name
-        bowMeta.displayName(Component.text(CashApp.replaceColors("&8Wither's Penance")));
+        bowMeta.displayName(Component.text("Wither's Penance", NamedTextColor.DARK_GRAY));
 
         // Set Lore
         List<Component> lore = new ArrayList<>();
-        lore.add(Component.text(CashApp.replaceColors("p e w")));
+        lore.add(Component.text("p e w"));
         bowMeta.lore(lore);
 
         // Set the finished modified meta and set the egg item to the created item

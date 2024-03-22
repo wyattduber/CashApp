@@ -117,5 +117,12 @@
     "version": "2.15.2",
     "oldRelocation": "com.fasterxml.jackson.core.jackson-annotations",
     "newRelocation": "lib.com.fasterxml.jackson.core.jackson-annotations"
+  },
+  {
+    "groupId": "net.kyori",
+    "artifactId": "adventure-text-minimessage",
+    "version": "4.16.0",
+    "oldRelocation": "net.kyori.adventure-text-minimessage",
+    "newRelocation": "lib.net.kyori.adventure-text-minimessage"
   }
 ]

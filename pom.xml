@@ -81,6 +81,12 @@
             <version>2.15.2</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-minimessage</artifactId>
+            <version>4.16.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -172,6 +178,10 @@
                         <relocation>
                             <pattern>com.fasterxml.jackson.core.jackson-core</pattern>
                             <shadedPattern>lib.com.fasterxml.jackson.core.jackson-core</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.kyori.adventure-text-minimessage</pattern>
+                            <shadedPattern>lib.net.kyori.adventure-text-minimessage</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

@@ -2,6 +2,8 @@ package wyattduber.cashapp.customitems.items.trophies;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -17,13 +19,16 @@ public class ChaosCore {
     public static ItemStack create() {
         ItemStack item = new ItemStack(Material.NETHER_STAR, 1);
         ItemMeta meta = item.getItemMeta();
+        var mm = MiniMessage.miniMessage();
 
         // Set Name
-        meta.displayName(Component.text("Chaos Core", NamedTextColor.AQUA));
+        meta.displayName(mm.deserialize("<gradient:#9600ff:#96ffff>Chaos Core</gradient>!"));
 
         // Set Lore
         List<Component> lore = new ArrayList<>();
-        lore.add(Component.text(CashApp.replaceColors("&8microwaved for 5 minutes, be careful")));
+        lore.add(Component.text("A reward for killing a Hunter. Somewhat useless except for decoration", TextColor.fromHexString("#4f1880")));
+        lore.add(Component.text("but a very unique way to show your strength.", TextColor.fromHexString("#4f1880")));
+        lore.add(Component.text("But also can make you at target. Hope you are ready for the storm to come.", TextColor.fromHexString("#4f1880")));
         meta.lore(lore);
 
         // Set Enchantment Glow
