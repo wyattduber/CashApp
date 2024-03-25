@@ -2,36 +2,31 @@ package wyattduber.cashapp.customitems;
 
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-import wyattduber.cashapp.CashApp;
 
+import javax.naming.Name;
 import java.util.Objects;
 
 public class ItemListener implements Listener {
 
-    private final CashApp ca = CashApp.getPlugin();
-
     @EventHandler
     public void onEggBreak(ThrownEggHatchEvent event) {
         if (event.getEgg().getShooter() instanceof Player) {
-            if (Boolean.TRUE.equals(event.getEgg().getItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey("CashApp", "ca_isAnarchyItem"), PersistentDataType.BOOLEAN))) {
+            if (Boolean.TRUE.equals(event.getEgg().getItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey("cashapp", "ca_isanarchyitem"), PersistentDataType.BOOLEAN))) {
                 // Make sure that the egg never actually hatches
                 event.setHatching(false);
 
@@ -45,7 +40,7 @@ public class ItemListener implements Listener {
     @EventHandler
     public void onBowFire(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
-            if (Boolean.TRUE.equals(Objects.requireNonNull(event.getBow()).getItemMeta().getPersistentDataContainer().get(new NamespacedKey("CashApp", "ca_isAnarchyItem"), PersistentDataType.BOOLEAN))) {
+            if (Boolean.TRUE.equals(Objects.requireNonNull(event.getBow()).getItemMeta().getPersistentDataContainer().get(new NamespacedKey("cashapp", "ca_isanarchyitem"), PersistentDataType.BOOLEAN))) {
                 Player player = (Player) event.getEntity();
 
                 // Cancel the original arrow projectile
@@ -61,12 +56,25 @@ public class ItemListener implements Listener {
     public void onCrossbowFire(EntityLoadCrossbowEvent event) {
         if (event.getEntity() instanceof Player player) {
             // Check if the item in the shooter's main hand is a crossbow
-            if (Boolean.TRUE.equals(event.getCrossbow().getItemMeta().getPersistentDataContainer().get(new NamespacedKey("CashApp", "ca_isAnarchyItem"), PersistentDataType.BOOLEAN))) {
+            if (Boolean.TRUE.equals(event.getCrossbow().getItemMeta().getPersistentDataContainer().get(new NamespacedKey("cashapp", "ca_isanarchyitem"), PersistentDataType.BOOLEAN))) {
                 // Cancel the arrow shooting event
                 event.setCancelled(true);
 
                 // Replace arrow with a sped-up wither skull
                 spawnWitherSkullProjectile(player);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Item droppedItem) {
+            ItemStack item = droppedItem.getItemStack();
+
+            if (Boolean.TRUE.equals(item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey("cashapp", "ca_isanarchyitem"), PersistentDataType.BOOLEAN))) {
+                if (Boolean.TRUE.equals(item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey("cashapp", "ca_indestructible"), PersistentDataType.BOOLEAN))) {
+                    event.setCancelled(true);
+                }
             }
         }
     }
