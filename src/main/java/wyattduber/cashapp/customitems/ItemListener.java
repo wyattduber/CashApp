@@ -3,12 +3,22 @@ package wyattduber.cashapp.customitems;
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import wyattduber.cashapp.CashApp;
 
@@ -21,7 +31,7 @@ public class ItemListener implements Listener {
     @EventHandler
     public void onEggBreak(ThrownEggHatchEvent event) {
         if (event.getEgg().getShooter() instanceof Player) {
-            if (Objects.requireNonNull(event.getEgg().getItem()).getItemMeta().equals(ItemManager.egg.getItemMeta())) {
+            if (Boolean.TRUE.equals(event.getEgg().getItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey("CashApp", "ca_isAnarchyItem"), PersistentDataType.BOOLEAN))) {
                 // Make sure that the egg never actually hatches
                 event.setHatching(false);
 
@@ -35,7 +45,7 @@ public class ItemListener implements Listener {
     @EventHandler
     public void onBowFire(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
-            if (Objects.requireNonNull(event.getBow()).getItemMeta().equals(ItemManager.bow.getItemMeta())) {
+            if (Boolean.TRUE.equals(Objects.requireNonNull(event.getBow()).getItemMeta().getPersistentDataContainer().get(new NamespacedKey("CashApp", "ca_isAnarchyItem"), PersistentDataType.BOOLEAN))) {
                 Player player = (Player) event.getEntity();
 
                 // Cancel the original arrow projectile
@@ -51,7 +61,7 @@ public class ItemListener implements Listener {
     public void onCrossbowFire(EntityLoadCrossbowEvent event) {
         if (event.getEntity() instanceof Player player) {
             // Check if the item in the shooter's main hand is a crossbow
-            if (event.getCrossbow().getItemMeta().equals(ItemManager.crossBow.getItemMeta())) {
+            if (Boolean.TRUE.equals(event.getCrossbow().getItemMeta().getPersistentDataContainer().get(new NamespacedKey("CashApp", "ca_isAnarchyItem"), PersistentDataType.BOOLEAN))) {
                 // Cancel the arrow shooting event
                 event.setCancelled(true);
 
