@@ -27,8 +27,8 @@ public class CustomItem extends ItemStack {
         createWeaponItem(name, itemNameColor, lore, itemLoreColor, itemMaterial, itemAmount);
     }
 
-    public CustomItem(String name, TextColor itemNameColor, Material itemMaterial, int itemAmount){
-        createWeaponItem(name, itemNameColor, itemMaterial, itemAmount);
+    public CustomItem(String name, TextColor itemNameColor, Material itemMaterial, int itemAmount, List<Enchantment> customEnchants){
+        createWeaponItem(name, itemNameColor, itemMaterial, itemAmount, customEnchants);
     }
 
     /**
@@ -113,7 +113,7 @@ public class CustomItem extends ItemStack {
      * @param material
      * @param amount
      */
-    private void createWeaponItem(String name, TextColor itemNameColor, Material material, int amount) {
+    private void createWeaponItem(String name, TextColor itemNameColor, Material material, int amount, List<Enchantment> customEnchants) {
         this.setType(material);
         this.setAmount(amount);
         ItemMeta meta = this.getItemMeta();
@@ -121,9 +121,10 @@ public class CustomItem extends ItemStack {
         // Set Name
         meta.displayName(Component.text(name, itemNameColor));
 
-        // Set Enchantment Glow
-        meta.addEnchant(Enchantment.LUCK, 1, false);
+        // Set Enchantments
         meta.addEnchant(Enchantment.VANISHING_CURSE, 1, false);
+        for (Enchantment e : customEnchants)
+            meta.addEnchant(e, 5, false);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         // Modify the NBT data so we know it's indestructible

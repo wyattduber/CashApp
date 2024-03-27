@@ -4,7 +4,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemManager {
 
@@ -35,10 +39,13 @@ public class ItemManager {
         egg = new CustomItem("Eggsplosion", NamedTextColor.YELLOW, "microwaved for 5 minutes, be careful!", NamedTextColor.GRAY, Material.EGG, 64);
 
         // Wither's Penance Bow
-        bow = new CustomItem("Wither's Penance", NamedTextColor.DARK_GRAY, Material.BOW, 1);
+        List<Enchantment> enchantments = new ArrayList<>();
+        enchantments.add(Enchantment.ARROW_INFINITE);
+        bow = new CustomItem("Wither's Penance", NamedTextColor.DARK_GRAY, Material.BOW, 1, enchantments);
 
         // Wither's Penance Crossbow
-        crossBow = new CustomItem("Wither's Penance", NamedTextColor.DARK_GRAY, Material.CROSSBOW, 1);
+        enchantments.add(Enchantment.QUICK_CHARGE);
+        crossBow = new CustomItem("Wither's Penance", NamedTextColor.DARK_GRAY, Material.CROSSBOW, 1, enchantments);
 
         /* Trophy Items */
         boogysPorkchop = new CustomItem("Boogy's Porkchop", NamedTextColor.DARK_RED, Material.COOKED_PORKCHOP);
