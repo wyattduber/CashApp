@@ -2,23 +2,20 @@ package wyattduber.cashapp.customitems;
 
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import javax.naming.Name;
 import java.util.Objects;
 
 public class ItemListener implements Listener {
@@ -74,6 +71,19 @@ public class ItemListener implements Listener {
             if (Boolean.TRUE.equals(item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey("cashapp", "ca_isanarchyitem"), PersistentDataType.BOOLEAN))) {
                 if (Boolean.TRUE.equals(item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey("cashapp", "ca_indestructible"), PersistentDataType.BOOLEAN))) {
                     event.setCancelled(true);
+                }
+            }
+        }
+        else if (event.getEntity() instanceof Player player) {
+            if (event.getDamageSource() instanceof Explosive explosive) {
+                if (explosive instanceof WitherSkull witherskull) {
+                    if (witherskull.getShooter() instanceof ItemStack item) {
+                        if (Boolean.TRUE.equals(item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey("cashapp", "ca_isanarchyitem"), PersistentDataType.BOOLEAN))) {
+                            if (item.getType() == Material.BOW || item.getType() == Material.CROSSBOW) {
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 5, 2, false, true));
+                            }
+                        }
+                    }
                 }
             }
         }
