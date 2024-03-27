@@ -15,17 +15,30 @@ import java.util.List;
 
 public class CustomItem extends ItemStack {
 
-    public CustomItem(String name, TextColor itemNameColor, Material itemMaterial, int itemAmount) {
-        create(name, itemNameColor, itemMaterial, itemAmount);
+    public CustomItem(String name, TextColor itemNameColor, Material itemMaterial) {
+        create(name, itemNameColor, itemMaterial);
     }
 
-    public CustomItem(Component formattedName, Material itemMaterial, int itemAmount) {
-        create(formattedName, itemMaterial, itemAmount);
+    public CustomItem(Component formattedName, Material itemMaterial) {
+        create(formattedName, itemMaterial);
     }
 
-    private void create(String name, TextColor color, Material material, int amount) {
+    public CustomItem(String name, TextColor itemNameColor, String lore, TextColor itemLoreColor, Material itemMaterial, int itemAmount){
+        createWeaponItem(name, itemNameColor, lore, itemLoreColor, itemMaterial, itemAmount);
+    }
+
+    public CustomItem(String name, TextColor itemNameColor, Material itemMaterial, int itemAmount){
+        createWeaponItem(name, itemNameColor, itemMaterial, itemAmount);
+    }
+
+    /**
+     * Create a normal item with a string name
+     * @param name
+     * @param color
+     * @param material
+     */
+    private void create(String name, TextColor color, Material material) {
         this.setType(material);
-        this.setAmount(amount);
         ItemMeta meta = this.getItemMeta();
 
         // Set Name
@@ -38,9 +51,13 @@ public class CustomItem extends ItemStack {
         this.setItemMeta(meta);
     }
 
-    private void create(Component formattedName, Material material, int amount) {
+    /**
+     * Create an item with a component for a name for gradient purposes
+     * @param formattedName
+     * @param material
+     */
+    private void create(Component formattedName, Material material) {
         this.setType(material);
-        this.setAmount(amount);
         ItemMeta meta = this.getItemMeta();
 
         // Set Name
@@ -48,6 +65,70 @@ public class CustomItem extends ItemStack {
 
         // Do the rest of the item meta setting (same for every item)
         setCustomItemMeta(meta);
+
+        // Set the finished modified meta and set the egg item to the created item
+        this.setItemMeta(meta);
+    }
+
+    /**
+     * Create a Weapon Item with vanishing curse and a custom lore
+     * @param name
+     * @param itemNameColor
+     * @param loreLine
+     * @param itemLoreColor
+     * @param material
+     * @param amount
+     */
+    private void createWeaponItem(String name, TextColor itemNameColor, String loreLine, TextColor itemLoreColor, Material material, int amount) {
+        this.setType(material);
+        this.setAmount(amount);
+        ItemMeta meta = this.getItemMeta();
+
+        // Set Name
+        meta.displayName(Component.text(name, itemNameColor));
+
+        // Do the rest of the item meta setting (same for every item)
+        // Set Lore
+        List<Component> lore = new ArrayList<>();
+        lore.add(Component.text(loreLine, itemLoreColor));
+        meta.lore(lore);
+
+        // Set Enchantment Glow
+        meta.addEnchant(Enchantment.LUCK, 1, false);
+        meta.addEnchant(Enchantment.VANISHING_CURSE, 1, false);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+        // Modify the NBT data so we know it's indestructible
+        meta.getPersistentDataContainer().set(new NamespacedKey("cashapp", "ca_indestructible"), PersistentDataType.BOOLEAN, true);
+        meta.getPersistentDataContainer().set(new NamespacedKey("cashapp", "ca_isanarchyitem"), PersistentDataType.BOOLEAN, true);
+
+        // Set the finished modified meta and set the egg item to the created item
+        this.setItemMeta(meta);
+    }
+
+    /**
+     * Create a Weapon Item with vanishing curse
+     * @param name
+     * @param itemNameColor
+     * @param material
+     * @param amount
+     */
+    private void createWeaponItem(String name, TextColor itemNameColor, Material material, int amount) {
+        this.setType(material);
+        this.setAmount(amount);
+        ItemMeta meta = this.getItemMeta();
+
+        // Set Name
+        meta.displayName(Component.text(name, itemNameColor));
+
+        // Set Enchantment Glow
+        meta.addEnchant(Enchantment.LUCK, 1, false);
+        meta.addEnchant(Enchantment.VANISHING_CURSE, 1, false);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+        // Modify the NBT data so we know it's indestructible
+        meta.getPersistentDataContainer().set(new NamespacedKey("cashapp", "ca_indestructible"), PersistentDataType.BOOLEAN, true);
+        meta.getPersistentDataContainer().set(new NamespacedKey("cashapp", "ca_isanarchyitem"), PersistentDataType.BOOLEAN, true);
 
         // Set the finished modified meta and set the egg item to the created item
         this.setItemMeta(meta);
