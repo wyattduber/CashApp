@@ -1,10 +1,14 @@
 package wyattduber.cashapp;
 
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
+import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.PlayerLeashEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import wyattduber.cashapp.commands.*;
@@ -14,6 +18,7 @@ import wyattduber.cashapp.customitems.ItemManager;
 import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.javacord.JavacordHelper;
 import wyattduber.cashapp.lib.LibrarySetup;
+import wyattduber.cashapp.listeners.LeashListener;
 import wyattduber.cashapp.listeners.LoginListener;
 
 import java.io.File;
@@ -46,6 +51,7 @@ public class CashApp extends JavaPlugin {
     public HashMap<String, String> messages = new HashMap<>();
     public LoginListener ll;
     public ItemListener il;
+    public LeashListener leashListener;
     public String botmChannelID;
     public List<String> botmBannedWords;
     public HashMap<String, Integer> usersCurrentlySyncing;
@@ -110,7 +116,13 @@ public class CashApp extends JavaPlugin {
     public void reload() {
         // Un-Register Listeners
         PlayerJoinEvent.getHandlerList().unregister(ll);
+
         ThrownEggHatchEvent.getHandlerList().unregister(il);
+        EntityShootBowEvent.getHandlerList().unregister(il);
+        EntityLoadCrossbowEvent.getHandlerList().unregister(il);
+        EntityDamageEvent.getHandlerList().unregister(il);
+
+        PlayerLeashEntityEvent.getHandlerList().unregister(leashListener);
 
         /* Load and Initiate Configs */
         try {
@@ -146,6 +158,9 @@ public class CashApp extends JavaPlugin {
 
         il = new ItemListener();
         getServer().getPluginManager().registerEvents(il, this);
+
+        leashListener = new LeashListener();
+        getServer().getPluginManager().registerEvents(leashListener, this);
 
         log("Listeners Loaded!");
     }
