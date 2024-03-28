@@ -99,7 +99,6 @@ public class CustomItem extends ItemStack {
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         // Modify the NBT data so we know it's indestructible
-        meta.getPersistentDataContainer().set(new NamespacedKey("cashapp", "ca_indestructible"), PersistentDataType.BOOLEAN, true);
         meta.getPersistentDataContainer().set(new NamespacedKey("cashapp", "ca_isanarchyitem"), PersistentDataType.BOOLEAN, true);
 
         // Set the finished modified meta and set the egg item to the created item
@@ -128,7 +127,6 @@ public class CustomItem extends ItemStack {
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         // Modify the NBT data so we know it's indestructible
-        meta.getPersistentDataContainer().set(new NamespacedKey("cashapp", "ca_indestructible"), PersistentDataType.BOOLEAN, true);
         meta.getPersistentDataContainer().set(new NamespacedKey("cashapp", "ca_isanarchyitem"), PersistentDataType.BOOLEAN, true);
 
         // Set the finished modified meta and set the egg item to the created item
