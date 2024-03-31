@@ -102,7 +102,14 @@ public class ItemListener implements Listener {
     @EventHandler
     public void onSnifferDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof Sniffer) {
-            ItemStack beefDrop = new ItemStack(Material.BEEF);
+            ItemStack beefDrop;
+
+            if (event.getEntity().isVisualFire()) {
+                beefDrop = new ItemStack(Material.COOKED_BEEF);
+            } else {
+                beefDrop = new ItemStack(Material.BEEF);
+            }
+
             beefDrop.setAmount(rand.nextInt(2));
 
             ItemMeta meta = beefDrop.getItemMeta();
