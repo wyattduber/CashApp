@@ -2,6 +2,9 @@ package wyattduber.cashapp.customitems;
 
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -9,16 +12,23 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public class ItemListener implements Listener {
+
+    private final Random rand = new Random();
 
     @EventHandler
     public void onEggBreak(ThrownEggHatchEvent event) {
@@ -86,6 +96,23 @@ public class ItemListener implements Listener {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onSnifferDeath(EntityDeathEvent event) {
+        if (event.getEntity() instanceof Sniffer) {
+            ItemStack beefDrop = new ItemStack(Material.BEEF);
+            beefDrop.setAmount(rand.nextInt(2));
+
+            ItemMeta meta = beefDrop.getItemMeta();
+            meta.displayName(Component.text("Sniffer Meat", TextColor.fromHexString("#2fc087")));
+            List<Component> lore = new ArrayList<>();
+            lore.add(Component.text("Perfect for sniffer burgers!", TextColor.fromHexString("#a73b32")));
+            meta.lore(lore);
+            beefDrop.setItemMeta(meta);
+
+            event.getDrops().add(beefDrop);
         }
     }
 
