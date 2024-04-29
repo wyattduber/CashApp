@@ -4,6 +4,7 @@ main: wyattduber.cashapp.CashApp
 api-version: 1.20
 author: wyattduber
 website: https://www.github.com/wyattduber/CashApp
+softdepend: [PlaceholderAPI, GriefPrevention]
 
 commands:
   ca:
