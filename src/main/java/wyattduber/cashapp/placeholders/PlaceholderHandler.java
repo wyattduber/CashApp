@@ -1,21 +1,18 @@
 package wyattduber.cashapp.placeholders;
 
-import me.clip.placeholderapi.PlaceholderHook;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
-import net.kyori.adventure.text.BlockNBTComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.xml.sax.helpers.LocatorImpl;
+import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
-public class PlaceholderHandler extends PlaceholderHook {
+public class PlaceholderHandler extends PlaceholderExpansion {
 
     private final CashApp ca;
 
@@ -48,9 +45,31 @@ public class PlaceholderHandler extends PlaceholderHook {
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, String identifier) {
-        // Check if player is null
+    public @NotNull String getIdentifier() {
+        return "ca";
+    }
+
+    @Override
+    public @NotNull String getAuthor() {
+        return "Wcash";
+    }
+
+    @Override
+    public @NotNull String getVersion() {
+        return "1.0.0";
+    }
+
+    @Override
+    public boolean persist() {
+        return true; // This is required or else PlaceholderAPI will unregister the Expansion on reload
+    }
+
+    @Override
+    public String onPlaceholderRequest(Player player, @NotNull String identifier) {
+         // Check if player is null
         if (player == null) return "";
+
+        ca.log("Identifier: " + identifier);
 
         // Make entire string lowercase
         identifier = identifier.toLowerCase();

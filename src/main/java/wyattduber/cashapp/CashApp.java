@@ -2,6 +2,7 @@ package wyattduber.cashapp;
 
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,6 +21,7 @@ import wyattduber.cashapp.javacord.JavacordHelper;
 import wyattduber.cashapp.lib.LibrarySetup;
 import wyattduber.cashapp.listeners.LeashListener;
 import wyattduber.cashapp.listeners.LoginListener;
+import wyattduber.cashapp.placeholders.PlaceholderHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -103,6 +105,11 @@ public class CashApp extends JavaPlugin {
             registerCommands();
         } catch (Exception e) {
             error("Error setting up commands! Contact the developer if you cannot fix this issue.");
+        }
+
+        /* Register Placeholders */
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PlaceholderHandler(this).register();
         }
     }
 
