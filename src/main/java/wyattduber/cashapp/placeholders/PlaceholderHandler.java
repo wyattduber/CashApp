@@ -5,6 +5,7 @@ import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
@@ -160,7 +161,7 @@ public class PlaceholderHandler extends PlaceholderExpansion {
         claim.getPermissions(builders, containers, accessors, managers);
 
         try {
-            Player player = Bukkit.getPlayer(UUID.fromString(builders.get(0)));
+            OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(builders.get(0)));
             if (player == null) return "";
 
             return player.getName();
