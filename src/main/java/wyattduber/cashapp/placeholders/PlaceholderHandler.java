@@ -152,7 +152,7 @@ public class PlaceholderHandler extends PlaceholderExpansion {
     private String getClaimOwner(Location location) {
         // Try to find the claim in the world with that location
         Claim claim = GriefPrevention.instance.dataStore.getClaimAt(location, true, null);
-        if (claim == null) return "";
+        if (claim == null) return "Claim doesn't exist!";
 
         ArrayList<String> builders = new ArrayList<>();
         ArrayList<String> containers = new ArrayList<>();
@@ -162,11 +162,10 @@ public class PlaceholderHandler extends PlaceholderExpansion {
 
         try {
             OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(builders.get(0)));
-            if (player == null) return "";
 
             return player.getName();
         } catch (Exception e) {
-            return "";
+            return "Empty";
         }
     }
 
