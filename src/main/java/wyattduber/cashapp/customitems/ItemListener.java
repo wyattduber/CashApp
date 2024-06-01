@@ -7,6 +7,7 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -103,7 +104,11 @@ public class ItemListener implements Listener {
         if (event.getEntity() instanceof Sniffer) {
             ItemStack beefDrop;
 
-            if (event.getEntity().isVisualFire()) {
+            ItemStack killItem = Objects.requireNonNull(event.getEntity().getKiller()).getInventory().getItemInMainHand();
+            EntityDamageEvent.DamageCause lastDamageCause = Objects.requireNonNull(event.getEntity().getLastDamageCause()).getCause();
+            boolean wasKilledByArrow = lastDamageCause.equals(EntityDamageEvent.DamageCause.PROJECTILE);
+            boolean wasKilledByFire = lastDamageCause.equals(EntityDamageEvent.DamageCause.FIRE) || lastDamageCause.equals(EntityDamageEvent.DamageCause.FIRE_TICK);
+            if (killItem.containsEnchantment(Enchantment.FIRE_ASPECT) || (wasKilledByArrow && killItem.containsEnchantment(Enchantment.ARROW_FIRE)) || wasKilledByFire) {
                 beefDrop = new ItemStack(Material.COOKED_BEEF);
             } else {
                 beefDrop = new ItemStack(Material.BEEF);
