@@ -94,7 +94,7 @@ public class CustomItem extends ItemStack {
         meta.lore(lore);
 
         // Set Enchantment Glow
-        meta.addEnchant(Enchantment.LUCK, 1, false);
+        meta.addEnchant(Enchantment.LURE, 1, false);
         meta.addEnchant(Enchantment.VANISHING_CURSE, 1, false);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
@@ -142,7 +142,7 @@ public class CustomItem extends ItemStack {
         meta.lore(lore);
 
         // Set Enchantment Glow
-        meta.addEnchant(Enchantment.LUCK, 1, false);
+        meta.addEnchant(Enchantment.LURE, 1, false);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         // Modify the NBT data so we know it's indestructible

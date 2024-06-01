@@ -3,7 +3,6 @@ package wyattduber.cashapp.customitems;
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Location;
 import org.bukkit.Material;

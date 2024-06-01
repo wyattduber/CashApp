@@ -40,7 +40,7 @@ public class ItemManager {
 
         // Wither's Penance Bow
         List<Enchantment> enchantments = new ArrayList<>();
-        enchantments.add(Enchantment.ARROW_INFINITE);
+        enchantments.add(Enchantment.INFINITY);
         bow = new CustomItem("Wither's Penance", NamedTextColor.DARK_GRAY, Material.BOW, 1, enchantments);
 
         // Wither's Penance Crossbow
