@@ -108,7 +108,7 @@ public class ItemListener implements Listener {
             EntityDamageEvent.DamageCause lastDamageCause = Objects.requireNonNull(event.getEntity().getLastDamageCause()).getCause();
             boolean wasKilledByArrow = lastDamageCause.equals(EntityDamageEvent.DamageCause.PROJECTILE);
             boolean wasKilledByFire = lastDamageCause.equals(EntityDamageEvent.DamageCause.FIRE) || lastDamageCause.equals(EntityDamageEvent.DamageCause.FIRE_TICK);
-            if (killItem.containsEnchantment(Enchantment.FIRE_ASPECT) || (wasKilledByArrow && killItem.containsEnchantment(Enchantment.ARROW_FIRE)) || wasKilledByFire) {
+            if (killItem.containsEnchantment(Enchantment.FIRE_ASPECT) || (wasKilledByArrow && killItem.containsEnchantment(Enchantment.FLAME)) || wasKilledByFire) {
                 beefDrop = new ItemStack(Material.COOKED_BEEF);
             } else {
                 beefDrop = new ItemStack(Material.BEEF);

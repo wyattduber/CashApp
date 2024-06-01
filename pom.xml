@@ -112,7 +112,7 @@
             <groupId>cmi.jar</groupId>
             <artifactId>CMI-API</artifactId>
             <scope>provided</scope>
-            <version>9.7.0.10</version>
+            <version>9.7.2.12</version>
         </dependency>
     </dependencies>
 
