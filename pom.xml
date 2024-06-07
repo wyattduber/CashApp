@@ -18,11 +18,6 @@
 
     <repositories>
         <repository>
-            <id>in-project</id>
-            <name>In Project Repo</name>
-            <url>file://${project.basedir}/libs</url>
-        </repository>
-        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
@@ -107,12 +102,6 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.11.1</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>cmi.jar</groupId>
-            <artifactId>CMI-API</artifactId>
-            <scope>provided</scope>
-            <version>9.7.2.12</version>
         </dependency>
     </dependencies>
 
