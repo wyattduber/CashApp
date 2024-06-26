@@ -16,19 +16,23 @@ import java.util.List;
 public class CustomItem extends ItemStack {
 
     public CustomItem(String name, TextColor itemNameColor, Material itemMaterial) {
+        super(itemMaterial);
         create(name, itemNameColor, itemMaterial);
     }
 
     public CustomItem(Component formattedName, Material itemMaterial) {
-        create(formattedName, itemMaterial);
+        super(itemMaterial);
+        create(formattedName);
     }
 
-    public CustomItem(String name, TextColor itemNameColor, String lore, TextColor itemLoreColor, Material itemMaterial, int itemAmount){
-        createWeaponItem(name, itemNameColor, lore, itemLoreColor, itemMaterial, itemAmount);
+    public CustomItem(String name, TextColor itemNameColor, String lore, TextColor itemLoreColor, Material itemMaterial, int itemAmount) {
+        super(itemMaterial);
+        createWeaponItem(name, itemNameColor, lore, itemLoreColor, itemAmount);
     }
 
-    public CustomItem(String name, TextColor itemNameColor, Material itemMaterial, int itemAmount, List<Enchantment> customEnchants){
-        createWeaponItem(name, itemNameColor, itemMaterial, itemAmount, customEnchants);
+    public CustomItem(String name, TextColor itemNameColor, Material itemMaterial, int itemAmount, List<Enchantment> customEnchants) {
+        super(itemMaterial);
+        createWeaponItem(name, itemNameColor, itemAmount, customEnchants);
     }
 
     /**
@@ -38,7 +42,6 @@ public class CustomItem extends ItemStack {
      * @param material
      */
     private void create(String name, TextColor color, Material material) {
-        this.setType(material);
         ItemMeta meta = this.getItemMeta();
 
         // Set Name
@@ -54,10 +57,8 @@ public class CustomItem extends ItemStack {
     /**
      * Create an item with a component for a name for gradient purposes
      * @param formattedName
-     * @param material
      */
-    private void create(Component formattedName, Material material) {
-        this.setType(material);
+    private void create(Component formattedName) {
         ItemMeta meta = this.getItemMeta();
 
         // Set Name
@@ -76,11 +77,9 @@ public class CustomItem extends ItemStack {
      * @param itemNameColor
      * @param loreLine
      * @param itemLoreColor
-     * @param material
      * @param amount
      */
-    private void createWeaponItem(String name, TextColor itemNameColor, String loreLine, TextColor itemLoreColor, Material material, int amount) {
-        this.setType(material);
+    private void createWeaponItem(String name, TextColor itemNameColor, String loreLine, TextColor itemLoreColor, int amount) {
         this.setAmount(amount);
         ItemMeta meta = this.getItemMeta();
 
@@ -109,11 +108,9 @@ public class CustomItem extends ItemStack {
      * Create a Weapon Item with vanishing curse
      * @param name
      * @param itemNameColor
-     * @param material
      * @param amount
      */
-    private void createWeaponItem(String name, TextColor itemNameColor, Material material, int amount, List<Enchantment> customEnchants) {
-        this.setType(material);
+    private void createWeaponItem(String name, TextColor itemNameColor, int amount, List<Enchantment> customEnchants) {
         this.setAmount(amount);
         ItemMeta meta = this.getItemMeta();
 
