@@ -30,7 +30,7 @@ public class Database {
 
     public boolean testConnection() {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT totalVotes FROM streaks");
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT minecraftid FROM usernameSync LIMIT 1");
             stmt.executeQuery();
             return true;
         } catch (SQLException e) {

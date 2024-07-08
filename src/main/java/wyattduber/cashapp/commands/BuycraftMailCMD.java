@@ -33,6 +33,12 @@ public class BuycraftMailCMD implements CommandExecutor {
             return false;
         }
 
+        //Check to make sure that only console is executing the command
+        if (!(sender instanceof ConsoleCommandSender)) {
+            ca.sendMessage(sender, "§cCommand must be executed from console!");
+            return true;
+        }
+
         // Confirm that argument is an integer
         try {
             Integer.parseInt(args[0]);
@@ -41,22 +47,6 @@ public class BuycraftMailCMD implements CommandExecutor {
             return true;
         }
 
-        //Check to make sure that only console is executing the command
-        if (sender instanceof Player player) {
-            ca.sendMessage(player, "§cCommand must be executed from console!");
-            return true;
-        }
-
-        /*
-         * Dictionary:
-         * -1 = Stall Re-Rental Message Alert
-         * 0 = Custom Title (Mod+)
-         * 1 = Custom Title Replacement (Mod+)
-         * 2 = Custom Weapon Name/Lore (Mod+)
-         * 3 = Public Warp (Mod/Mod+)
-         * 4 = Warp Move/Rename (Mod/Mod+)
-         * 5 = Mob Spawner (Mod/Mod+)
-         */
         switch (BuycraftMailType.fromInt(Integer.parseInt(args[0]))) {
             case STALL_RE_RENTAL_MESSAGE_ALERT -> {
                 for (String value : modList) {
