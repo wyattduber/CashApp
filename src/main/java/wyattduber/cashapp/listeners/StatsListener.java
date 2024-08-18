@@ -1,20 +1,25 @@
 package wyattduber.cashapp.listeners;
 
+import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.*;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.enums.StatType;
+
+import java.util.Map;
 
 public class StatsListener implements Listener {
 
@@ -98,6 +103,89 @@ public class StatsListener implements Listener {
         }
 
         db.addStat(player.getUniqueId(), StatType.distanceWalked, 1);
+    }
+
+    @EventHandler
+    public void onItemEnchanted(EnchantItemEvent event) {
+        Player player = event.getEnchanter();
+        db.addStat(player.getUniqueId(), StatType.itemsEnchanted, event.getItem().toString(), 1);
+        for (Enchantment enchantment : event.getEnchantsToAdd().keySet()) {
+            int level = event.getEnchantsToAdd().get(enchantment);
+            if (level > 1) {
+                db.addStat(player.getUniqueId(), StatType.itemsEnchanted, enchantment.toString(), level);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onItemCrafted(CraftItemEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        db.addStat(player.getUniqueId(), StatType.itemsCrafted, event.getRecipe().getResult().toString(), 1);
+    }
+
+    @EventHandler
+    public void onItemSmelted(FurnaceExtractEvent event) {
+        Player player = event.getPlayer();
+        db.addStat(player.getUniqueId(), StatType.itemsSmelted, event.getItemType().toString(), 1);
+    }
+
+    @EventHandler
+    public void onItemDropped(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        db.addStat(player.getUniqueId(), StatType.itemsDropped, event.getItemDrop().getItemStack().toString(), 1);
+    }
+
+    @EventHandler
+    public void onItemPickedUp(PlayerAttemptPickupItemEvent event) {
+        Player player = event.getPlayer();
+        db.addStat(player.getUniqueId(), StatType.itemsPickedUp, event.getItem().getItemStack().toString(), 1);
+    }
+
+    @EventHandler
+    public void onPlayerSleep(PlayerBedEnterEvent event) {
+        Player player = event.getPlayer();
+        db.addStat(player.getUniqueId(), StatType.timesSlept, 1);
+    }
+
+    @EventHandler
+    public void onPlayerEat(PlayerItemConsumeEvent event) {
+        Player player = event.getPlayer();
+        db.addStat(player.getUniqueId(), StatType.foodEaten, event.getItem().toString(), 1);
+    }
+
+    @EventHandler
+    public void onPlayerDrink(PlayerItemConsumeEvent event) {
+        Player player = event.getPlayer();
+        db.addStat(player.getUniqueId(), StatType.potionsDrank, event.getItem().toString(), 1);
+    }
+
+    @EventHandler
+    public void onPlayerXPAmountChange(PlayerExpChangeEvent event) {
+        Player player = event.getPlayer();
+
+        if (event.getAmount() < 0) {
+            db.addStat(player.getUniqueId(), StatType.xpLost, String.valueOf(event.getAmount()), 1);
+        } else {
+            db.addStat(player.getUniqueId(), StatType.xpGained, String.valueOf(event.getAmount()), 1);
+        }
+    }
+
+    @EventHandler
+    public void onDamageDealt(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player player)) return;
+        db.addStat(player.getUniqueId(), StatType.damageDealt, String.valueOf(event.getDamage()), 1);
+    }
+
+    @EventHandler
+    public void onDamageTaken(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        db.addStat(player.getUniqueId(), StatType.damageTaken, String.valueOf(event.getDamage()), 1);
+    }
+
+    @EventHandler
+    public void onPlayerPickupExperience(PlayerPickupExperienceEvent event) {
+        Player player = event.getPlayer();
+        db.addStat(player.getUniqueId(), StatType.xpGained, String.valueOf(event.getExperienceOrb().getExperience()), 1);
     }
 
 }
