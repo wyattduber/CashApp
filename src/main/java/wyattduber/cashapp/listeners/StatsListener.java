@@ -164,28 +164,28 @@ public class StatsListener implements Listener {
         Player player = event.getPlayer();
 
         if (event.getAmount() < 0) {
-            db.addStat(player.getUniqueId(), StatType.xpLost, String.valueOf(event.getAmount()), 1);
+            db.addStat(player.getUniqueId(), StatType.xpLost, event.getAmount());
         } else {
-            db.addStat(player.getUniqueId(), StatType.xpGained, String.valueOf(event.getAmount()), 1);
+            db.addStat(player.getUniqueId(), StatType.xpGained, event.getAmount());
         }
     }
 
     @EventHandler
     public void onDamageDealt(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player player)) return;
-        db.addStat(player.getUniqueId(), StatType.damageDealt, String.valueOf(event.getDamage()), 1);
+        db.addStat(player.getUniqueId(), StatType.damageDealt, event.getDamage());
     }
 
     @EventHandler
     public void onDamageTaken(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        db.addStat(player.getUniqueId(), StatType.damageTaken, String.valueOf(event.getDamage()), 1);
+        db.addStat(player.getUniqueId(), StatType.damageTaken, event.getDamage());
     }
 
     @EventHandler
     public void onPlayerPickupExperience(PlayerPickupExperienceEvent event) {
         Player player = event.getPlayer();
-        db.addStat(player.getUniqueId(), StatType.xpGained, String.valueOf(event.getExperienceOrb().getExperience()), 1);
+        db.addStat(player.getUniqueId(), StatType.xpGained, event.getExperienceOrb().getExperience());
     }
 
 }
