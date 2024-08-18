@@ -1,6 +1,7 @@
 package wyattduber.cashapp.database;
 
 import wyattduber.cashapp.CashApp;
+import wyattduber.cashapp.enums.StatType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ public class Database {
         updateTableStructure("usernameSync",
                 "CREATE TABLE usernameSync (minecraftid TEXT NOT NULL, mcusername TEXT NOT NULL, discordid TEXT NOT NULL, isSynced BIT NOT NULL, syncReminder BIT NOT NULL)");
 
+        updateTableStructure("playerStats",
+                "CREATE TABLE playerStats (minecraftid TEXT NOT NULL, statType TEXT NOT NULL, statSubType TEXT NULL, statValue DOUBLE NOT NULL)");
     }
 
     public String getDbPath() { return dbPath; }
@@ -138,7 +141,139 @@ public class Database {
         }
     }
 
-    /* Private Methods */
+    /* Player Stats Methods */
+
+    public void addStat(UUID minecraftid, StatType statType, double statValue) {
+        // First, check stat exists. If so, update it
+        if (statExists(minecraftid, statType)) {
+            updateStat(minecraftid, statType, statValue);
+            return;
+        }
+
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO playerStats(minecraftid,statType,statValue) VALUES (?,?,?)");
+            stmt.setString(1, minecraftid.toString());
+            stmt.setString(2, statType.toString());
+            stmt.setDouble(3, statValue);
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error adding a stat record for user " + getName(minecraftid) + "!");
+            ca.error("Error Message: " + e.getMessage());
+        }
+    }
+
+    public void addStat(UUID minecraftid, StatType statType, String statSubType, double statValue) {
+        // First, check stat exists. If so, update it
+        if (statExists(minecraftid, statType, statSubType)) {
+            updateStat(minecraftid, statType, statSubType, statValue);
+            return;
+        }
+
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO playerStats(minecraftid,statType,statSubType,statValue) VALUES (?,?,?,?)");
+            stmt.setString(1, minecraftid.toString());
+            stmt.setString(2, statType.toString());
+            stmt.setString(3, statSubType);
+            stmt.setDouble(4, statValue);
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error adding a stat record for user " + getName(minecraftid) + "!");
+            ca.error("Error Message: " + e.getMessage());
+        }
+    }
+
+    private void updateStat(UUID minecraftid, StatType statType, double statValue) {
+        try {
+            // First, get the existing stat value
+            double existingStatValue = getStat(minecraftid, statType);
+
+            PreparedStatement stmt = dbcon.prepareStatement("UPDATE playerStats SET statValue=? WHERE minecraftid=? AND statType=?");
+            stmt.setDouble(1, statValue + existingStatValue);
+            stmt.setString(2, minecraftid.toString());
+            stmt.setString(3, statType.toString());
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error updating a stat record for user " + getName(minecraftid) + "!");
+            ca.error("Error Message: " + e.getMessage());
+        }
+    }
+
+    private void updateStat(UUID minecraftid, StatType statType, String statSubType, double statValue) {
+        try {
+            // First, get the existing stat value
+            double existingStatValue = getStat(minecraftid, statType);
+
+            PreparedStatement stmt = dbcon.prepareStatement("UPDATE playerStats SET statValue=? WHERE minecraftid=? AND statType=? AND statSubType=?");
+            stmt.setDouble(1, statValue + existingStatValue);
+            stmt.setString(2, minecraftid.toString());
+            stmt.setString(3, statType.toString());
+            stmt.setString(4, statSubType);
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error updating a stat record for user " + getName(minecraftid) + "!");
+            ca.error("Error Message: " + e.getMessage());
+        }
+    }
+
+    private boolean statExists(UUID minecraftid, StatType statType) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT minecraftId,statType FROM playerStats WHERE minecraftid=? AND statType=?");
+            stmt.setString(1, minecraftid.toString());
+            stmt.setString(2, statType.toString());
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            ca.error("Error checking if player exists in the database!");
+            ca.error("Error Message: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private boolean statExists(UUID minecraftid, StatType statType, String statSubType) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT minecraftId,statType,subStatType FROM playerStats WHERE minecraftid=? AND statType=? AND statSubType=?");
+            stmt.setString(1, minecraftid.toString());
+            stmt.setString(2, statType.toString());
+            stmt.setString(3, statSubType);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            ca.error("Error checking if player exists in the database!");
+            ca.error("Error Message: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private double getStat(UUID minecraftid, StatType statType) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT statValue FROM playerStats WHERE minecraftid=? AND statType=?");
+            stmt.setString(1, minecraftid.toString());
+            stmt.setString(2, statType.toString());
+            ResultSet rs = stmt.executeQuery();
+            return rs.getDouble("statValue");
+        } catch (SQLException e) {
+            ca.error("Error fetching stat value for user " + getName(minecraftid) + "!");
+            ca.error("Error Message: " + e.getMessage());
+            return 0;
+        }
+    }
+
+    private double getStat(UUID minecraftid, StatType statType, String statSubType) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT statValue FROM playerStats WHERE minecraftid=? AND statType=? AND statSubType=?");
+            stmt.setString(1, minecraftid.toString());
+            stmt.setString(2, statType.toString());
+            stmt.setString(3, statSubType);
+            ResultSet rs = stmt.executeQuery();
+            return rs.getDouble("statValue");
+        } catch (SQLException e) {
+            ca.error("Error fetching stat value for user " + getName(minecraftid) + "!");
+            ca.error("Error Message: " + e.getMessage());
+            return 0;
+        }
+    }
+
+    /* Helper Methods */
 
     private void updateTableStructure(String tableName, String createTableQuery) throws SQLException {
         DatabaseMetaData meta = dbcon.getMetaData();

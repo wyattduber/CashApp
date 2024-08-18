@@ -21,6 +21,7 @@ import wyattduber.cashapp.javacord.JavacordHelper;
 import wyattduber.cashapp.lib.LibrarySetup;
 import wyattduber.cashapp.listeners.LeashListener;
 import wyattduber.cashapp.listeners.LoginListener;
+import wyattduber.cashapp.listeners.StatsListener;
 import wyattduber.cashapp.placeholders.PlaceholderHandler;
 
 import java.io.File;
@@ -53,6 +54,7 @@ public class CashApp extends JavaPlugin {
     public HashMap<String, String> messages = new HashMap<>();
     public LoginListener ll;
     public ItemListener il;
+    public StatsListener sl;
     public LeashListener leashListener;
     public String botmChannelID;
     public List<String> botmBannedWords;
@@ -165,6 +167,9 @@ public class CashApp extends JavaPlugin {
 
         il = new ItemListener();
         getServer().getPluginManager().registerEvents(il, this);
+
+        sl = new StatsListener();
+        getServer().getPluginManager().registerEvents(sl, this);
 
         leashListener = new LeashListener();
         getServer().getPluginManager().registerEvents(leashListener, this);
