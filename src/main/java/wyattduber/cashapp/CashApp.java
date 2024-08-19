@@ -322,6 +322,9 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("getanarchyitem")).setExecutor(new AnarchyItemsCMD());
             Objects.requireNonNull(this.getCommand("getanarchyitem")).setTabCompleter(new AnarchyItemsTC());
 
+            Objects.requireNonNull(this.getCommand("stats")).setExecutor(new StatsCMD());
+            Objects.requireNonNull(this.getCommand("stats")).setTabCompleter(new StatsTC());
+
             log("Commands Registered Successfully!");
         } catch (NullPointerException e) {
             error(e.getMessage());

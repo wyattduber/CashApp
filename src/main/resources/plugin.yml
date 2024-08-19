@@ -37,6 +37,11 @@ commands:
     usage: /getAnarchyItem <item>
     permission: ca.getanarchyitem
     permission-message: §cYou do not have permission!
+  stats:
+    description: Get the stats of a player
+    usage: /stats <statType> <statSubType> [player]
+    permission: ca.stats
+    permission-message: §cYou do not have permission!
 
 permissions:
   ca.*:
@@ -50,6 +55,7 @@ permissions:
       ca.ls: true
       ca.streak: true
       ca.getAnarchyItem: true
+      ca.stats: true
   ca.botm:
     description: Allows the use of the BOTM command
     default: op
@@ -67,4 +73,7 @@ permissions:
     default: op
   ca.getanarchyitem:
     description: Allows the use of the /getAnarchyItem command
+    default: op
+  ca.stats:
+    description: Allows the use of the /stats command
     default: op

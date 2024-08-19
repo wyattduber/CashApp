@@ -107,12 +107,12 @@ public class Database {
                 return rs.getLong("discordid");
             } else {
                 // handle the case when no rows are returned
-                return 0;
+                return -1;
             }
         } catch (SQLException e) {
             ca.error("Error fetching synced Discord ID for user " + getName(minecraftid) + "!");
             ca.error("Error Message: " + e.getMessage());
-            return 0;
+            return -1;
         }
     }
 
@@ -231,7 +231,7 @@ public class Database {
 
     private boolean statExists(UUID minecraftid, StatType statType, String statSubType) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT minecraftId,statType,subStatType FROM playerStats WHERE minecraftid=? AND statType=? AND statSubType=?");
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT minecraftId,statType,statSubType FROM playerStats WHERE minecraftid=? AND statType=? AND statSubType=?");
             stmt.setString(1, minecraftid.toString());
             stmt.setString(2, statType.toString());
             stmt.setString(3, statSubType);
@@ -244,32 +244,42 @@ public class Database {
         }
     }
 
-    private double getStat(UUID minecraftid, StatType statType) {
+    public double getStat(UUID minecraftid, StatType statType) {
         try {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT statValue FROM playerStats WHERE minecraftid=? AND statType=?");
             stmt.setString(1, minecraftid.toString());
             stmt.setString(2, statType.toString());
             ResultSet rs = stmt.executeQuery();
-            return rs.getDouble("statValue");
+
+            double statValue = rs.getDouble("statValue");
+            if (statValue == 0) {
+                return -1;
+            }
+            return statValue;
         } catch (SQLException e) {
             ca.error("Error fetching stat value for user " + getName(minecraftid) + "!");
             ca.error("Error Message: " + e.getMessage());
-            return 0;
+            return -1;
         }
     }
 
-    private double getStat(UUID minecraftid, StatType statType, String statSubType) {
+    public double getStat(UUID minecraftid, StatType statType, String statSubType) {
         try {
             PreparedStatement stmt = dbcon.prepareStatement("SELECT statValue FROM playerStats WHERE minecraftid=? AND statType=? AND statSubType=?");
             stmt.setString(1, minecraftid.toString());
             stmt.setString(2, statType.toString());
             stmt.setString(3, statSubType);
             ResultSet rs = stmt.executeQuery();
-            return rs.getDouble("statValue");
+
+            double statValue = rs.getDouble("statValue");
+            if (statValue == 0) {
+                return -1;
+            }
+            return statValue;
         } catch (SQLException e) {
             ca.error("Error fetching stat value for user " + getName(minecraftid) + "!");
             ca.error("Error Message: " + e.getMessage());
-            return 0;
+            return -1;
         }
     }
 
