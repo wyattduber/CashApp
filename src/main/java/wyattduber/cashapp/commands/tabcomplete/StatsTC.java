@@ -1,14 +1,21 @@
 package wyattduber.cashapp.commands.tabcomplete;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
+import wyattduber.cashapp.enums.StatType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StatsTC implements TabCompleter {
 
@@ -19,65 +26,50 @@ public class StatsTC implements TabCompleter {
     }
 
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
-        if (!(sender instanceof Player)) return null; // Only provide tab completion for players
+        if (!(sender instanceof Player player)) return null; // Only provide tab completion for players
 
         ArrayList<String> tabs = new ArrayList<>();
 
         return switch (args.length) {
             // StatType
             case 1 -> {
-                tabs.add("joins");
-                tabs.add("leaves");
-                tabs.add("mobsKilled");
-                tabs.add("playersKilled");
-                tabs.add("deaths");
-                tabs.add("blocksBroken");
-                tabs.add("blocksPlaced");
-                tabs.add("moneyEarned");
-                tabs.add("moneySpent");
-                tabs.add("fishCaught");
-                tabs.add("itemsCrafted");
-                tabs.add("itemsEnchanted");
-                tabs.add("itemsBrewed");
-                tabs.add("itemsSmelted");
-                tabs.add("itemsEaten");
-                tabs.add("itemsDropped");
-                tabs.add("itemsPickedUp");
-                tabs.add("timesSlept");
-                tabs.add("damageDealt");
-                tabs.add("damageTaken");
-                tabs.add("distanceWalked");
-                tabs.add("distanceCrouched");
-                tabs.add("distanceSprinted");
-                tabs.add("distanceSwam");
-                tabs.add("distanceFallen");
-                tabs.add("distanceClimbed");
-                tabs.add("distanceFlown");
+                for (StatType statType : StatType.values()) {
+                    tabs.add(statType.toString());
+                }
                 yield tabs;
             }
             // StatSubType
             case 2 -> {
-                if (args[0].equalsIgnoreCase("Trophy")) {
-                    tabs.add("BoogysPorkchop");
-                    tabs.add("BrokenDrillBit");
-                    tabs.add("BucketOfFrost");
-                    tabs.add("ChaosCore");
-                    tabs.add("CrownShard");
-                    tabs.add("DefusedEggBomb");
-                    tabs.add("DemolitionistFlintStriker");
-                    tabs.add("GambitCoin");
-                    tabs.add("GreenysPetEgg");
-                    tabs.add("NaturesGem");
-                    tabs.add("Nemo");
-                    tabs.add("PartyCake");
-                    tabs.add("ScoutsIntrusiveThoughts");
-                    tabs.add("TandsFavoritePotato");
-                    tabs.add("ToxicVial");
-                    tabs.add("WitherKnightSkull");
+                if (Arrays.stream(StatType.values()).noneMatch(stat -> stat.name().equalsIgnoreCase(args[0]))) yield tabs;
+
+                switch (StatType.valueOf(args[0])) {
+                    case MobsKilled:
+                        tabs.addAll(GetMobTypes());
+                        yield tabs;
+                    case PlayersKilled:
+                        tabs.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList());
+                        yield tabs;
+                    case BlocksBroken:
+                    case BlocksPlaced:
+                        tabs.addAll(GetBlockTypes());
+                        yield tabs;
+                    case FishCaught:
+                        tabs.add("cod");
+                        tabs.add("salmon");
+                        tabs.add("pufferfish");
+                        tabs.add("tropicalFish");
                 }
                 yield tabs;
             }
             default -> tabs;
         };
+    }
+
+    private ArrayList<String> GetMobTypes() {
+        return Arrays.stream(EntityType.values()).map(entity -> entity.name().toLowerCase()).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private ArrayList<String> GetBlockTypes() {
+        return Arrays.stream(Material.values()).filter(Material::isBlock).map(material -> material.name().toLowerCase()).collect(Collectors.toCollection(ArrayList::new));
     }
 }
