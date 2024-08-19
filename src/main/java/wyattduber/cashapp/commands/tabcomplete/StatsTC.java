@@ -1,16 +1,16 @@
 package wyattduber.cashapp.commands.tabcomplete;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
-import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.enums.StatType;
 
 import java.util.ArrayList;
@@ -20,14 +20,8 @@ import java.util.stream.Collectors;
 
 public class StatsTC implements TabCompleter {
 
-    private final CashApp ca;
-
-    public StatsTC() {
-        ca = CashApp.getPlugin();
-    }
-
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
-        if (!(sender instanceof Player player)) return null; // Only provide tab completion for players
+        if (!(sender instanceof Player)) return null; // Only provide tab completion for players
 
         ArrayList<String> tabs = new ArrayList<>();
 
@@ -41,7 +35,8 @@ public class StatsTC implements TabCompleter {
             }
             // StatSubType
             case 2 -> {
-                if (Arrays.stream(StatType.values()).noneMatch(stat -> stat.name().equalsIgnoreCase(args[0]))) yield tabs;
+                if (Arrays.stream(StatType.values()).noneMatch(stat -> stat.name().equalsIgnoreCase(args[0])))
+                    yield tabs;
 
                 switch (StatType.valueOf(args[0])) {
                     case MobsKilled:
@@ -67,11 +62,14 @@ public class StatsTC implements TabCompleter {
                         tabs.add("tropicalFish");
                         yield tabs;
                     case ItemsCrafted:
-                    case ItemsEnchanted:
                     case ItemsSmelted:
                     case ItemsDropped:
                     case ItemsPickedUp:
                         tabs.addAll(GetAllItemTypes());
+                        yield tabs;
+                    case ItemsEnchanted:
+                        tabs.addAll(GetAllItemTypes());
+                        tabs.addAll(GetAllEnchantmentTypes());
                         yield tabs;
                     case FoodEaten:
                         tabs.addAll(GetAllEdibleItemTypes());
@@ -107,6 +105,14 @@ public class StatsTC implements TabCompleter {
     }
 
     private List<String> GetAllPotionTypes() {
-        return Arrays.stream(PotionType.values()).map(material -> material.name().toLowerCase()).collect(Collectors.toList());
+        return Arrays.stream(PotionType.values()).map(potionType -> potionType.name().toLowerCase()).collect(Collectors.toList());
+    }
+
+    private List<String> GetAllEnchantmentTypes() {
+        var registry = RegistryAccess.registryAccess();
+        var registryGet = registry.getRegistry(RegistryKey.ENCHANTMENT);
+        return Arrays.stream(registryGet.stream().toArray())
+                .map(enchantment -> enchantment.toString().toLowerCase())
+                .collect(Collectors.toList());
     }
 }

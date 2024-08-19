@@ -18,6 +18,8 @@ import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.enums.StatType;
 
+import java.util.Objects;
+
 public class StatsListener implements Listener {
 
     private final Database db;
@@ -60,15 +62,15 @@ public class StatsListener implements Listener {
         Player player = event.getEntity().getKiller();
         if (player == null) return;
 
-        var deathCause = event.getDamageSource();
-        db.addStat(player.getUniqueId(), StatType.MobsKilled, deathCause.toString(), 1);
+        String entityType = Objects.requireNonNull(event.getDamageSource().getCausingEntity()).getType().toString().toLowerCase();
+        db.addStat(player.getUniqueId(), StatType.MobsKilled, entityType, 1);
     }
 
     @EventHandler
     public void onFishCaught(PlayerFishEvent event) {
         Player player = event.getPlayer();
         Entity fish = event.getCaught();
-        db.addStat(player.getUniqueId(), StatType.FishCaught, fish != null ? fish.getType().toString() : null, 1);
+        db.addStat(player.getUniqueId(), StatType.FishCaught, fish != null ? fish.getType().toString().toLowerCase() : null, 1);
     }
 
     @EventHandler
