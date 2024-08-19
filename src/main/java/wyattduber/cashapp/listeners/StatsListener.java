@@ -19,8 +19,6 @@ import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.enums.StatType;
 
-import java.util.Map;
-
 public class StatsListener implements Listener {
 
     private final CashApp ca = CashApp.getPlugin();
@@ -77,13 +75,13 @@ public class StatsListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        db.addStat(player.getUniqueId(), StatType.blocksBroken, event.getBlock().toString(), 1);
+        db.addStat(player.getUniqueId(), StatType.blocksBroken, event.getBlock().getType().toString().toLowerCase(), 1);
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        db.addStat(player.getUniqueId(), StatType.blocksPlaced, event.getBlock().toString(), 1);
+        db.addStat(player.getUniqueId(), StatType.blocksPlaced, event.getBlock().getType().toString().toLowerCase(), 1);
     }
 
     @EventHandler

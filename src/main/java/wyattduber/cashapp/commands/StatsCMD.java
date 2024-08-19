@@ -23,11 +23,11 @@ public class StatsCMD implements CommandExecutor {
 
     /**
      * Usage: /stats (statType) (statSubType) [player]
-     * @param sender
-     * @param command
-     * @param label
-     * @param args
-     * @return
+     * @param sender The sender of the command
+     * @param command The command that was executed
+     * @param label The alias of the command
+     * @param args The arguments provided with the command
+     * @return true if the command was executed successfully, false otherwise
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
