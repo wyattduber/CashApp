@@ -8,6 +8,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.enums.StatType;
@@ -47,7 +48,13 @@ public class StatsTC implements TabCompleter {
                         tabs.addAll(GetMobTypes());
                         yield tabs;
                     case PlayersKilled:
-                        tabs.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList());
+                        tabs.addAll(GetOnlinePlayerNames());
+                        yield tabs;
+                    case DamageDealt:
+                    case DamageTaken:
+                    case Deaths:
+                        tabs.addAll(GetOnlinePlayerNames());
+                        tabs.addAll(GetMobTypes());
                         yield tabs;
                     case BlocksBroken:
                     case BlocksPlaced:
@@ -58,6 +65,20 @@ public class StatsTC implements TabCompleter {
                         tabs.add("salmon");
                         tabs.add("pufferfish");
                         tabs.add("tropicalFish");
+                        yield tabs;
+                    case ItemsCrafted:
+                    case ItemsEnchanted:
+                    case ItemsSmelted:
+                    case ItemsDropped:
+                    case ItemsPickedUp:
+                        tabs.addAll(GetAllItemTypes());
+                        yield tabs;
+                    case FoodEaten:
+                        tabs.addAll(GetAllEdibleItemTypes());
+                        yield tabs;
+                    case PotionsDrank:
+                        tabs.addAll(GetAllPotionTypes());
+                        yield tabs;
                 }
                 yield tabs;
             }
@@ -65,11 +86,27 @@ public class StatsTC implements TabCompleter {
         };
     }
 
-    private ArrayList<String> GetMobTypes() {
-        return Arrays.stream(EntityType.values()).map(entity -> entity.name().toLowerCase()).collect(Collectors.toCollection(ArrayList::new));
+    private List<String> GetOnlinePlayerNames() {
+        return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
     }
 
-    private ArrayList<String> GetBlockTypes() {
-        return Arrays.stream(Material.values()).filter(Material::isBlock).map(material -> material.name().toLowerCase()).collect(Collectors.toCollection(ArrayList::new));
+    private List<String> GetMobTypes() {
+        return Arrays.stream(EntityType.values()).map(entity -> entity.name().toLowerCase()).collect(Collectors.toList());
+    }
+
+    private List<String> GetBlockTypes() {
+        return Arrays.stream(Material.values()).filter(Material::isBlock).map(material -> material.name().toLowerCase()).collect(Collectors.toList());
+    }
+
+    private List<String> GetAllItemTypes() {
+        return Arrays.stream(Material.values()).filter(Material::isItem).map(material -> material.name().toLowerCase()).collect(Collectors.toList());
+    }
+
+    private List<String> GetAllEdibleItemTypes() {
+        return Arrays.stream(Material.values()).filter(Material::isEdible).map(material -> material.name().toLowerCase()).collect(Collectors.toList());
+    }
+
+    private List<String> GetAllPotionTypes() {
+        return Arrays.stream(PotionType.values()).map(material -> material.name().toLowerCase()).collect(Collectors.toList());
     }
 }
