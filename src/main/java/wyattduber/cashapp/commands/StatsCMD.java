@@ -11,6 +11,8 @@ import wyattduber.cashapp.enums.StatType;
 
 import java.util.Arrays;
 
+import static wyattduber.cashapp.enums.StatType.Joins;
+
 public class StatsCMD implements CommandExecutor {
 
     private final CashApp ca;
@@ -42,27 +44,29 @@ public class StatsCMD implements CommandExecutor {
         }
 
         if (args.length == 1) {
-            String statType = args[0];
-            if (Arrays.stream(StatType.values()).noneMatch(stat -> stat.name().equalsIgnoreCase(statType))) {
+            String statTypeString = args[0];
+            if (Arrays.stream(StatType.values()).noneMatch(stat -> stat.name().equalsIgnoreCase(statTypeString))) {
                 ca.sendMessage(player, "§cInvalid Stat Type!");
                 return true;
             }
+            StatType statType = StatType.valueOf(statTypeString);
 
-            double stat = db.getStat(player.getUniqueId(), StatType.valueOf(statType));
-            if (stat == -1) ca.sendMessage(player, "§cInvalid Stat Type or You have no stat for this type yet!");
-            else ca.sendMessage(player, "§a" + statType + ": " + stat);
+            double stat = db.getStat(player.getUniqueId(), statType);
+            if (stat == -1) ca.sendMessage(player, "§cYou have no stat for this type yet!");
+            else statType.print(player, stat);
         } else if (args.length == 2) {
-            String statType = args[0];
+            String statTypeString = args[0];
             String statSubType = args[1];
-            if (Arrays.stream(StatType.values()).noneMatch(stat -> stat.name().equalsIgnoreCase(statType))) {
+            if (Arrays.stream(StatType.values()).noneMatch(stat -> stat.name().equalsIgnoreCase(statTypeString))) {
                 ca.sendMessage(player, "§cInvalid Stat Type!");
                 return true;
             }
+            StatType statType = StatType.valueOf(statTypeString);
 
-            double stat = db.getStat(player.getUniqueId(), StatType.valueOf(statType), statSubType);
+            double stat = db.getStat(player.getUniqueId(), statType, statSubType);
 
-            if (stat == -1) ca.sendMessage(player, "§cInvalid Stat SubType!");
-            else ca.sendMessage(player, "§a" + statType + ": " + stat);
+            if (stat == -1) ca.sendMessage(player, "§cInvalid Stat SubType or you have no stat for this type/subType yet!");
+            else statType.print(player, statSubType, stat);
             return true;
         }
         return true;
