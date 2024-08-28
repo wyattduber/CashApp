@@ -3,9 +3,7 @@ package wyattduber.cashapp.placeholders;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
@@ -126,12 +124,63 @@ public class PlaceholderHandler extends PlaceholderExpansion {
             case "stall" -> {
                 return parseStallPlaceholder(args);
             }
+            case "chunks" -> {
+                return parseChunkPlaceholder(args);
+            }
             default -> {
                 return "";
             }
 
         }
     }
+
+    /* Loaded Chunks Calculation Placeholders */
+
+    private String parseChunkPlaceholder(String[] args) {
+        // Parse some args
+        String world = args[1];
+        String generatedStatus = args[2];
+        if (!generatedStatus.equals("generated") && !generatedStatus.equals("ungenerated")) return "";
+        boolean generatedOrUnGenerated = Objects.equals(args[2], "loaded");
+
+        // Check if the last argument is percent
+        boolean percentOrAmount = false;
+        if (args.length == 4) {
+            String percentStatus = args[3];
+            if (!percentStatus.equals("percent") && !percentStatus.isEmpty()) return "";
+
+            percentOrAmount = Objects.equals(args[3], "percent");
+        }
+
+        // Get the loaded chunks
+        return getLoadedChunks(world, generatedOrUnGenerated, percentOrAmount);
+    }
+
+    private String getLoadedChunks(String world, boolean generatedOrUnGenerated, boolean percentOrAmount) {
+        // Get the world
+        World bukkitWorld = Bukkit.getWorld(world);
+        if (bukkitWorld == null) return "";
+
+        List<Chunk> chunks = Arrays.stream(bukkitWorld.getLoadedChunks()).toList();
+        double totalChunks = bukkitWorld.getChunkCount();
+        double generatedChunks = 0;
+
+        for (Chunk chunk : chunks) {
+            if (chunk.isGenerated()) generatedChunks++;
+        }
+
+        if (!generatedOrUnGenerated) {
+            generatedChunks = totalChunks - generatedChunks;
+        }
+
+        if (percentOrAmount) {
+            return Math.round((generatedChunks / totalChunks) * 100) + "%";
+        } else {
+            return String.valueOf(generatedChunks);
+        }
+    }
+
+    /* Stall Claim Owner Placeholders */
 
     private String parseStallPlaceholder(String[] args) {
         // Parse some args
