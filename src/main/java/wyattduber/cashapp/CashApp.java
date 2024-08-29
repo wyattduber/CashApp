@@ -40,11 +40,21 @@ public class CashApp extends JavaPlugin {
 
     public FileConfiguration config;
     public File customConfigFile;
+    public LoginListener ll;
+    public ItemListener il;
+    public StatsListener sl;
+    public LeashListener leashListener;
+    public HashMap<String, Integer> usersCurrentlySyncing;
+    public JavacordHelper js;
+    public Database db;
+    public boolean discordConnected;
+
+    // Config Settings
     public boolean debugMode;
     public List<String> modList;
     public List<String> modPlusList;
     public String botToken;
-    public String serverID;
+    public long serverID;
     public String mallMsg;
     public String syncReminderMsg;
     public boolean useFirstTimeMessage;
@@ -52,16 +62,11 @@ public class CashApp extends JavaPlugin {
     public String firstTimeMessage;
     public List<String> messageNames;
     public HashMap<String, String> messages = new HashMap<>();
-    public LoginListener ll;
-    public ItemListener il;
-    public StatsListener sl;
-    public LeashListener leashListener;
-    public String botmChannelID;
+    public long botmChannelID;
+    public long closedTicketChannelID;
+    public List<Long> modLevelTicketRoles;
     public List<String> botmBannedWords;
-    public HashMap<String, Integer> usersCurrentlySyncing;
-    public JavacordHelper js;
-    public Database db;
-    public boolean discordConnected;
+
 
     public static CashApp getPlugin() { return getPlugin(CashApp.class); }
 
@@ -197,8 +202,12 @@ public class CashApp extends JavaPlugin {
         }
 
         try {
-            serverID = getConfigString("server-id");
-            if (getConfigString("server-id").equalsIgnoreCase("000000000000000000") || getConfigString("server-id").equalsIgnoreCase("")) throw new Exception();
+            serverID = getConfigLong("server-id");
+            if (Long.toString(getConfigLong("server-id")).equals("000000000000000000")) {
+                throw new Exception();
+            } else {
+                getConfigLong("server-id");
+            }
             log("Discord Server Found!");
         } catch (Exception e) {
             warn("Invalid Server ID! Please enter a valid Server ID in config.yml and reload the plugin.");
@@ -273,11 +282,29 @@ public class CashApp extends JavaPlugin {
         }
 
         try {
-            botmChannelID = getConfigString("botm-channel-id");
-            if (getConfigString("botm-channel-id").equalsIgnoreCase("000000000000000000") || getConfigString("botm-channel-id").equalsIgnoreCase("")) throw new Exception();
+            botmChannelID = getConfigLong("botm-channel-id");
+            if (Long.toString(getConfigLong("botm-channel-id")).equalsIgnoreCase("000000000000000000")) throw new Exception();
         } catch (Exception e) {
             warn("Invalid BOTM Channel ID! Please enter a valid Bot Token in config.yml and reload the plugin.");
             discordConnected = false;
+        }
+
+        try {
+            closedTicketChannelID = getConfigLong("closed-ticket-channel-id");
+            if (Long.toString(getConfigLong("closed-ticket-channel-id")).equalsIgnoreCase("000000000000000000")) throw new Exception();
+        } catch (Exception e) {
+            warn("Invalid Closed Ticket Channel ID! Please enter a valid Bot Token in config.yml and reload the plugin.");
+            discordConnected = false;
+        }
+
+        try {
+            modLevelTicketRoles = getConfig().getLongList("mod-level-ticket-roles");
+            if (modLevelTicketRoles.isEmpty()) throw new Exception();
+
+            log("Ticket Roles Loaded!");
+        } catch (Exception e) {
+            warn("Invalid Ticket Roles! Please make sure the roles are valid in the config.yml and don't contain syntax errors.");
+            flag = false;
         }
 
         try {
@@ -341,6 +368,10 @@ public class CashApp extends JavaPlugin {
 
     private boolean getConfigBool(String entryName) {
         return config.getBoolean(entryName);
+    }
+
+    private long getConfigLong(String entryName) {
+        return config.getLong(entryName);
     }
 
     private void reloadCustomConfig() {

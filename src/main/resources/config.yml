@@ -1,7 +1,7 @@
 debug: false
 
 bot-token: "BOTTOKEN"
-server-id: "000000000000000000"
+server-id: 000000000000000000
 
 mod-list: 
   - Mod1
@@ -27,7 +27,12 @@ first-time-message:
 example:
   - "This is an example message."
 
-botm-channel-id: "000000000000000000"
+closed-ticket-channel-id: 000000000000000000
+mod-level-ticket-roles:
+  - 000000000000000000
+  - 000000000000000000
+
+botm-channel-id: 000000000000000000
 botm-banned-words:
   - anal
   - ass

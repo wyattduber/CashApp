@@ -27,6 +27,9 @@ public class Database {
 
         updateTableStructure("playerStats",
                 "CREATE TABLE playerStats (minecraftid TEXT NOT NULL, statType TEXT NOT NULL, statSubType TEXT NULL, statValue DOUBLE NOT NULL)");
+
+        updateTableStructure("tickets",
+                "CREATE TABLE tickets (ticketID INTEGER PRIMARY KEY AUTOINCREMENT, channelID TEXT NOT NULL, ownerMinecraftID TEXT NOT NULL, ticketAdminOnly BIT NOT NULL, ticketOpen BIT NOT NULL, ticketClosed BIT NOT NULL, ticketCreationReason TEXT NOT NULL, ticketCreationTime TEXT NOT NULL, ticketCloseReason TEXT NULL)");
     }
 
     public String getDbPath() { return dbPath; }
@@ -280,6 +283,95 @@ public class Database {
             ca.error("Error fetching stat value for user " + getName(minecraftid) + "!");
             ca.error("Error Message: " + e.getMessage());
             return -1;
+        }
+    }
+
+    /* Ticket Methods */
+
+    public void openTicket(long channelID, UUID ownerMinecraftID, boolean ticketAdminOnly, String ticketCreationReason, String ticketCreationTime, String ticketCloseReason) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO tickets(channelID,ownerMinecraftID,ticketAdminOnly,ticketOpen,ticketClosed,ticketCreationReason,ticketCreationTime,ticketCloseReason) VALUES (?,?,?,?,?,?,?,?)");
+            stmt.setString(1, Long.toString(channelID));
+            stmt.setString(2, ownerMinecraftID.toString());
+            stmt.setBoolean(3, ticketAdminOnly);
+            stmt.setBoolean(4, true);
+            stmt.setBoolean(5, false);
+            stmt.setString(6, ticketCreationReason);
+            stmt.setString(7, ticketCreationTime);
+            stmt.setString(8, null);
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error adding a ticket record for user " + getName(ownerMinecraftID) + "!");
+            ca.error("Error Message: " + e.getMessage());
+        }
+    }
+
+    public void closeTicket(long channelID) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("UPDATE tickets SET ticketOpen=?,ticketClosed=? WHERE channelID=?");
+            stmt.setBoolean(1, false);
+            stmt.setBoolean(2, true);
+            stmt.setString(3, Long.toString(channelID));
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error closing ticket " + channelID + "!");
+            ca.error("Error Message: " + e.getMessage());
+        }
+    }
+
+    public void closeTicket(long channelID, String closeReason) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("UPDATE tickets SET ticketOpen=?,ticketClosed=?,ticketCloseReason=? WHERE channelID=?");
+            stmt.setBoolean(1, false);
+            stmt.setBoolean(2, true);
+            stmt.setString(3, closeReason);
+            stmt.setString(4, Long.toString(channelID));
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error closing ticket " + channelID + "!");
+            ca.error("Error Message: " + e.getMessage());
+        }
+    }
+
+    public List<Long> getOpenTickets() {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT channelID FROM tickets WHERE ticketOpen=?");
+            stmt.setBoolean(1, true);
+            ResultSet rs = stmt.executeQuery();
+            List<Long> openTickets = new ArrayList<>();
+            while (rs.next()) {
+                openTickets.add(rs.getLong("channelID"));
+            }
+            return openTickets;
+        } catch (SQLException e) {
+            ca.error("Error fetching open tickets!");
+            ca.error("Error Message: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public boolean isTicketAdminOnly(long channelID) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT ticketAdminOnly FROM tickets WHERE channelID=?");
+            stmt.setString(1, Long.toString(channelID));
+            ResultSet rs = stmt.executeQuery();
+            return rs.getBoolean("ticketAdminOnly");
+        } catch (SQLException e) {
+            ca.error("Error fetching ticket admin only status for ticket " + channelID + "!");
+            ca.error("Error Message: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public void setAdminOnly(long channelID, boolean ticketAdminOnly) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("UPDATE tickets SET ticketAdminOnly=? WHERE channelID=?");
+            stmt.setBoolean(1, ticketAdminOnly);
+            stmt.setString(2, Long.toString(channelID));
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error updating ticket admin only status for ticket " + channelID + "!");
+            ca.error("Error Message: " + e.getMessage());
         }
     }
 
