@@ -1,5 +1,6 @@
 package wyattduber.cashapp.database;
 
+import org.bukkit.entity.Player;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.enums.StatType;
 
@@ -22,21 +23,27 @@ public class Database {
         dbcon = DriverManager.getConnection(dbPath);
 
         // Check if the table exists and update its structure if necessary
-        updateTableStructure("usernameSync",
-                "CREATE TABLE usernameSync (minecraftid TEXT NOT NULL, mcusername TEXT NOT NULL, discordid TEXT NOT NULL, isSynced BIT NOT NULL, syncReminder BIT NOT NULL)");
-
         updateTableStructure("playerStats",
                 "CREATE TABLE playerStats (minecraftid TEXT NOT NULL, statType TEXT NOT NULL, statSubType TEXT NULL, statValue DOUBLE NOT NULL)");
 
         updateTableStructure("tickets",
                 "CREATE TABLE tickets (ticketID INTEGER PRIMARY KEY AUTOINCREMENT, channelID TEXT NOT NULL, ownerMinecraftID TEXT NOT NULL, ticketAdminOnly BIT NOT NULL, ticketOpen BIT NOT NULL, ticketClosed BIT NOT NULL, ticketCreationReason TEXT NOT NULL, ticketCreationTime TEXT NOT NULL, ticketCloseReason TEXT NULL)");
+
+        updateTableStructure("users",
+                "CREATE TABLE users (" +
+                        "minecraftid TEXT NOT NULL, " +
+                        "mcusername TEXT NOT NULL, " +
+                        "discordid TEXT NULL, " +
+                        "isSynced BIT NOT NULL, " +
+                        "syncReminder BIT NOT NULL," +
+                        "doNotDisturbState BIT NOT NULL)");
     }
 
     public String getDbPath() { return dbPath; }
 
     public boolean testConnection() {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT minecraftid FROM usernameSync LIMIT 1");
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT minecraftid FROM users LIMIT 1");
             stmt.executeQuery();
             return true;
         } catch (SQLException e) {
@@ -44,25 +51,64 @@ public class Database {
         }
     }
 
-    /* Username Sync Methods */
+    /* Users Methods */
 
-    public void addSyncRecord(UUID minecraftid, String mcusername, long discordid, boolean isSynced) {
+    public boolean isUserInDatabase(UUID minecraftid) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO usernameSync(minecraftid,mcusername,discordid,isSynced) VALUES (?,?,?,?)");
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT minecraftid FROM users WHERE minecraftid=?");
             stmt.setString(1, minecraftid.toString());
-            stmt.setString(2, mcusername);
-            stmt.setString(3, Long.toString(discordid));
-            stmt.setBoolean(4, isSynced);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public void insertUser(Player player) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO users(minecraftid,mcusername,isSynced,syncReminder,doNotDisturbState) VALUES (?,?,?,?,?)");
+            stmt.setString(1, player.getUniqueId().toString());
+            stmt.setString(2, player.getName());
+            stmt.setBoolean(3, false);
+            stmt.setBoolean(4, false);
+            stmt.setBoolean(5, false);
             stmt.execute();
         } catch (SQLException e) {
-            ca.error("Error adding a sync record for user " + getName(minecraftid) + "!");
+            ca.error("Error adding a user record for user " + player.getName() + "!");
             ca.error("Error Message: " + e.getMessage());
         }
     }
 
+    public boolean getDoNotDisturbStatus(Player player) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT doNotDisturbStatus FROM users WHERE minecraftid=?");
+            stmt.setString(1, player.getUniqueId().toString());
+            ResultSet rs = stmt.executeQuery();
+            return rs.getBoolean("doNotDisturbStatus");
+        } catch (SQLException e) {
+            ca.error("Error retrieving Do not Disturb Status for user " + player.getName() + "!");
+            ca.error("Error Message: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public void setDoNotDisturbStatus(Player player, boolean status) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("UPDATE users SET doNotDisturbStatus=? WHERE minecraftid=?");
+            stmt.setBoolean(1, status);
+            stmt.setString(2, player.getUniqueId().toString());
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error updating Do Not Disturb Status for user " + player.getName() + "!");
+            ca.error("Error Message: " + e.getMessage());
+        }
+    }
+
+    /* Username Sync Methods */
+
     public void updateSyncRecord(UUID minecraftid, String mcusername, long discordid, boolean isSynced) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("UPDATE usernameSync SET mcusername=?,discordid=?,isSynced=? WHERE minecraftid=?");
+            PreparedStatement stmt = dbcon.prepareStatement("UPDATE users SET mcusername=?,discordid=?,isSynced=? WHERE minecraftid=?");
             stmt.setString(1, mcusername);
             stmt.setString(2, Long.toString(discordid));
             stmt.setBoolean(3, isSynced);
@@ -76,7 +122,7 @@ public class Database {
 
     public boolean isSynced(UUID minecraftid) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT isSynced FROM usernameSync WHERE minecraftid=?");
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT isSynced FROM users WHERE minecraftid=?");
             stmt.setString(1, minecraftid.toString());
             ResultSet rs = stmt.executeQuery();
             return rs.getBoolean("isSynced");
@@ -87,23 +133,9 @@ public class Database {
         }
     }
 
-    public boolean userExistsInSync(UUID minecraftid) {
-        try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT minecraftid FROM usernameSync WHERE minecraftid=?");
-            stmt.setString(1, minecraftid.toString());
-            ResultSet rs = stmt.executeQuery();
-            // Use rs.next() to check if there are any rows in the result set
-            return rs.next();
-        } catch (SQLException e) {
-            ca.error("Error fetching sync status for user " + getName(minecraftid) + "!");
-            ca.error("Error Message: " + e.getMessage());
-            return false;
-        }
-    }
-
     public long getSyncedDiscordID(UUID minecraftid) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT discordid FROM usernameSync WHERE minecraftid=?");
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT discordid FROM users WHERE minecraftid=?");
             stmt.setString(1, minecraftid.toString());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -121,7 +153,7 @@ public class Database {
 
     public boolean getSyncReminderStatus(UUID minecraftid) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT syncReminder FROM usernameSync WHERE minecraftid=?");
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT syncReminder FROM users WHERE minecraftid=?");
             stmt.setString(1, minecraftid.toString());
             ResultSet rs = stmt.executeQuery();
             return rs.getBoolean("syncReminder");
@@ -134,7 +166,7 @@ public class Database {
 
     public void setSyncReminderStatus(UUID minecraftid, boolean status) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("UPDATE usernameSync SET syncReminder=? WHERE minecraftid=?");
+            PreparedStatement stmt = dbcon.prepareStatement("UPDATE users SET syncReminder=? WHERE minecraftid=?");
             stmt.setBoolean(1, status);
             stmt.setString(2, minecraftid.toString());
             stmt.execute();

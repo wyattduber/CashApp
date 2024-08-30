@@ -1,7 +1,9 @@
 package wyattduber.cashapp;
 
+import com.comphenix.protocol.ProtocolManager;
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,7 +21,7 @@ import wyattduber.cashapp.customitems.ItemManager;
 import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.javacord.JavacordHelper;
 import wyattduber.cashapp.lib.LibrarySetup;
-import wyattduber.cashapp.listeners.LeashListener;
+import wyattduber.cashapp.listeners.ChatListener;
 import wyattduber.cashapp.listeners.LoginListener;
 import wyattduber.cashapp.listeners.StatsListener;
 import wyattduber.cashapp.placeholders.PlaceholderHandler;
@@ -43,11 +45,12 @@ public class CashApp extends JavaPlugin {
     public LoginListener ll;
     public ItemListener il;
     public StatsListener sl;
-    public LeashListener leashListener;
+    public ChatListener cl;
     public HashMap<String, Integer> usersCurrentlySyncing;
     public JavacordHelper js;
     public Database db;
     public boolean discordConnected;
+    public ProtocolManager protocolManager;
 
     // Config Settings
     public boolean debugMode;
@@ -135,8 +138,7 @@ public class CashApp extends JavaPlugin {
         EntityShootBowEvent.getHandlerList().unregister(il);
         EntityLoadCrossbowEvent.getHandlerList().unregister(il);
         EntityDamageEvent.getHandlerList().unregister(il);
-
-        PlayerLeashEntityEvent.getHandlerList().unregister(leashListener);
+        AsyncChatEvent.getHandlerList().unregister(cl);
 
         /* Load and Initiate Configs */
         try {
@@ -176,8 +178,8 @@ public class CashApp extends JavaPlugin {
         sl = new StatsListener();
         getServer().getPluginManager().registerEvents(sl, this);
 
-        leashListener = new LeashListener();
-        getServer().getPluginManager().registerEvents(leashListener, this);
+        cl = new ChatListener();
+        getServer().getPluginManager().registerEvents(cl, this);
 
         log("Listeners Loaded!");
     }
@@ -339,6 +341,9 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("botm")).setTabCompleter(new BuildOfTheMonthTC());
 
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
+
+            Objects.requireNonNull(this.getCommand("dnd")).setExecutor(new DoNotDisturbCMD());
+            Objects.requireNonNull(this.getCommand("dnd")).setTabCompleter(new DoNotDisturbTC());
 
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
             Objects.requireNonNull(this.getCommand("rmd")).setTabCompleter(new StallRemindTC());

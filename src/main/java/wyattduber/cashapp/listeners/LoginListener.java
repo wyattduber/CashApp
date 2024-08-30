@@ -22,6 +22,8 @@ public class LoginListener implements Listener {
     public void onLogin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
+        // Add Player to the Users Database
+
         if (ca.messageDelayTicks > 0) {
             new BukkitRunnable() {
                 @Override

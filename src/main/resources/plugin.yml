@@ -22,6 +22,11 @@ commands:
     usage: /bce <event id> <playername>
     permission: ca.bce
     permission-message: §cYou do not have permission!
+  dnd:
+    description: Command to toggle Do Not Disturb Status for the player!
+    usage: /dnd <on/off> [player]
+    permission: ca.dnd
+    permission-message: §cYou do not have permission!
   rmd:
     description: Command to send all of the current users a reminder /mail
     usage: /rmd <username-1> <username-2> ... <username-n>
@@ -51,6 +56,7 @@ permissions:
       ca.update: true
       ca.botm: true
       ca.bce: true
+      ca.dnd: true
       ca.rmd: true
       ca.ls: true
       ca.streak: true
@@ -64,6 +70,12 @@ permissions:
     default: op
   ca.bce:
     description: Allows the use of the /bce command
+    default: op
+  ca.dnd:
+    description: Allows the use of the /dnd command
+    default: op
+  ca.dnd.others:
+    description: Allows the user of the /dnd on other players
     default: op
   ca.rmd:
     description: Allows the use of the /rmd command
