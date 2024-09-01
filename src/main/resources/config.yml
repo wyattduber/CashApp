@@ -14,6 +14,8 @@ mod-plus-list:
   - Admin1
   - Admin2
 
+dnd-shout-message-char: '!'
+
 mall-remind-msg: Hello, mall re-rental has begun! Please contact an online staff member to re-rent your stall, or do nothing and your stall will be emptied."
 
 message-delay: 0

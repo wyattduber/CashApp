@@ -64,7 +64,7 @@ public class CashApp extends JavaPlugin {
     public long closedTicketChannelID;
     public List<Long> modLevelTicketRoles;
     public List<String> botmBannedWords;
-
+    public char DND_SHOUT_MESSAGE_CHAR;
 
     public static CashApp getPlugin() { return getPlugin(CashApp.class); }
 
@@ -302,6 +302,13 @@ public class CashApp extends JavaPlugin {
         } catch (Exception e) {
             warn("Invalid banned words list! Please make sure the list is valid in the config.yml and doesn't contain syntax errors.");
             flag = false;
+        }
+
+        try {
+            DND_SHOUT_MESSAGE_CHAR = Objects.requireNonNull(getConfig().getString("dnd-shout-message-char")).charAt(0);
+            log("DND Shout Message Character loaded!");
+        } catch (Exception ex) {
+            warn("Invalid DnD Shout Message Character! Please make sure the entry is valid in the config.yml and doesn't contain syntax errors.");
         }
 
         log("Config loaded!");
