@@ -1,4 +1,4 @@
-package wyattduber.cashapp.javacord.listeners;
+package wyattduber.cashapp.javacord.tickets;
 
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;

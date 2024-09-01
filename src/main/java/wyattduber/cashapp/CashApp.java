@@ -18,6 +18,7 @@ import wyattduber.cashapp.customitems.ItemListener;
 import wyattduber.cashapp.customitems.ItemManager;
 import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.javacord.JavacordHelper;
+import wyattduber.cashapp.javacord.tickets.TicketHelper;
 import wyattduber.cashapp.lib.LibrarySetup;
 import wyattduber.cashapp.listeners.ChatListener;
 import wyattduber.cashapp.listeners.LoginListener;
@@ -43,6 +44,7 @@ public class CashApp extends JavaPlugin {
     public ItemListener il;
     public ChatListener cl;
     public JavacordHelper js;
+    public TicketHelper th;
     public Database db;
     public boolean discordConnected;
 
@@ -101,6 +103,8 @@ public class CashApp extends JavaPlugin {
         /* Config Parsing */
         if (parseConfig()) {
             js = new JavacordHelper();
+            js.connectAPI();
+            th = new TicketHelper();
         }
 
         /* Commands */
@@ -119,7 +123,7 @@ public class CashApp extends JavaPlugin {
     @Override
     public void onDisable() {
         if (js != null) {
-            js.disableAPI();
+            js.disconnectAPI();
         }
     }
 

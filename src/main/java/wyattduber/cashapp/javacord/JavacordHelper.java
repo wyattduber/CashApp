@@ -2,13 +2,17 @@ package wyattduber.cashapp.javacord;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.channel.ServerTextChannelBuilder;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.permission.PermissionType;
+import org.javacord.api.entity.permission.Permissions;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.listener.message.MessageCreateListener;
+import org.javacord.api.entity.permission.PermissionsBuilder;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.database.Database;
-import wyattduber.cashapp.javacord.listeners.TicketMessageListener;
+import wyattduber.cashapp.javacord.tickets.TicketMessageListener;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,11 +30,11 @@ public class JavacordHelper {
     private final CashApp ca = CashApp.getPlugin();
     private final Database db = ca.db;
 
-    public JavacordHelper() {
+    public void connectAPI() {
         parseConfig();
     }
 
-    public void disableAPI() {
+    public void disconnectAPI() {
         try {
             // Unregister Listeners
             api.removeListener(ticketMessageListener);
@@ -45,11 +49,8 @@ public class JavacordHelper {
     }
 
     public void reload() {
-        // Remove listeners to re-register
-        api.removeListener(ticketMessageListener);
-
-        disableAPI();
-        parseConfig();
+        disconnectAPI();
+        connectAPI();
     }
 
     private void parseConfig() {
@@ -95,6 +96,7 @@ public class JavacordHelper {
         }
 
         verifyOpenTickets();
+        initListeners();
     }
 
     private void verifyOpenTickets() {
@@ -114,16 +116,6 @@ public class JavacordHelper {
         api.addMessageCreateListener(ticketMessageListener);
     }
 
-    private User checkUserExists(String username) {
-        try {
-            User user = api.getCachedUsersByNameIgnoreCase(username).iterator().next();
-            discordServer.requestMember(user).get().getId();
-            return user;
-        } catch (NullPointerException | InterruptedException | ExecutionException | NoSuchElementException e) {
-            return null;
-        } 
-    }
-
     public void sendBOTMMessage(String username, String world, String x, String y, String z, String message) {
         String messageToSend = "Name: " + username + "\n" +
                                "World: " + world + "\n" +
@@ -132,39 +124,13 @@ public class JavacordHelper {
         botmChannel.sendMessage(messageToSend);
     }
 
-    public void createTicket(String name, String description, List<Long> users) {
+    public User checkUserExists(String username) {
         try {
-            var ticketChannel = discordServer.createTextChannelBuilder().setName(name).create().get();
-            // TODO Add mod permissions and user permissions to channel
-        } catch (Exception e) {
-            ca.error("Error Creating Ticket! Contact the developer.");
-            ca.error(e.getMessage());
-        }
-    }
-
-    public void setTicketAdminOnly(long channelID, boolean adminOnly) {
-        try {
-            var channel = discordServer.getTextChannelById(channelID);
-            if (channel.isPresent()) {
-                db.setAdminOnly(channelID, adminOnly);
-
-                // TODO Add/Remove permissions for channel
-            } else throw new Exception();
-        } catch (Exception e) {
-            ca.error("Error Setting Ticket Admin Only! Contact the developer.");
-            ca.error(e.getMessage());
-        }
-    }
-
-    public void deleteTicket(long channelID) {
-        try {
-            var channel = discordServer.getTextChannelById(channelID);
-            if (channel.isPresent()) {
-                channel.get().delete().get();
-            } else throw new Exception();
-        } catch (Exception e) {
-            ca.error("Error Deleting Ticket! Contact the developer.");
-            ca.error(e.getMessage());
+            User user = api.getCachedUsersByNameIgnoreCase(username).iterator().next();
+            discordServer.requestMember(user).get().getId();
+            return user;
+        } catch (NullPointerException | InterruptedException | ExecutionException | NoSuchElementException e) {
+            return null;
         }
     }
 }
