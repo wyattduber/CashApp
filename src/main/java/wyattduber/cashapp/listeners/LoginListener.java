@@ -6,16 +6,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import wyattduber.cashapp.CashApp;
+import wyattduber.cashapp.database.Database;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class LoginListener implements Listener {
 
     private final CashApp ca;
+    private final Database db;
 
     public LoginListener() {
         ca = CashApp.getPlugin();
+        db = ca.db;
     }
 
     @EventHandler
@@ -23,6 +25,9 @@ public class LoginListener implements Listener {
         Player player = event.getPlayer();
 
         // Add Player to the Users Database
+        if (!db.isUserInDatabase(player)) {
+            db.insertUser(player);
+        }
 
         if (ca.messageDelayTicks > 0) {
             new BukkitRunnable() {
@@ -47,21 +52,6 @@ public class LoginListener implements Listener {
 
             /* Sends the Messages to Players who have the Permission node to receive them */
             sendCustomMessages(event.getPlayer());
-        }
-
-
-        if (ca.db.getSyncReminderStatus(player.getUniqueId()) && ca.db.isSynced(player.getUniqueId())) {
-            UUID uuid = player.getUniqueId();
-            String discordUsername = getSyncedDiscordUsername(uuid);
-            if (!Objects.equals(discordUsername, player.getName())) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        /* If the username is not the same as the discord username, then notify the player to update their username */
-                        ca.sendMessage(player, ca.syncReminderMsg.replaceAll("%DISCORDUSERNAME%", discordUsername));
-                    }
-                }.runTaskLater(ca, ca.messageDelayTicks + 2);
-            }
         }
     }
 
@@ -88,10 +78,4 @@ public class LoginListener implements Listener {
 
         return message;
     }
-
-    private String getSyncedDiscordUsername(UUID uuid) {
-        long discordId = ca.db.getSyncedDiscordID(uuid);
-        return ca.js.getUserName(discordId);
-    }
-
 }

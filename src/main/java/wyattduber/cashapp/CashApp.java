@@ -11,7 +11,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.PlayerLeashEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import wyattduber.cashapp.commands.*;
@@ -23,7 +22,6 @@ import wyattduber.cashapp.javacord.JavacordHelper;
 import wyattduber.cashapp.lib.LibrarySetup;
 import wyattduber.cashapp.listeners.ChatListener;
 import wyattduber.cashapp.listeners.LoginListener;
-import wyattduber.cashapp.listeners.StatsListener;
 import wyattduber.cashapp.placeholders.PlaceholderHandler;
 
 import java.io.File;
@@ -44,7 +42,6 @@ public class CashApp extends JavaPlugin {
     public File customConfigFile;
     public LoginListener ll;
     public ItemListener il;
-    public StatsListener sl;
     public ChatListener cl;
     public HashMap<String, Integer> usersCurrentlySyncing;
     public JavacordHelper js;
@@ -174,9 +171,6 @@ public class CashApp extends JavaPlugin {
 
         il = new ItemListener();
         getServer().getPluginManager().registerEvents(il, this);
-
-        sl = new StatsListener();
-        getServer().getPluginManager().registerEvents(sl, this);
 
         cl = new ChatListener();
         getServer().getPluginManager().registerEvents(cl, this);
@@ -348,14 +342,8 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
             Objects.requireNonNull(this.getCommand("rmd")).setTabCompleter(new StallRemindTC());
 
-            Objects.requireNonNull(this.getCommand("sdu")).setExecutor(new SyncDiscordUsernameCMD());
-            Objects.requireNonNull(this.getCommand("sdu")).setTabCompleter(new SyncDiscordUsernameTC());
-
             Objects.requireNonNull(this.getCommand("getanarchyitem")).setExecutor(new AnarchyItemsCMD());
             Objects.requireNonNull(this.getCommand("getanarchyitem")).setTabCompleter(new AnarchyItemsTC());
-
-            Objects.requireNonNull(this.getCommand("stats")).setExecutor(new StatsCMD());
-            Objects.requireNonNull(this.getCommand("stats")).setTabCompleter(new StatsTC());
 
             log("Commands Registered Successfully!");
         } catch (NullPointerException e) {

@@ -96,12 +96,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.GriefPrevention</groupId>
-            <artifactId>GriefPrevention</artifactId>
-            <version>16.18.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.11.1</version>

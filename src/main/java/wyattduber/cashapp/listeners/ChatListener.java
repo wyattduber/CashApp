@@ -9,12 +9,10 @@ import wyattduber.cashapp.database.Database;
 
 public class ChatListener implements Listener {
 
-    private final CashApp ca;
     private final Database db;
 
     public ChatListener() {
-        ca = CashApp.getPlugin();
-        db = ca.db;
+        db = CashApp.getPlugin().db;
     }
 
     @EventHandler
