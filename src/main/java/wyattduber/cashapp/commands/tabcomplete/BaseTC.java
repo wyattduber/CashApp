@@ -18,6 +18,8 @@ public class BaseTC implements TabCompleter {
         return switch (args.length) {
             case 1 -> {
                 tabs.add("reload");
+                tabs.add("commands");
+                tabs.add("help");
                 yield tabs;
             }
             default -> tabs;

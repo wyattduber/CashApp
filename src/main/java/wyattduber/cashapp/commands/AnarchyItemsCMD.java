@@ -24,6 +24,7 @@ public class AnarchyItemsCMD implements CommandExecutor {
         }
 
         // Get Player
+        assert sender instanceof Player; // Should always pass due to previous check
         Player player = (Player) sender;
 
         // Assign item based off of argument

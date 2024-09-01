@@ -1,6 +1,5 @@
 package wyattduber.cashapp;
 
-import com.comphenix.protocol.ProtocolManager;
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -43,11 +42,9 @@ public class CashApp extends JavaPlugin {
     public LoginListener ll;
     public ItemListener il;
     public ChatListener cl;
-    public HashMap<String, Integer> usersCurrentlySyncing;
     public JavacordHelper js;
     public Database db;
     public boolean discordConnected;
-    public ProtocolManager protocolManager;
 
     // Config Settings
     public boolean debugMode;
@@ -56,7 +53,6 @@ public class CashApp extends JavaPlugin {
     public String botToken;
     public long serverID;
     public String mallMsg;
-    public String syncReminderMsg;
     public boolean useFirstTimeMessage;
     public int messageDelayTicks;
     public String firstTimeMessage;
@@ -116,7 +112,7 @@ public class CashApp extends JavaPlugin {
 
         /* Register Placeholders */
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new PlaceholderHandler(this).register();
+            new PlaceholderHandler().register();
         }
     }
 
@@ -229,13 +225,6 @@ public class CashApp extends JavaPlugin {
             log("Mall Reminder Message Loaded!");
         } catch (Exception e) {
             warn("Invalid Mall Reminder Message! Please set the mall-remind-msg in the config.yml!");
-        }
-
-        try {
-            syncReminderMsg = replaceColors(getConfigString("sync-reminder-msg"));
-            log("Sync Reminder Message Loaded!");
-        } catch (Exception e) {
-            warn("Invalid Sync Reminder Message! Please set the sync-reminder-msg in the config.yml!");
         }
 
         try {

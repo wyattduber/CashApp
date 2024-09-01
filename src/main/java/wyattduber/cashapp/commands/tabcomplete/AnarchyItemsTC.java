@@ -49,7 +49,14 @@ public class AnarchyItemsTC implements TabCompleter {
                     tabs.add("TandsFavoritePotato");
                     tabs.add("ToxicVial");
                     tabs.add("WitherKnightSkull");
+                } else {
+                    ca.getServer().getOnlinePlayers().forEach(player -> tabs.add(player.getName()));
                 }
+                yield tabs;
+            }
+            case 3 -> {
+                if (!args[0].equalsIgnoreCase("Trophy"))
+                    ca.getServer().getOnlinePlayers().forEach(player -> tabs.add(player.getName()));
                 yield tabs;
             }
             default -> tabs;

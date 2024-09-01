@@ -1,22 +1,13 @@
 package wyattduber.cashapp.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import wyattduber.cashapp.CashApp;
-
-import java.util.*;
 
 public class PlaceholderHandler extends PlaceholderExpansion {
 
-    private final CashApp ca;
-
-    private final HashMap<String, Location> stalls = new HashMap<>();
-
-    public PlaceholderHandler(CashApp ca) {
+    public PlaceholderHandler() {
         super();
-        this.ca = ca;
     }
 
     @Override
@@ -41,11 +32,7 @@ public class PlaceholderHandler extends PlaceholderExpansion {
 
     /**
      * Placeholders:
-     * ca_stall_[direction]_[number]
-     *
-     * @param player
-     * @param identifier
-     * @return
+     * None currently
      */
     @Override
     public String onPlaceholderRequest(Player player, @NotNull String identifier) {

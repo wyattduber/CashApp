@@ -106,7 +106,7 @@ public class Database {
 
     /* Ticket Methods */
 
-    public void openTicket(long channelID, UUID ownerMinecraftID, boolean ticketAdminOnly, String ticketCreationReason, String ticketCreationTime, String ticketCloseReason) {
+    public void openTicket(long channelID, UUID ownerMinecraftID, boolean ticketAdminOnly, String ticketCreationReason, String ticketCreationTime) {
         try {
             PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO tickets(channelID,ownerMinecraftID,ticketAdminOnly,ticketOpen,ticketClosed,ticketCreationReason,ticketCreationTime,ticketCloseReason) VALUES (?,?,?,?,?,?,?,?)");
             stmt.setString(1, Long.toString(channelID));
@@ -126,10 +126,11 @@ public class Database {
 
     public void closeTicket(long channelID) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("UPDATE tickets SET ticketOpen=?,ticketClosed=? WHERE channelID=?");
+            PreparedStatement stmt = dbcon.prepareStatement("UPDATE tickets SET ticketOpen=?,ticketClosed=?,ticketCloseReason=? WHERE channelID=?");
             stmt.setBoolean(1, false);
             stmt.setBoolean(2, true);
             stmt.setString(3, Long.toString(channelID));
+            stmt.setString(4, "No close reason specified.");
             stmt.execute();
         } catch (SQLException e) {
             ca.error("Error closing ticket " + channelID + "!");

@@ -116,3 +116,6 @@ META-INF/
 
 # Internal Libraries
 libs/
+
+# Database
+cashapp.sqlite.db

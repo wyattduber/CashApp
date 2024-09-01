@@ -29,10 +29,6 @@ public class StallRemindCMD implements CommandExecutor {
         for (String arg : strings) {
             String cmd = "cmi mail send " + arg + " " + ca.mallMsg;
             flag = Bukkit.dispatchCommand(console, cmd);
-
-            if (!flag) {
-                flag = false;
-            }
         }
 
         if (flag) {

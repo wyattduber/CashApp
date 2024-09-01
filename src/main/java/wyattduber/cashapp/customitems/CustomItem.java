@@ -17,7 +17,7 @@ public class CustomItem extends ItemStack {
 
     public CustomItem(String name, TextColor itemNameColor, Material itemMaterial) {
         super(itemMaterial);
-        create(name, itemNameColor, itemMaterial);
+        create(name, itemNameColor);
     }
 
     public CustomItem(Component formattedName, Material itemMaterial) {
@@ -35,13 +35,7 @@ public class CustomItem extends ItemStack {
         createWeaponItem(name, itemNameColor, itemAmount, customEnchants);
     }
 
-    /**
-     * Create a normal item with a string name
-     * @param name
-     * @param color
-     * @param material
-     */
-    private void create(String name, TextColor color, Material material) {
+    private void create(String name, TextColor color) {
         ItemMeta meta = this.getItemMeta();
 
         // Set Name
@@ -54,10 +48,6 @@ public class CustomItem extends ItemStack {
         this.setItemMeta(meta);
     }
 
-    /**
-     * Create an item with a component for a name for gradient purposes
-     * @param formattedName
-     */
     private void create(Component formattedName) {
         ItemMeta meta = this.getItemMeta();
 
@@ -71,14 +61,6 @@ public class CustomItem extends ItemStack {
         this.setItemMeta(meta);
     }
 
-    /**
-     * Create a Weapon Item with vanishing curse and a custom lore
-     * @param name
-     * @param itemNameColor
-     * @param loreLine
-     * @param itemLoreColor
-     * @param amount
-     */
     private void createWeaponItem(String name, TextColor itemNameColor, String loreLine, TextColor itemLoreColor, int amount) {
         this.setAmount(amount);
         ItemMeta meta = this.getItemMeta();
@@ -104,12 +86,6 @@ public class CustomItem extends ItemStack {
         this.setItemMeta(meta);
     }
 
-    /**
-     * Create a Weapon Item with vanishing curse
-     * @param name
-     * @param itemNameColor
-     * @param amount
-     */
     private void createWeaponItem(String name, TextColor itemNameColor, int amount, List<Enchantment> customEnchants) {
         this.setAmount(amount);
         ItemMeta meta = this.getItemMeta();

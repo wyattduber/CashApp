@@ -6,7 +6,6 @@ import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.listener.message.MessageCreateListener;
-import org.javacord.api.util.logging.ExceptionLogger;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.javacord.listeners.TicketMessageListener;
@@ -46,6 +45,9 @@ public class JavacordHelper {
     }
 
     public void reload() {
+        // Remove listeners to re-register
+        api.removeListener(ticketMessageListener);
+
         disableAPI();
         parseConfig();
     }
@@ -64,8 +66,10 @@ public class JavacordHelper {
         }
 
         try {
+            assert api != null;
             if (api.getServerById(ca.serverID).isPresent())
                 discordServer = api.getServerById(ca.serverID).get();
+            assert discordServer != null;
             ca.log("Connected to " + discordServer.getName() + " Discord Server!");
         } catch (Exception e) {
             ca.warn("Server not Found! Please enter a valid Server ID in config.yml and reload the plugin.");
@@ -110,7 +114,7 @@ public class JavacordHelper {
         api.addMessageCreateListener(ticketMessageListener);
     }
 
-    public User checkUserExists(String username) {
+    private User checkUserExists(String username) {
         try {
             User user = api.getCachedUsersByNameIgnoreCase(username).iterator().next();
             discordServer.requestMember(user).get().getId();
@@ -126,30 +130,6 @@ public class JavacordHelper {
                                "Co-Ords: " + x + " " + y + " " + z + "\n" +
                                "Other: " + message;
         botmChannel.sendMessage(messageToSend);
-    }
-
-    public int sendCode(User user) {
-        int code = (int) (Math.random() * 1000000);
-        user.openPrivateChannel().thenAccept(channel -> channel.sendMessage("Your code is: " + code)).join();
-        return code;
-    }
-
-    public void syncUsername(User user, String username) {
-        discordServer.updateNickname(user, username, "Username Sync").exceptionally(ExceptionLogger.get());
-    }
-
-    public void unsyncUsername(User user) {
-        discordServer.updateNickname(user, "", "Username Unsync").exceptionally(ExceptionLogger.get());
-    }
-
-    public String getUserName(long discordId) {
-        try {
-            if (api.getCachedUserById(discordId).isPresent())
-                return api.getCachedUserById(discordId).get().getDisplayName(discordServer);
-            else throw new Exception();
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     public void createTicket(String name, String description, List<Long> users) {

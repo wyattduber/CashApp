@@ -34,7 +34,7 @@ commands:
     permission-message: §cYou do not have permission!
   getanarchyitem:
     description: Get one of the custom anarchy items
-    usage: /getAnarchyItem <item>
+    usage: /getAnarchyItem <item/trophy> [trophyType] [player]
     permission: ca.getanarchyitem
     permission-message: §cYou do not have permission!
 

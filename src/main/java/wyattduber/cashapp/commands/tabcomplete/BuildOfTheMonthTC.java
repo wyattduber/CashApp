@@ -24,7 +24,7 @@ public class BuildOfTheMonthTC implements TabCompleter {
             case 2 -> {
                 tabs.add("Surival");
                 tabs.add("Nether");
-                tabs.add("The End");
+                tabs.add("End");
                 tabs.add("Creative");
                 yield tabs;
             }
