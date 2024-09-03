@@ -5,12 +5,12 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.database.Database;
-import wyattduber.cashapp.javacord.JavacordHelper;
+import wyattduber.cashapp.javacord.Javacord;
 
 public class TicketMessageListener implements MessageCreateListener {
 
     private final CashApp ca = CashApp.getPlugin();
-    private final JavacordHelper js = ca.js;
+    private final Javacord js = ca.js;
     private final Database db = ca.db;
 
     @Override

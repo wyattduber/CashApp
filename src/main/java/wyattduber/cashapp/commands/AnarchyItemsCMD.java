@@ -1,14 +1,18 @@
 package wyattduber.cashapp.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.customitems.ItemManager;
+import wyattduber.cashapp.helpers.TabCompleterHelper;
 
-public class AnarchyItemsCMD implements CommandExecutor {
+public class AnarchyItemsCMD implements TabExecutor {
 
     private final CashApp ca;
 
@@ -59,5 +63,53 @@ public class AnarchyItemsCMD implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+        if (!(sender instanceof Player)) return null; // Only provide tab completion for players
+
+        ArrayList<String> tabs = new ArrayList<>();
+
+        return switch (args.length) {
+            case 1 -> {
+                tabs.add("Egg");
+                tabs.add("Bow");
+                tabs.add("Crossbow");
+                tabs.add("Trophy");
+                tabs = TabCompleterHelper.narrowDownTabCompleteResults(args[0], tabs);
+                yield tabs;
+            }
+            case 2 -> {
+                if (args[0].equalsIgnoreCase("Trophy")) {
+                    tabs.add("BoogysPorkchop");
+                    tabs.add("BrokenDrillBit");
+                    tabs.add("BucketOfFrost");
+                    tabs.add("ChaosCore");
+                    tabs.add("CrownShard");
+                    tabs.add("DefusedEggBomb");
+                    tabs.add("DemolitionistFlintStriker");
+                    tabs.add("GambitCoin");
+                    tabs.add("GreenysPetEgg");
+                    tabs.add("NaturesGem");
+                    tabs.add("Nemo");
+                    tabs.add("PartyCake");
+                    tabs.add("ScoutsIntrusiveThoughts");
+                    tabs.add("TandsFavoritePotato");
+                    tabs.add("ToxicVial");
+                    tabs.add("WitherKnightSkull");
+                    tabs = TabCompleterHelper.narrowDownTabCompleteResults(args[1], tabs);
+                } else {
+                    tabs = TabCompleterHelper.narrowDownTabCompleteResultsOnlinePlayerList(args[1]);
+                }
+                yield tabs;
+            }
+            case 3 -> {
+                if (!args[0].equalsIgnoreCase("Trophy"))
+                    tabs = TabCompleterHelper.narrowDownTabCompleteResultsOnlinePlayerList(args[1]);
+                yield tabs;
+            }
+            default -> tabs;
+        };
     }
 }

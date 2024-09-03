@@ -1,12 +1,16 @@
 package wyattduber.cashapp.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
+import wyattduber.cashapp.helpers.TabCompleterHelper;
 
-public class BaseCMD implements CommandExecutor {
+public class BaseCMD implements TabExecutor {
 
     private final CashApp ca;
 
@@ -45,5 +49,22 @@ public class BaseCMD implements CommandExecutor {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+
+        ArrayList<String> tabs = new ArrayList<>();
+
+        return switch (args.length) {
+            case 1 -> {
+                tabs.add("reload");
+                tabs.add("commands");
+                tabs.add("help");
+                tabs = TabCompleterHelper.narrowDownTabCompleteResults(args[0], tabs);
+                yield tabs;
+            }
+            default -> tabs;
+        };
     }
 }

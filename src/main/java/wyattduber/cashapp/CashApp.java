@@ -13,13 +13,12 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import wyattduber.cashapp.commands.*;
-import wyattduber.cashapp.commands.tabcomplete.*;
 import wyattduber.cashapp.customitems.ItemListener;
 import wyattduber.cashapp.customitems.ItemManager;
 import wyattduber.cashapp.database.Database;
-import wyattduber.cashapp.javacord.JavacordHelper;
+import wyattduber.cashapp.helpers.lib.LibrarySetup;
+import wyattduber.cashapp.javacord.Javacord;
 import wyattduber.cashapp.javacord.tickets.TicketHelper;
-import wyattduber.cashapp.lib.LibrarySetup;
 import wyattduber.cashapp.listeners.ChatListener;
 import wyattduber.cashapp.listeners.LoginListener;
 import wyattduber.cashapp.placeholders.PlaceholderHandler;
@@ -43,7 +42,7 @@ public class CashApp extends JavaPlugin {
     public LoginListener ll;
     public ItemListener il;
     public ChatListener cl;
-    public JavacordHelper js;
+    public Javacord js;
     public TicketHelper th;
     public Database db;
     public boolean discordConnected;
@@ -102,7 +101,7 @@ public class CashApp extends JavaPlugin {
 
         /* Config Parsing */
         if (parseConfig()) {
-            js = new JavacordHelper();
+            js = new Javacord();
             js.connectAPI();
             th = new TicketHelper();
         }
@@ -157,7 +156,7 @@ public class CashApp extends JavaPlugin {
         }
 
         if (parseConfig() || js == null) {
-            js = new JavacordHelper();
+            js = new Javacord();
         } else {
             js.reload();
         }
@@ -329,21 +328,11 @@ public class CashApp extends JavaPlugin {
     private void registerCommands() {
         try {
             Objects.requireNonNull(this.getCommand("ca")).setExecutor(new BaseCMD());
-            Objects.requireNonNull(this.getCommand("ca")).setTabCompleter(new BaseTC());
-
             Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BuildOfTheMonthCMD());
-            Objects.requireNonNull(this.getCommand("botm")).setTabCompleter(new BuildOfTheMonthTC());
-
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
-
             Objects.requireNonNull(this.getCommand("dnd")).setExecutor(new DoNotDisturbCMD());
-            Objects.requireNonNull(this.getCommand("dnd")).setTabCompleter(new DoNotDisturbTC());
-
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
-            Objects.requireNonNull(this.getCommand("rmd")).setTabCompleter(new StallRemindTC());
-
             Objects.requireNonNull(this.getCommand("getanarchyitem")).setExecutor(new AnarchyItemsCMD());
-            Objects.requireNonNull(this.getCommand("getanarchyitem")).setTabCompleter(new AnarchyItemsTC());
 
             log("Commands Registered Successfully!");
         } catch (NullPointerException e) {

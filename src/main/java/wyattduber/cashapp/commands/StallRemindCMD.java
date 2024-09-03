@@ -1,14 +1,18 @@
 package wyattduber.cashapp.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
 
-public class StallRemindCMD implements CommandExecutor {
+public class StallRemindCMD implements TabExecutor {
 
     private final CashApp ca;
     private final ConsoleCommandSender console;
@@ -40,5 +44,16 @@ public class StallRemindCMD implements CommandExecutor {
         Bukkit.dispatchCommand(console, "bce -1 " + commandSender.getName());
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+        if (!(sender instanceof Player)) return null; // Only provide tab completion for players
+
+        ArrayList<String> tabs = new ArrayList<>();
+
+        tabs.add("Username-" + args.length);
+
+        return tabs;
     }
 }

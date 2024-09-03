@@ -2,14 +2,10 @@ package wyattduber.cashapp.javacord;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
-import org.javacord.api.entity.channel.ServerTextChannelBuilder;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.permission.PermissionType;
-import org.javacord.api.entity.permission.Permissions;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.listener.message.MessageCreateListener;
-import org.javacord.api.entity.permission.PermissionsBuilder;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.javacord.tickets.TicketMessageListener;
@@ -18,7 +14,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutionException;
 
-public class JavacordHelper {
+public class Javacord {
 
     public DiscordApi api;
     public Server discordServer;

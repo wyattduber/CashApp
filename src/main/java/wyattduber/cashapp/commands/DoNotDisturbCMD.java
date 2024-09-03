@@ -2,18 +2,19 @@ package wyattduber.cashapp.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.database.Database;
+import wyattduber.cashapp.helpers.TabCompleterHelper;
 
 import java.util.*;
 
-public class DoNotDisturbCMD implements CommandExecutor {
+public class DoNotDisturbCMD implements TabExecutor {
 
     private final CashApp ca;
     private final Database db;
@@ -90,6 +91,29 @@ public class DoNotDisturbCMD implements CommandExecutor {
         return true;
     }
 
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+
+        ArrayList<String> tabs = new ArrayList<>();
+
+        return switch (args.length) {
+            case 1 -> {
+                tabs.add("on");
+                tabs.add("off");
+                tabs.add("status");
+                tabs = TabCompleterHelper.narrowDownTabCompleteResults(args[0], tabs);
+                yield tabs;
+            }
+            case 2 -> {
+                if (sender.hasPermission("ca.dnd.others")) {
+                    tabs = TabCompleterHelper.narrowDownTabCompleteResultsOnlinePlayerList(args[1]);
+                }
+                yield tabs;
+            }
+            default -> tabs;
+        };
+    }
+
     private @Nullable Player getPlayerIfExists(String playerName) {
         Player player = null;
         var onlinePlayer = ca.getServer().getPlayerExact(playerName);
@@ -102,7 +126,7 @@ public class DoNotDisturbCMD implements CommandExecutor {
             offlinePlayerList.forEach(offlinePlayer -> offlinePlayerNameList.add(offlinePlayer.getName()));
 
             if (offlinePlayerNameList.contains(playerName)) {
-                player = (Player) Bukkit.getOfflinePlayer(playerName);
+                player = Bukkit.getOfflinePlayer(playerName).getPlayer();
             }
         }
 

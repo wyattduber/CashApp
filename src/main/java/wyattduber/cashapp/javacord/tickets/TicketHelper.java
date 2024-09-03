@@ -9,7 +9,7 @@ import org.javacord.api.entity.permission.PermissionsBuilder;
 import org.javacord.api.entity.server.Server;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.database.Database;
-import wyattduber.cashapp.javacord.JavacordHelper;
+import wyattduber.cashapp.javacord.Javacord;
 
 import java.time.Instant;
 import java.util.Date;
@@ -19,7 +19,7 @@ public class TicketHelper {
 
     public final CashApp ca;
     public final Database db;
-    public final JavacordHelper js;
+    public final Javacord js;
     public final Server discordServer;
 
     public TicketHelper() {

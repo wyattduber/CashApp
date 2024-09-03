@@ -1,17 +1,21 @@
 package wyattduber.cashapp.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.javacord.JavacordHelper;
+import wyattduber.cashapp.helpers.TabCompleterHelper;
+import wyattduber.cashapp.javacord.Javacord;
 
-public class BuildOfTheMonthCMD implements CommandExecutor {
+public class BuildOfTheMonthCMD implements TabExecutor {
 
     private final CashApp ca;
-    private final JavacordHelper js;
+    private final Javacord js;
 
     public BuildOfTheMonthCMD() {
         ca = CashApp.getPlugin();
@@ -76,6 +80,45 @@ public class BuildOfTheMonthCMD implements CommandExecutor {
         ca.sendMessage(sender, "BOTM Message Sent!");
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+        if (!(sender instanceof Player)) return null; // Only provide tab completion for players
+
+        ArrayList<String> tabs = new ArrayList<>();
+
+        return switch (args.length) {
+            case 1 -> {
+                tabs.add(sender.getName());
+                yield tabs;
+            }
+            case 2 -> {
+                tabs.add("Surival");
+                tabs.add("Nether");
+                tabs.add("End");
+                tabs.add("Creative");
+                tabs = TabCompleterHelper.narrowDownTabCompleteResults(args[1], tabs);
+                yield tabs;
+            }
+            case 3 -> {
+                tabs.add("X-Coordinate");
+                yield tabs;
+            }
+            case 4 -> {
+                tabs.add("Y-Coordinate");
+                yield tabs;
+            }
+            case 5 -> {
+                tabs.add("Z-Coordinate");
+                yield tabs;
+            }
+            case 6 -> {
+                tabs.add("Optional Message...");
+                yield tabs;
+            }
+            default -> tabs;
+        };
     }
 
 }

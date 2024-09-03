@@ -119,3 +119,6 @@ libs/
 
 # Database
 cashapp.sqlite.db
+
+# VSCode
+.vscode/

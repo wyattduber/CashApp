@@ -1,4 +1,4 @@
-package wyattduber.cashapp.lib;
+package wyattduber.cashapp.helpers.lib;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.byteflux.libby.BukkitLibraryManager;
