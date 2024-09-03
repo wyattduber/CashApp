@@ -1,11 +1,10 @@
 package wyattduber.cashapp.listeners;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import ru.tehkode.permissions.PermissionUser;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.database.Database;
 
@@ -21,23 +20,33 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public void onPlayerChatEvent(AsyncChatEvent event) {
+        // Check if user has do not disturb status
+        // If so, they should not be able to send messages. Should alert user of their status
+        if (db.getDoNotDisturbStatus(event.getPlayer())) {
+            event.setCancelled(true);
+            ca.log("Player " + event.getPlayer().getName() + " attempted to send a message while having Do Not Disturb enabled. Message: " + PlainTextComponentSerializer.plainText().serialize(event.message()));
+            ca.sendMessage(event.getPlayer(), "&cYou have Do Not Disturb enabled. You cannot send messages. Do &a/dnd off &cto disable.");
+            return;
+        }
+
         // Special case if a staff member were to specifically shout a message out to all players
         var message = event.message();
         if (message.toString().charAt(0) == ca.DND_SHOUT_MESSAGE_CHAR) {
             var sender = event.getPlayer();
-            PermissionUser permUser = PermissionsEx.getUser(sender);
-            var rank = permUser.getRankLadderGroup("default");
-            String rankName = rank.getName();
-            if (rankName.equalsIgnoreCase("premod") ||
-                    rankName.equalsIgnoreCase("moderator") ||
-                    rankName.equalsIgnoreCase("moderator+") ||
-                    rankName.equalsIgnoreCase("council") ||
-                    rankName.equalsIgnoreCase("element") ||
-                    rankName.equalsIgnoreCase("daemon"))
+
+            if (sender.hasPermission("ca.donotremove.premodperm") ||
+                sender.hasPermission("ca.donotremove.moderatorperm") ||
+                sender.hasPermission("ca.donotremove.moderatorplusperm") ||
+                sender.hasPermission("ca.donotremove.councilperm"))
                 return;
 
         }
-        event.viewers().removeIf(player -> db.getDoNotDisturbStatus((Player) player));
+        event.viewers().removeIf(viewer -> {
+            if (viewer instanceof Player player) {
+                return db.getDoNotDisturbStatus(player);
+            }
+            return false;
+        });
     }
 
 }

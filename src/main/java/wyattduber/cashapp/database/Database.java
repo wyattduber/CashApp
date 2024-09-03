@@ -68,10 +68,10 @@ public class Database {
 
     public void insertUser(Player player) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO users(minecraftid,mcusername,doNotDisturbState) VALUES (?,?,?,?,?)");
+            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO users(minecraftid,mcusername,doNotDisturbState) VALUES (?,?,?)");
             stmt.setString(1, player.getUniqueId().toString());
             stmt.setString(2, player.getName());
-            stmt.setBoolean(5, false);
+            stmt.setBoolean(3, false);
             stmt.execute();
         } catch (SQLException e) {
             ca.error("Error adding a user record for user " + player.getName() + "!");
@@ -81,10 +81,10 @@ public class Database {
 
     public boolean getDoNotDisturbStatus(Player player) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT doNotDisturbStatus FROM users WHERE minecraftid=?");
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT doNotDisturbState FROM users WHERE minecraftid=?");
             stmt.setString(1, player.getUniqueId().toString());
             ResultSet rs = stmt.executeQuery();
-            return rs.getBoolean("doNotDisturbStatus");
+            return rs.getBoolean("doNotDisturbState");
         } catch (SQLException e) {
             ca.error("Error retrieving Do not Disturb Status for user " + player.getName() + "!");
             ca.error("Error Message: " + e.getMessage());
@@ -94,7 +94,7 @@ public class Database {
 
     public void setDoNotDisturbStatus(Player player, boolean status) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("UPDATE users SET doNotDisturbStatus=? WHERE minecraftid=?");
+            PreparedStatement stmt = dbcon.prepareStatement("UPDATE users SET doNotDisturbState=? WHERE minecraftid=?");
             stmt.setBoolean(1, status);
             stmt.setString(2, player.getUniqueId().toString());
             stmt.execute();
