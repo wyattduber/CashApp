@@ -25,6 +25,7 @@ import wyattduber.cashapp.anarchyItems.customitems.ItemManager;
 import wyattduber.cashapp.connectors.Database;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbCMD;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbListener;
+import wyattduber.cashapp.doNotDisturb.DoNotDisturbProtocolListener;
 import wyattduber.cashapp.helpers.lib.LibrarySetup;
 import wyattduber.cashapp.connectors.Javacord;
 import wyattduber.cashapp.discordTickets.TicketHelper;
@@ -146,6 +147,9 @@ public class CashApp extends JavaPlugin {
         EntityDamageEvent.getHandlerList().unregister(il);
         AsyncChatEvent.getHandlerList().unregister(cl);
 
+        // Unregister ProtocolLib Packet Listener
+        protocolManager.removePacketListeners(this);
+
         /* Load and Initiate Configs */
         try {
             reloadCustomConfig();
@@ -184,42 +188,8 @@ public class CashApp extends JavaPlugin {
         cl = new DoNotDisturbListener();
         getServer().getPluginManager().registerEvents(cl, this);
 
-        // ProtocolLib Listeners
-        protocolManager.addPacketListener(new PacketAdapter(this,
-                ListenerPriority.NORMAL,
-                PacketType.Play.Server.CHAT) {
-            @Override
-            public void onPacketReceiving(PacketEvent event) {
-                Player player = event.getPlayer();
-                if (db.getDoNotDisturbStatus(player)) {
-                    event.setCancelled(true);
-                }
-            }
-        });
-
-        protocolManager.addPacketListener(new PacketAdapter(this,
-                ListenerPriority.NORMAL,
-                PacketType.Play.Server.SYSTEM_CHAT) {
-            @Override
-            public void onPacketReceiving(PacketEvent event) {
-                Player player = event.getPlayer();
-                if (db.getDoNotDisturbStatus(player)) {
-                    event.setCancelled(true);
-                }
-            }
-        });
-
-        protocolManager.addPacketListener(new PacketAdapter(this,
-                ListenerPriority.NORMAL,
-                PacketType.Play.Server.DISGUISED_CHAT) {
-            @Override
-            public void onPacketReceiving(PacketEvent event) {
-                Player player = event.getPlayer();
-                if (db.getDoNotDisturbStatus(player)) {
-                    event.setCancelled(true);
-                }
-            }
-        });
+        // Register ProtocolLib Packet Listener
+        DoNotDisturbProtocolListener.initProtocolListeners(this, protocolManager, db);
 
         log("Listeners Loaded!");
     }
