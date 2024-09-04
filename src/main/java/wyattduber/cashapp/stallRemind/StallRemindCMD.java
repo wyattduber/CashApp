@@ -1,4 +1,4 @@
-package wyattduber.cashapp.commands;
+package wyattduber.cashapp.stallRemind;
 
 import java.util.ArrayList;
 import java.util.List;

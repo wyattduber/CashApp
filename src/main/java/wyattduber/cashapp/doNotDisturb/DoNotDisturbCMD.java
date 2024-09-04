@@ -1,4 +1,4 @@
-package wyattduber.cashapp.commands;
+package wyattduber.cashapp.doNotDisturb;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -9,10 +9,12 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.database.Database;
+import wyattduber.cashapp.connectors.Database;
 import wyattduber.cashapp.helpers.TabCompleterHelper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class DoNotDisturbCMD implements TabExecutor {
 

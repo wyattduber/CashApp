@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.database.Database;
+import wyattduber.cashapp.connectors.Database;
 
 import java.util.Objects;
 

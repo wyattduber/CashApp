@@ -1,7 +1,4 @@
-package wyattduber.cashapp.commands;
-
-import java.util.ArrayList;
-import java.util.List;
+package wyattduber.cashapp.botm;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -9,8 +6,11 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.helpers.TabCompleterHelper;
 import wyattduber.cashapp.connectors.Javacord;
+import wyattduber.cashapp.helpers.TabCompleterHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BuildOfTheMonthCMD implements TabExecutor {
 

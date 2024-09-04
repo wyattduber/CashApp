@@ -1,4 +1,4 @@
-package wyattduber.cashapp.customitems;
+package wyattduber.cashapp.anarchyItems.customitems;
 
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;

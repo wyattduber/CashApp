@@ -1,4 +1,4 @@
-package wyattduber.cashapp.commands;
+package wyattduber.cashapp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.jetbrains.annotations.NotNull;
-import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.helpers.TabCompleterHelper;
 
 public class BaseCMD implements TabExecutor {

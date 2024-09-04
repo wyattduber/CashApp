@@ -1,4 +1,4 @@
-package wyattduber.cashapp.listeners;
+package wyattduber.cashapp.doNotDisturb;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.BroadcastMessageEvent;
 import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.database.Database;
+import wyattduber.cashapp.connectors.Database;
 
 public class DoNotDisturbListener implements Listener {
 

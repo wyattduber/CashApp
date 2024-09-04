@@ -1,11 +1,11 @@
-package wyattduber.cashapp.javacord.tickets;
+package wyattduber.cashapp.discordTickets;
 
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.database.Database;
-import wyattduber.cashapp.javacord.Javacord;
+import wyattduber.cashapp.connectors.Database;
+import wyattduber.cashapp.connectors.Javacord;
 
 public class TicketMessageListener implements MessageCreateListener {
 

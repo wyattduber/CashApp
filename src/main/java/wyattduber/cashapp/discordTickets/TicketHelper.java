@@ -1,4 +1,4 @@
-package wyattduber.cashapp.javacord.tickets;
+package wyattduber.cashapp.discordTickets;
 
 import org.bukkit.entity.Player;
 import org.javacord.api.entity.channel.RegularServerChannelUpdater;
@@ -8,8 +8,8 @@ import org.javacord.api.entity.permission.Permissions;
 import org.javacord.api.entity.permission.PermissionsBuilder;
 import org.javacord.api.entity.server.Server;
 import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.database.Database;
-import wyattduber.cashapp.javacord.Javacord;
+import wyattduber.cashapp.connectors.Database;
+import wyattduber.cashapp.connectors.Javacord;
 
 import java.time.Instant;
 import java.util.Date;

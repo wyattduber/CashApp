@@ -1,4 +1,4 @@
-package wyattduber.cashapp.commands;
+package wyattduber.cashapp.anarchyItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.customitems.ItemManager;
+import wyattduber.cashapp.anarchyItems.customitems.ItemManager;
 import wyattduber.cashapp.helpers.TabCompleterHelper;
 
 public class AnarchyItemsCMD implements TabExecutor {

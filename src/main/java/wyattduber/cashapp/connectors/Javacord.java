@@ -1,4 +1,4 @@
-package wyattduber.cashapp.javacord;
+package wyattduber.cashapp.connectors;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -7,8 +7,7 @@ import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.listener.message.MessageCreateListener;
 import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.database.Database;
-import wyattduber.cashapp.javacord.tickets.TicketMessageListener;
+import wyattduber.cashapp.discordTickets.TicketMessageListener;
 
 import java.util.List;
 import java.util.NoSuchElementException;

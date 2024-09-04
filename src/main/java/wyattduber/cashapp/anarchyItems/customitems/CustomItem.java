@@ -1,4 +1,4 @@
-package wyattduber.cashapp.customitems;
+package wyattduber.cashapp.anarchyItems.customitems;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;

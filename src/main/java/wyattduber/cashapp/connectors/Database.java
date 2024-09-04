@@ -1,4 +1,4 @@
-package wyattduber.cashapp.database;
+package wyattduber.cashapp.connectors;
 
 import org.bukkit.entity.Player;
 import wyattduber.cashapp.CashApp;
