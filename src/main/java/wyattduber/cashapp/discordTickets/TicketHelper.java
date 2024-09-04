@@ -11,6 +11,8 @@ import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.connectors.Database;
 import wyattduber.cashapp.connectors.Javacord;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -153,36 +155,46 @@ public class TicketHelper {
     }
 
     public boolean closeTicket(long channelID) {
-        try {
-            var channelOptional = discordServer.getTextChannelById(channelID);
-            if (channelOptional.isPresent()) {
-                channelOptional.get().delete().get();
-
-                // TODO: Add logic to handle logging and saving to closed tickets channel
-
-                db.closeTicket(channelID);
-            } else throw new Exception();
-
-            return true;
-        } catch (Exception e) {
-            ca.error("Error Deleting Ticket! Contact the developer.");
-            ca.error(e.getMessage());
-            return false;
-        }
+        db.closeTicket(channelID);
+        return closeTicketInternal(channelID);
     }
 
     public boolean closeTicket(long channelID, String closeReason) {
+        db.closeTicket(channelID, closeReason);
+        return closeTicketInternal(channelID);
+    }
+
+    private boolean closeTicketInternal(long channelID) {
         try {
-            var channelOptional = discordServer.getTextChannelById(channelID);
-            if (channelOptional.isPresent()) {
-                channelOptional.get().delete().get();
+        var channelOptional = discordServer.getTextChannelById(channelID);
+        if (channelOptional.isPresent()) {
+            var channel = channelOptional.get();
 
-                // TODO: Add logic to handle logging and saving to closed tickets channel
+            StringBuilder message = new StringBuilder();
+            var messages = channel.getMessages(Integer.MAX_VALUE).get();
+            for (var channelMessage : messages) {
+                message.append("[").append(channelMessage.getCreationTimestamp()).append("] ").append(channelMessage.getAuthor().getDiscriminatedName()).append(" (").append(channelMessage.getAuthor().getId()).append(")").append(": ").append(channelMessage.getContent()).append("\n");
+            }
 
-                db.closeTicket(channelID, closeReason);
-            } else throw new Exception();
+            // Create a .txt file that we will send to the close ticket channel
+            FileWriter file = new FileWriter("ticket_" + channelID + ".txt");
+            file.write(message.toString());
+            file.close();
 
-            return true;
+            // Send the file to the closed ticket channel
+            var closedTicketChannel = js.closedTicketChannel;
+            closedTicketChannel.sendMessage("Ticket Closed!");
+            closedTicketChannel.sendMessage(new File("ticket_" + channelID + ".txt"));
+
+            // Delete the file
+            File fileToDelete = new File("ticket_" + channelID + ".txt");
+            fileToDelete.delete();
+
+            // Finally, close ticket and let Database know
+            channel.delete().get();
+            db.closeTicket(channelID);
+        } else throw new Exception();
+        return true;
         } catch (Exception e) {
             ca.error("Error Deleting Ticket! Contact the developer.");
             ca.error(e.getMessage());
