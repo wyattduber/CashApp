@@ -1,5 +1,11 @@
 package wyattduber.cashapp;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -19,7 +25,7 @@ import wyattduber.cashapp.database.Database;
 import wyattduber.cashapp.helpers.lib.LibrarySetup;
 import wyattduber.cashapp.javacord.Javacord;
 import wyattduber.cashapp.javacord.tickets.TicketHelper;
-import wyattduber.cashapp.listeners.ChatListener;
+import wyattduber.cashapp.listeners.DoNotDisturbListener;
 import wyattduber.cashapp.listeners.LoginListener;
 import wyattduber.cashapp.placeholders.PlaceholderHandler;
 
@@ -41,10 +47,11 @@ public class CashApp extends JavaPlugin {
     public File customConfigFile;
     public LoginListener ll;
     public ItemListener il;
-    public ChatListener cl;
+    public DoNotDisturbListener cl;
     public Javacord js;
     public TicketHelper th;
     public Database db;
+    public final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
     public boolean discordConnected;
 
     // Config Settings
@@ -171,8 +178,45 @@ public class CashApp extends JavaPlugin {
         il = new ItemListener();
         getServer().getPluginManager().registerEvents(il, this);
 
-        cl = new ChatListener();
+        cl = new DoNotDisturbListener();
         getServer().getPluginManager().registerEvents(cl, this);
+
+        // ProtocolLib Listeners
+        protocolManager.addPacketListener(new PacketAdapter(this,
+                ListenerPriority.NORMAL,
+                PacketType.Play.Server.CHAT) {
+            @Override
+            public void onPacketReceiving(PacketEvent event) {
+                Player player = event.getPlayer();
+                if (db.getDoNotDisturbStatus(player)) {
+                    event.setCancelled(true);
+                }
+            }
+        });
+
+        protocolManager.addPacketListener(new PacketAdapter(this,
+                ListenerPriority.NORMAL,
+                PacketType.Play.Server.SYSTEM_CHAT) {
+            @Override
+            public void onPacketReceiving(PacketEvent event) {
+                Player player = event.getPlayer();
+                if (db.getDoNotDisturbStatus(player)) {
+                    event.setCancelled(true);
+                }
+            }
+        });
+
+        protocolManager.addPacketListener(new PacketAdapter(this,
+                ListenerPriority.NORMAL,
+                PacketType.Play.Server.DISGUISED_CHAT) {
+            @Override
+            public void onPacketReceiving(PacketEvent event) {
+                Player player = event.getPlayer();
+                if (db.getDoNotDisturbStatus(player)) {
+                    event.setCancelled(true);
+                }
+            }
+        });
 
         log("Listeners Loaded!");
     }

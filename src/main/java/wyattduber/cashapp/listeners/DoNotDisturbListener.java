@@ -5,15 +5,16 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.server.BroadcastMessageEvent;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.database.Database;
 
-public class ChatListener implements Listener {
+public class DoNotDisturbListener implements Listener {
 
     private final CashApp ca;
     private final Database db;
 
-    public ChatListener() {
+    public DoNotDisturbListener() {
         ca = CashApp.getPlugin();
         db = ca.db;
     }
@@ -39,7 +40,6 @@ public class ChatListener implements Listener {
                 sender.hasPermission("ca.donotremove.moderatorplusperm") ||
                 sender.hasPermission("ca.donotremove.councilperm"))
                 return;
-
         }
         event.viewers().removeIf(viewer -> {
             if (viewer instanceof Player player) {
@@ -49,4 +49,13 @@ public class ChatListener implements Listener {
         });
     }
 
+    @EventHandler
+    public void onBroadcastMessage(BroadcastMessageEvent event) {
+        event.getRecipients().removeIf(recipient -> {
+            if (recipient instanceof Player player) {
+                return db.getDoNotDisturbStatus(player);
+            }
+            return false;
+        });
+    }
 }
