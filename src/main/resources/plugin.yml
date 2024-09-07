@@ -4,7 +4,7 @@ main: wyattduber.cashapp.CashApp
 api-version: 1.21
 author: wyattduber
 website: https://www.github.com/wyattduber/CashApp
-depend: [PlaceholderAPI, ProtocolLib]
+depend: [CMI, PermissionsEx, PlaceholderAPI, ProtocolLib]
 
 commands:
   ca:
