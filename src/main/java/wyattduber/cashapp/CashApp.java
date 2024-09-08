@@ -1,11 +1,7 @@
 package wyattduber.cashapp;
 
-import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -25,7 +21,6 @@ import wyattduber.cashapp.anarchyItems.customitems.ItemManager;
 import wyattduber.cashapp.connectors.Database;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbCMD;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbListener;
-import wyattduber.cashapp.doNotDisturb.DoNotDisturbProtocolListener;
 import wyattduber.cashapp.helpers.lib.LibrarySetup;
 import wyattduber.cashapp.connectors.Javacord;
 import wyattduber.cashapp.discordTickets.TicketHelper;
@@ -55,7 +50,7 @@ public class CashApp extends JavaPlugin {
     public Javacord js;
     public TicketHelper th;
     public Database db;
-    public final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+    public ProtocolManager protocolManager;
     public boolean discordConnected;
 
     // Config Settings
@@ -108,6 +103,7 @@ public class CashApp extends JavaPlugin {
          }
 
          /* Load Listeners */
+         protocolManager = ProtocolLibrary.getProtocolManager();
          initListeners();
 
         /* Config Parsing */
@@ -187,9 +183,6 @@ public class CashApp extends JavaPlugin {
 
         cl = new DoNotDisturbListener();
         getServer().getPluginManager().registerEvents(cl, this);
-
-        // Register ProtocolLib Packet Listener
-        DoNotDisturbProtocolListener.initProtocolListeners(this, protocolManager, db);
 
         log("Listeners Loaded!");
     }
