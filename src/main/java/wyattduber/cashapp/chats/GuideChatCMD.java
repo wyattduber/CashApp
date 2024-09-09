@@ -9,6 +9,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
+import wyattduber.cashapp.helpers.ChatMessageHelper;
 
 public class GuideChatCMD implements CommandExecutor {
 
@@ -30,16 +31,16 @@ public class GuideChatCMD implements CommandExecutor {
             CCSender.sendMessage(messageFromServer);
             for (Player player : ca.getServer().getOnlinePlayers()) {
                 if (player.hasPermission("ca.guidechat")) {
-                    player.sendMessage(Component.text(messageFromServer));
+                    ChatMessageHelper.sendMessage(player, messageFromServer);
                 }
             }
         } else if (sender instanceof Player player) {
             CMIUser user = CMIUser.getUser(player);
-            String messageFromPlayer = "§5§lGuideChat §r" + getPrefix(user) + user.getDisplayName() + "§f: " + message;
+            String messageFromPlayer = "§5§lGuideChat§r" + getPrefix(user) + user.getDisplayName() + "§f: " + message;
             ca.getServer().getConsoleSender().sendMessage(messageFromPlayer);
             for (Player recipient : ca.getServer().getOnlinePlayers()) {
                 if (recipient.hasPermission("ca.guidechat")) {
-                    recipient.sendMessage(Component.text(messageFromPlayer));
+                    ChatMessageHelper.sendMessage(recipient, messageFromPlayer);
                 }
             }
         }

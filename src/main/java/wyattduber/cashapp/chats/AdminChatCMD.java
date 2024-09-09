@@ -1,6 +1,9 @@
 package wyattduber.cashapp.chats;
 
+import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Containers.CMIUser;
+import com.Zrips.CMI.Modules.Chat.ChatManager;
+import com.Zrips.CMI.Modules.ChatFormat.ChatFormatManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,6 +12,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
+import wyattduber.cashapp.helpers.ChatMessageHelper;
 
 public class AdminChatCMD implements CommandExecutor {
 
@@ -30,16 +34,16 @@ public class AdminChatCMD implements CommandExecutor {
             CCSender.sendMessage(messageFromServer);
             for (Player player : ca.getServer().getOnlinePlayers()) {
                 if (player.hasPermission("ca.adminchat")) {
-                    player.sendMessage(Component.text(messageFromServer));
+                    ChatMessageHelper.sendMessage(player, messageFromServer);
                 }
             }
         } else if (sender instanceof Player player) {
             CMIUser user = CMIUser.getUser(player);
-            String messageFromPlayer = "§3§lAdminChat §r" + getPrefix(user) + user.getDisplayName() + "§f: " + message;
+            String messageFromPlayer = "§3§lAdminChat§r" + getPrefix(user) + user.getDisplayName() + "§f: " + message;
             ca.getServer().getConsoleSender().sendMessage(messageFromPlayer);
             for (Player recipient : ca.getServer().getOnlinePlayers()) {
                 if (recipient.hasPermission("ca.adminchat")) {
-                    recipient.sendMessage(Component.text(messageFromPlayer));
+                    ChatMessageHelper.sendMessage(recipient, messageFromPlayer);
                 }
             }
         }
@@ -48,6 +52,7 @@ public class AdminChatCMD implements CommandExecutor {
 
     private String getPrefix(CMIUser user) {
         var prefix = user.getPrefix();
+        var manager = CMI.getInstance().getChatFormatManager();
         return prefix.isEmpty() ? "" : prefix + " ";
     }
 }

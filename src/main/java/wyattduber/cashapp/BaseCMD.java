@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.jetbrains.annotations.NotNull;
+import wyattduber.cashapp.helpers.ChatMessageHelper;
 import wyattduber.cashapp.helpers.TabCompleterHelper;
 
 public class BaseCMD implements TabExecutor {
@@ -24,7 +25,7 @@ public class BaseCMD implements TabExecutor {
             switch (args[0].toLowerCase()) { // reload command
                 case "reload" -> {
                     ca.reload();
-                    ca.sendMessage(sender, "Configuration Reloaded!");
+                    ChatMessageHelper.sendMessage(sender, "Configuration Reloaded!");
                     return true;
                 }
                 case "commands","help" -> {
@@ -43,7 +44,7 @@ public class BaseCMD implements TabExecutor {
                             msg.append(" [player]");
                     }
 
-                    ca.sendMessage(sender, msg.toString());
+                    ChatMessageHelper.sendMessage(sender, msg.toString());
                 }
             }
         }

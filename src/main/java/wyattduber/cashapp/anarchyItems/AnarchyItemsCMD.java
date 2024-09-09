@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.anarchyItems.customitems.ItemManager;
+import wyattduber.cashapp.helpers.ChatMessageHelper;
 import wyattduber.cashapp.helpers.TabCompleterHelper;
 
 public class AnarchyItemsCMD implements TabExecutor {
@@ -37,8 +38,8 @@ public class AnarchyItemsCMD implements TabExecutor {
                 case "egg" -> player.getInventory().addItem(ItemManager.egg);
                 case "bow" -> player.getInventory().addItem(ItemManager.bow);
                 case "crossbow" -> player.getInventory().addItem(ItemManager.crossBow);
-                case "trophy" -> ca.sendMessage(player, "&cValid trophy options are: BoogysPorkchop, BrokenDrillBit, BucketOfFrost, ChaosCore, CrownShard, DefusedEggBomb, DemolitionistFlintStriker, GambitCoin, GreenysPetEgg, NaturesGem, Nemo, PartyCake, ScoutsIntrusiveThoughts, TandsFavoritePotato, ToxicVial, WitherKnightSkull");
-                default -> ca.sendMessage(player, "&cValid item options are: Egg, Bow, Crossbow");
+                case "trophy" -> ChatMessageHelper.sendMessage(player, "&cValid trophy options are: BoogysPorkchop, BrokenDrillBit, BucketOfFrost, ChaosCore, CrownShard, DefusedEggBomb, DemolitionistFlintStriker, GambitCoin, GreenysPetEgg, NaturesGem, Nemo, PartyCake, ScoutsIntrusiveThoughts, TandsFavoritePotato, ToxicVial, WitherKnightSkull");
+                default -> ChatMessageHelper.sendMessage(player, "&cValid item options are: Egg, Bow, Crossbow");
             }
         } else if (args[0].equalsIgnoreCase("trophy")) {
             switch (args[1].toLowerCase()) {
@@ -58,7 +59,7 @@ public class AnarchyItemsCMD implements TabExecutor {
                 case "tandsfavoritepotato" -> player.getInventory().addItem(ItemManager.tandsFavoritePotato);
                 case "toxicvial" -> player.getInventory().addItem(ItemManager.toxicVial);
                 case "witherknightskull" -> player.getInventory().addItem(ItemManager.witherKnightSkull);
-                default -> ca.sendMessage(player, "&cValid trophy options are: BoogysPorkchop, BrokenDrillBit, BucketOfFrost, ChaosCore, CrownShard, DefusedEggBomb, DemolitionistFlintStriker, GambitCoin, GreenysPetEgg, NaturesGem, Nemo, PartyCake, ScoutsIntrusiveThoughts, TandsFavoritePotato, ToxicVial, WitherKnightSkull");
+                default -> ChatMessageHelper.sendMessage(player, "&cValid trophy options are: BoogysPorkchop, BrokenDrillBit, BucketOfFrost, ChaosCore, CrownShard, DefusedEggBomb, DemolitionistFlintStriker, GambitCoin, GreenysPetEgg, NaturesGem, Nemo, PartyCake, ScoutsIntrusiveThoughts, TandsFavoritePotato, ToxicVial, WitherKnightSkull");
             }
         }
 

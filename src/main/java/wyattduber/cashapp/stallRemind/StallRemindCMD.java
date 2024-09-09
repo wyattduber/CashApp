@@ -11,6 +11,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
+import wyattduber.cashapp.helpers.ChatMessageHelper;
 
 public class StallRemindCMD implements TabExecutor {
 
@@ -36,9 +37,9 @@ public class StallRemindCMD implements TabExecutor {
         }
 
         if (flag) {
-            ca.sendMessage(commandSender, "§aMessage sent to all players!");
+            ChatMessageHelper.sendMessage(commandSender, "§aMessage sent to all players!");
         } else {
-            ca.sendMessage(commandSender, "§cMessage failed to send to all players! One or more of the usernames were incorrect or couldn't be found.");
+            ChatMessageHelper.sendMessage(commandSender, "§cMessage failed to send to all players! One or more of the usernames were incorrect or couldn't be found.");
         }
 
         Bukkit.dispatchCommand(console, "bce -1 " + commandSender.getName());

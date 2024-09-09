@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
+import wyattduber.cashapp.helpers.ChatMessageHelper;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class BuycraftMailCMD implements CommandExecutor {
 
         //Check to make sure that only console is executing the command
         if (!(sender instanceof ConsoleCommandSender)) {
-            ca.sendMessage(sender, "§cCommand must be executed from console!");
+            ChatMessageHelper.sendMessage(sender, "§cCommand must be executed from console!");
             return true;
         }
 
@@ -42,7 +43,7 @@ public class BuycraftMailCMD implements CommandExecutor {
         try {
             Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            ca.sendMessage(sender, "§cFirst argument must be an integer!");
+            ChatMessageHelper.sendMessage(sender, "§cFirst argument must be an integer!");
             return true;
         }
 
@@ -96,7 +97,7 @@ public class BuycraftMailCMD implements CommandExecutor {
             }
         }
 
-        ca.sendMessage(sender, "Buycraft Event " + BuycraftMailType.fromInt(Integer.parseInt(args[0])) + " Sent!");
+        ChatMessageHelper.sendMessage(sender, "Buycraft Event " + BuycraftMailType.fromInt(Integer.parseInt(args[0])) + " Sent!");
         return true;
     }
 

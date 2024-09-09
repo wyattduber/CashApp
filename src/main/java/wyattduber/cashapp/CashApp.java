@@ -6,10 +6,8 @@ import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import io.papermc.paper.event.entity.EntityLoadCrossbowEvent;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -23,6 +21,7 @@ import wyattduber.cashapp.anarchyItems.customitems.ItemManager;
 import wyattduber.cashapp.connectors.Database;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbCMD;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbListener;
+import wyattduber.cashapp.helpers.ChatMessageHelper;
 import wyattduber.cashapp.helpers.lib.LibrarySetup;
 import wyattduber.cashapp.connectors.Javacord;
 import wyattduber.cashapp.discordTickets.TicketHelper;
@@ -236,7 +235,7 @@ public class CashApp extends JavaPlugin {
         }
 
         try {
-            mallMsg = replaceColors(getConfigString("mall-remind-msg"));
+            mallMsg = String.valueOf(ChatMessageHelper.replaceColors(getConfigString("mall-remind-msg")));
             log("Mall Reminder Message Loaded!");
         } catch (Exception e) {
             warn("Invalid Mall Reminder Message! Please set the mall-remind-msg in the config.yml!");
@@ -431,55 +430,4 @@ public class CashApp extends JavaPlugin {
     public void debug(String message) {
         this.getLogger().log(Level.FINE, message);
     }
-
-    public void sendMessage(CommandSender sender, String message) {
-        if (sender instanceof Player) {
-            sender.sendMessage("§f[§aCash§bApp§f] " + replaceColors(message));
-        } else {
-            log(message);
-        }
-    }
-
-    /**
-     * The escape sequence for minecraft special chat codes
-     */
-    public static final char ESCAPE = '§';
-
-    /**
-     * Replace all the color codes (prepended with &) with the corresponding color code.
-     * This uses raw char arrays, so it can be considered to be extremely fast.
-     *
-     * @param text the text to replace the color codes in
-     * @return string with color codes replaced
-     */
-    public static String replaceColors(String text) {
-        char[] chrarray = text.toCharArray();
-
-        for (int index = 0; index < chrarray.length; index ++) {
-            char chr = chrarray[index];
-
-            // Ignore anything that we don't want
-            if (chr != '&') {
-                continue;
-            }
-
-            if ((index + 1) == chrarray.length) {
-                // we are at the end of the array
-                break;
-            }
-
-            // get the forward char
-            char forward = chrarray[index + 1];
-
-            // is it in range?
-            if ((forward >= '0' && forward <= '9') || (forward >= 'a' && forward <= 'f') || (forward >= 'k' && forward <= 'r')) {
-                // It is! Replace the char we are at now with the escape sequence
-                chrarray[index] = ESCAPE;
-            }
-        }
-
-        // Rebuild the string and return it
-        return new String(chrarray);
-    }
-
 }

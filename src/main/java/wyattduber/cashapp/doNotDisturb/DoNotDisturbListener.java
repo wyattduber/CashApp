@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.BroadcastMessageEvent;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.connectors.Database;
+import wyattduber.cashapp.helpers.ChatMessageHelper;
 
 public class DoNotDisturbListener implements Listener {
 
@@ -26,7 +27,7 @@ public class DoNotDisturbListener implements Listener {
         if (db.getDoNotDisturbStatus(event.getPlayer())) {
             event.setCancelled(true);
             ca.log("Player " + event.getPlayer().getName() + " attempted to send a message while having Do Not Disturb enabled. Message: " + PlainTextComponentSerializer.plainText().serialize(event.message()));
-            ca.sendMessage(event.getPlayer(), "&cYou have Do Not Disturb enabled. You cannot send messages. Do &a/dnd off &cto disable.");
+            ChatMessageHelper.sendMessage(event.getPlayer(), "&cYou have Do Not Disturb enabled. You cannot send messages. Do &a/dnd off &cto disable.");
             return;
         }
 
