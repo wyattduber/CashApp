@@ -4,9 +4,14 @@ main: wyattduber.cashapp.CashApp
 api-version: 1.21
 author: wyattduber
 website: https://www.github.com/wyattduber/CashApp
-depend: [PlaceholderAPI]
+depend: [CMI, PlaceholderAPI]
 
 commands:
+  am:
+    description: Command to send a message to all online admins
+    usage: /am <message...>
+    permission: ca.adminchat
+    permission-message: §cYou do not have permission!
   ca:
     description: Helper command for the CashApp plugin
     usage: /ca <args...>
@@ -27,6 +32,11 @@ commands:
     usage: /dnd <on/off> [player]
     permission: ca.dnd
     permission-message: §cYou do not have permission!
+  gc:
+    description: Command to send a message to all online players
+    usage: /gc <message>
+    permission: ca.guidechat
+    permission-message: §cYou do not have permission!
   rmd:
     description: Command to send all of the current users a reminder /mail
     usage: /rmd <username-1> <username-2> ... <username-n>
@@ -42,13 +52,18 @@ permissions:
   ca.*:
     description: Gives access to all CashApp Commands and Features
     children:
+      ca.adminchat: true
       ca.ca: true
       ca.update: true
       ca.botm: true
       ca.bce: true
       ca.dnd: true
+      ca.guidechat: true
       ca.rmd: true
       ca.getAnarchyItem: true
+  ca.adminchat:
+    description: Allows the use of the /am command
+    default: op
   ca.botm:
     description: Allows the use of the BOTM command
     default: op
@@ -63,6 +78,9 @@ permissions:
     default: op
   ca.dnd.others:
     description: Allows the user of the /dnd on other players
+    default: op
+  ca.guidechat:
+    description: Allows the use of the /gc command
     default: op
   ca.rmd:
     description: Allows the use of the /rmd command

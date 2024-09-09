@@ -15,6 +15,8 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import wyattduber.cashapp.anarchyItems.AnarchyItemsCMD;
+import wyattduber.cashapp.chats.AdminChatCMD;
+import wyattduber.cashapp.chats.GuideChatCMD;
 import wyattduber.cashapp.commands.*;
 import wyattduber.cashapp.anarchyItems.customitems.ItemListener;
 import wyattduber.cashapp.anarchyItems.customitems.ItemManager;
@@ -337,10 +339,12 @@ public class CashApp extends JavaPlugin {
 
     private void registerCommands() {
         try {
+            Objects.requireNonNull(this.getCommand("am")).setExecutor(new AdminChatCMD());
             Objects.requireNonNull(this.getCommand("ca")).setExecutor(new BaseCMD());
             Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BuildOfTheMonthCMD());
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
             Objects.requireNonNull(this.getCommand("dnd")).setExecutor(new DoNotDisturbCMD());
+            Objects.requireNonNull(this.getCommand("gc")).setExecutor(new GuideChatCMD());
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
             Objects.requireNonNull(this.getCommand("getanarchyitem")).setExecutor(new AnarchyItemsCMD());
 
