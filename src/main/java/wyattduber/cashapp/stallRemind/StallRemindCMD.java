@@ -37,9 +37,9 @@ public class StallRemindCMD implements TabExecutor {
         }
 
         if (flag) {
-            ChatMessageHelper.sendMessage(commandSender, "§aMessage sent to all players!");
+            ChatMessageHelper.sendMessage(commandSender, "§aMessage sent to all players!", true);
         } else {
-            ChatMessageHelper.sendMessage(commandSender, "§cMessage failed to send to all players! One or more of the usernames were incorrect or couldn't be found.");
+            ChatMessageHelper.sendMessage(commandSender, "§cMessage failed to send to all players! One or more of the usernames were incorrect or couldn't be found.", true);
         }
 
         Bukkit.dispatchCommand(console, "bce -1 " + commandSender.getName());

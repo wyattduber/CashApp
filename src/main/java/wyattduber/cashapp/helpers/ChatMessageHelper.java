@@ -3,6 +3,7 @@ package wyattduber.cashapp.helpers;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import wyattduber.cashapp.CashApp;
@@ -18,9 +19,9 @@ public class ChatMessageHelper {
     private static final Pattern HEX_PATTERN = Pattern.compile("\\{#([a-fA-F0-9]{6})\\}");
     private static final Pattern GRADIENT_PATTERN = Pattern.compile("\\{#([a-fA-F0-9]{6})>}(.+?)\\{#([a-fA-F0-9]{6})<}");
 
-    public static void sendMessage(CommandSender sender, String message) {
+    public static void sendMessage(CommandSender sender, String message, boolean includePluginPrefix) {
         if (sender instanceof Player) {
-            sender.sendMessage("§f[§aCash§bApp§f] " + replaceColors(message));
+            sender.sendMessage((includePluginPrefix ? "§f[§aCash§bApp§f] " : "") + replaceColors(message));
         } else {
             ca.log(message);
         }
@@ -32,39 +33,30 @@ public class ChatMessageHelper {
      * @param text the text to replace the color codes in
      * @return TextComponent with color codes and hex colors replaced
      */
-    public static TextComponent replaceColors(String text) {
+    public static String replaceColors(String text) {
         TextComponent.Builder componentBuilder = Component.text();
 
         // Replace '&' codes first
-        char[] chrarray = text.toCharArray();
-        for (int index = 0; index < chrarray.length; index++) {
-            char chr = chrarray[index];
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
 
-            // If it's not an '&', just add the character to the component
-            if (chr != '&') {
-                componentBuilder.append(Component.text(Character.toString(chr)));
-                continue;
-            }
+            // Check if the character is a Minecraft color code '&'
+            if (c == '&' && i + 1 < text.length()) {
+                char colorCode = text.charAt(i + 1);
 
-            // If we are at the end of the array, break
-            if ((index + 1) == chrarray.length) {
-                break;
-            }
-
-            // Get the next char
-            char forward = chrarray[index + 1];
-
-            // Check if it's a valid Minecraft color code
-            if ((forward >= '0' && forward <= '9') || (forward >= 'a' && forward <= 'f') || (forward >= 'k' && forward <= 'r')) {
-                // Replace '&' with '§' and append to component
-                componentBuilder.append(Component.text("§" + forward));
-                index++;  // Skip next character since it's already processed
+                // Convert Minecraft color codes into TextColor or styles
+                if (isMinecraftColorCode(colorCode)) {
+                    TextColor color = minecraftColorToTextColor(colorCode);
+                    componentBuilder.append(Component.text("", TextColor.color(color)));
+                    i++; // Skip the next character as it's a part of the color code
+                } else {
+                    componentBuilder.append(Component.text("&")); // Invalid color code, just append '&'
+                }
             } else {
-                componentBuilder.append(Component.text("&"));  // Keep the '&' if not a valid code
+                componentBuilder.append(Component.text(String.valueOf(c)));
             }
         }
 
-        // Convert remaining string to handle hex and gradient replacements
         String remainingText = componentBuilder.build().content();
 
         // Handle gradients
@@ -75,7 +67,6 @@ public class ChatMessageHelper {
             String endColor = gradientMatcher.group(3);
 
             TextComponent gradientText = applyGradient(startColor, message, endColor);
-            remainingText = remainingText.replace(gradientMatcher.group(0), gradientText.content());
             componentBuilder.append(gradientText);
         }
 
@@ -84,11 +75,10 @@ public class ChatMessageHelper {
         while (hexMatcher.find()) {
             String hexCode = hexMatcher.group(1);
             TextComponent hexText = Component.text("").color(TextColor.fromHexString("#" + hexCode));
-            remainingText = remainingText.replace(hexMatcher.group(0), hexText.content());
             componentBuilder.append(hexText);
         }
 
-        return componentBuilder.build();
+        return PlainTextComponentSerializer.plainText().serialize(componentBuilder.build());
     }
 
     /**
@@ -100,11 +90,89 @@ public class ChatMessageHelper {
      * @return a TextComponent with the gradient applied
      */
     private static TextComponent applyGradient(String startHex, String message, String endHex) {
-        // Implement gradient logic using net.kyori.adventure.text.Component
-        // (Can implement linear interpolation for colors)
+        // Convert hex strings to RGB values
+        int[] startRGB = hexToRgb(startHex);
+        int[] endRGB = hexToRgb(endHex);
 
-        // For now, return the text with the start color as a placeholder
-        return Component.text(message).color(TextColor.fromHexString("#" + startHex));
+        // Create a builder for the gradient component
+        TextComponent.Builder gradientBuilder = Component.text();
+
+        // Length of the message
+        int length = message.length();
+
+        // Loop over each character in the message
+        for (int i = 0; i < length; i++) {
+            // Calculate the interpolation factor (0.0 at the start, 1.0 at the end)
+            float ratio = (float) i / (length - 1);
+
+            // Interpolate the RGB values
+            int red = (int) (startRGB[0] + ratio * (endRGB[0] - startRGB[0]));
+            int green = (int) (startRGB[1] + ratio * (endRGB[1] - startRGB[1]));
+            int blue = (int) (startRGB[2] + ratio * (endRGB[2] - startRGB[2]));
+
+            // Convert the interpolated RGB values back to a hex string
+            String interpolatedHex = String.format("#%02X%02X%02X", red, green, blue);
+
+            // Append the current character with the interpolated color to the component
+            gradientBuilder.append(
+                    Component.text(String.valueOf(message.charAt(i)))
+                            .color(TextColor.fromHexString(interpolatedHex))
+            );
+        }
+
+        // Return the final gradient component
+        return gradientBuilder.build();
     }
 
+    /**
+     * Helper method to convert a hex color code to an RGB array.
+     *
+     * @param hex the hex color code (without the #)
+     * @return an array of three integers [red, green, blue]
+     */
+    private static int[] hexToRgb(String hex) {
+        return new int[]{
+                Integer.valueOf(hex.substring(0, 2), 16), // Red
+                Integer.valueOf(hex.substring(2, 4), 16), // Green
+                Integer.valueOf(hex.substring(4, 6), 16)  // Blue
+        };
+    }
+
+    /**
+     * Check if the given char is a valid Minecraft color code.
+     *
+     * @param colorCode the color code character
+     * @return true if valid, false otherwise
+     */
+    private static boolean isMinecraftColorCode(char colorCode) {
+        return (colorCode >= '0' && colorCode <= '9') || (colorCode >= 'a' && colorCode <= 'f') || (colorCode >= 'k' && colorCode <= 'r');
+    }
+
+    /**
+     * Convert a Minecraft color code char to a TextColor.
+     *
+     * @param colorCode the Minecraft color code
+     * @return the corresponding TextColor
+     */
+    private static TextColor minecraftColorToTextColor(char colorCode) {
+        return switch (colorCode) {
+            case '0' -> TextColor.color(0x000000); // Black
+            case '1' -> TextColor.color(0x0000AA); // Dark Blue
+            case '2' -> TextColor.color(0x00AA00); // Dark Green
+            case '3' -> TextColor.color(0x00AAAA); // Dark Aqua
+            case '4' -> TextColor.color(0xAA0000); // Dark Red
+            case '5' -> TextColor.color(0xAA00AA); // Dark Purple
+            case '6' -> TextColor.color(0xFFAA00); // Gold
+            case '7' -> TextColor.color(0xAAAAAA); // Gray
+            case '8' -> TextColor.color(0x555555); // Dark Gray
+            case '9' -> TextColor.color(0x5555FF); // Blue
+            case 'a' -> TextColor.color(0x55FF55); // Green
+            case 'b' -> TextColor.color(0x55FFFF); // Aqua
+            case 'c' -> TextColor.color(0xFF5555); // Red
+            case 'd' -> TextColor.color(0xFF55FF); // Light Purple
+            case 'e' -> TextColor.color(0xFFFF55); // Yellow
+            case 'f' -> TextColor.color(0xFFFFFF); // White
+            default -> TextColor.color(0xFFFFFF); // Default to white
+        };
+    }
 }

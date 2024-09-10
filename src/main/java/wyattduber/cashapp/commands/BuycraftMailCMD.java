@@ -35,7 +35,7 @@ public class BuycraftMailCMD implements CommandExecutor {
 
         //Check to make sure that only console is executing the command
         if (!(sender instanceof ConsoleCommandSender)) {
-            ChatMessageHelper.sendMessage(sender, "§cCommand must be executed from console!");
+            ChatMessageHelper.sendMessage(sender, "§cCommand must be executed from console!", true);
             return true;
         }
 
@@ -43,7 +43,7 @@ public class BuycraftMailCMD implements CommandExecutor {
         try {
             Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            ChatMessageHelper.sendMessage(sender, "§cFirst argument must be an integer!");
+            ChatMessageHelper.sendMessage(sender, "§cFirst argument must be an integer!", true);
             return true;
         }
 
@@ -97,7 +97,7 @@ public class BuycraftMailCMD implements CommandExecutor {
             }
         }
 
-        ChatMessageHelper.sendMessage(sender, "Buycraft Event " + BuycraftMailType.fromInt(Integer.parseInt(args[0])) + " Sent!");
+        ChatMessageHelper.sendMessage(sender, "Buycraft Event " + BuycraftMailType.fromInt(Integer.parseInt(args[0])) + " Sent!", true);
         return true;
     }
 

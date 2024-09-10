@@ -27,7 +27,7 @@ public class DoNotDisturbListener implements Listener {
         if (db.getDoNotDisturbStatus(event.getPlayer())) {
             event.setCancelled(true);
             ca.log("Player " + event.getPlayer().getName() + " attempted to send a message while having Do Not Disturb enabled. Message: " + PlainTextComponentSerializer.plainText().serialize(event.message()));
-            ChatMessageHelper.sendMessage(event.getPlayer(), "&cYou have Do Not Disturb enabled. You cannot send messages. Do &a/dnd off &cto disable.");
+            ChatMessageHelper.sendMessage(event.getPlayer(), "&cYou have Do Not Disturb enabled. You cannot send messages. Do &a/dnd off &cto disable.", true);
             return;
         }
 

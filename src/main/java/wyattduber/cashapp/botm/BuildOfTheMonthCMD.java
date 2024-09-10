@@ -33,12 +33,12 @@ public class BuildOfTheMonthCMD implements TabExecutor {
 
         // Check if the server is connected to Discord
         if (!ca.discordConnected) {
-            ChatMessageHelper.sendMessage(sender, "&cThe server is not connected to Discord! Contact an admin.");
+            ChatMessageHelper.sendMessage(sender, "&cThe server is not connected to Discord! Contact an admin.", true);
             return true;
         }
 
         if (ca.js.botmChannel == null) {
-            ChatMessageHelper.sendMessage(sender, "&cThe build of the month channel is not properly connected! Contact an admin.");
+            ChatMessageHelper.sendMessage(sender, "&cThe build of the month channel is not properly connected! Contact an admin.", true);
             return true;
         }
 
@@ -60,7 +60,7 @@ public class BuildOfTheMonthCMD implements TabExecutor {
 
             for (String bword : ca.botmBannedWords) {
                 if (message.toString().contains(bword) || username.contains(bword) || world.contains(bword) || x.contains(bword) || y.contains(bword) || z.contains(bword)) {
-                    ChatMessageHelper.sendMessage(sender, "§cKeep your message kid-friendly!");
+                    ChatMessageHelper.sendMessage(sender, "§cKeep your message kid-friendly!", true);
                     return true;
                 }
             }
@@ -71,14 +71,14 @@ public class BuildOfTheMonthCMD implements TabExecutor {
         // Check if player is who they say they are when sending the command
         if (sender instanceof Player player) {
             if (!player.getName().equals(username)) {
-                ChatMessageHelper.sendMessage(player, "§cUsernames do not match!");
+                ChatMessageHelper.sendMessage(player, "§cUsernames do not match!", true);
                 return true;
             }
         }
 
         // If all the above conditions check out, then send the message to the javacord handler
         js.sendBOTMMessage(username, world, x, y, z, message.toString());
-        ChatMessageHelper.sendMessage(sender, "BOTM Message Sent!");
+        ChatMessageHelper.sendMessage(sender, "BOTM Message Sent!", true);
 
         return true;
     }

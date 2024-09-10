@@ -25,7 +25,7 @@ public class BaseCMD implements TabExecutor {
             switch (args[0].toLowerCase()) { // reload command
                 case "reload" -> {
                     ca.reload();
-                    ChatMessageHelper.sendMessage(sender, "Configuration Reloaded!");
+                    ChatMessageHelper.sendMessage(sender, "Configuration Reloaded!", true);
                     return true;
                 }
                 case "commands","help" -> {
@@ -44,7 +44,7 @@ public class BaseCMD implements TabExecutor {
                             msg.append(" [player]");
                     }
 
-                    ChatMessageHelper.sendMessage(sender, msg.toString());
+                    ChatMessageHelper.sendMessage(sender, msg.toString(), true);
                 }
             }
         }

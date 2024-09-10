@@ -31,7 +31,7 @@ public class GuideChatCMD implements CommandExecutor {
             CCSender.sendMessage(messageFromServer);
             for (Player player : ca.getServer().getOnlinePlayers()) {
                 if (player.hasPermission("ca.guidechat")) {
-                    ChatMessageHelper.sendMessage(player, messageFromServer);
+                    ChatMessageHelper.sendMessage(player, messageFromServer, false);
                 }
             }
         } else if (sender instanceof Player player) {
@@ -40,7 +40,7 @@ public class GuideChatCMD implements CommandExecutor {
             ca.getServer().getConsoleSender().sendMessage(messageFromPlayer);
             for (Player recipient : ca.getServer().getOnlinePlayers()) {
                 if (recipient.hasPermission("ca.guidechat")) {
-                    ChatMessageHelper.sendMessage(recipient, messageFromPlayer);
+                    ChatMessageHelper.sendMessage(recipient, messageFromPlayer, false);
                 }
             }
         }

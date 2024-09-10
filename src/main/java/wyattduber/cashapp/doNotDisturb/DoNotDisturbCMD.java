@@ -38,7 +38,7 @@ public class DoNotDisturbCMD implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!sender.hasPermission("ca.dnd")) {
-            ChatMessageHelper.sendMessage(sender, "&cYou don't have permission to use this command!");
+            ChatMessageHelper.sendMessage(sender, "&cYou don't have permission to use this command!", true);
             return true;
         }
 
@@ -48,25 +48,25 @@ public class DoNotDisturbCMD implements TabExecutor {
             if (!args[0].equalsIgnoreCase("on") && !args[0].equalsIgnoreCase("off") && !args[0].equalsIgnoreCase("status")) return false;
 
             if (!(sender instanceof Player player)) {
-                ChatMessageHelper.sendMessage(sender, "&cThis command must be run as a player, or you must target a player!");
+                ChatMessageHelper.sendMessage(sender, "&cThis command must be run as a player, or you must target a player!", true);
             }
             else {
                 boolean statusRequested = args[0].equalsIgnoreCase("status");
 
                 if (statusRequested) {
                     var currentStatus = db.getDoNotDisturbStatus(player);
-                    ChatMessageHelper.sendMessage(sender, "Do Not Disturb Status currently " + (currentStatus ? "&aEnabled" : "&cDisabled" + "&f!"));
+                    ChatMessageHelper.sendMessage(sender, "Do Not Disturb Status currently " + (currentStatus ? "&aEnabled" : "&cDisabled" + "&f!"), true);
                 } else {
                     boolean status = args[0].equalsIgnoreCase("on");
 
                     db.setDoNotDisturbStatus(player, status);
-                    ChatMessageHelper.sendMessage(player, "Do Not Disturb " + (status ? "Enabled!" : "Disabled!"));
+                    ChatMessageHelper.sendMessage(player, "Do Not Disturb " + (status ? "Enabled!" : "Disabled!"), true);
                 }
             }
         }
         else {
             if (!sender.hasPermission("ca.dnd.others") && !(sender instanceof ConsoleCommandSender)) {
-                ChatMessageHelper.sendMessage(sender, "&cYou don't have permission to run this command on other players!");
+                ChatMessageHelper.sendMessage(sender, "&cYou don't have permission to run this command on other players!", true);
             }
             if (!args[0].equalsIgnoreCase("on") && !args[0].equalsIgnoreCase("off") && !args[0].equalsIgnoreCase("status")) return false;
 
@@ -75,19 +75,19 @@ public class DoNotDisturbCMD implements TabExecutor {
 
             Player player = getPlayerIfExists(playerName);
             if (player == null) {
-                ChatMessageHelper.sendMessage(sender, "&cPlayer " + playerName + "cannot be found!");
+                ChatMessageHelper.sendMessage(sender, "&cPlayer " + playerName + "cannot be found!", true);
                 return true;
             }
 
             if (statusRequested) {
                 var currentStatus = db.getDoNotDisturbStatus(player);
-                ChatMessageHelper.sendMessage(sender, "Do Not Disturb Status currently " + (currentStatus ? "&aEnabled" : "&cDisabled" + "&f!"));
+                ChatMessageHelper.sendMessage(sender, "Do Not Disturb Status currently " + (currentStatus ? "&aEnabled" : "&cDisabled" + "&f!"), true);
             }
             else {
                 boolean status = args[0].equalsIgnoreCase("on");
 
                 db.setDoNotDisturbStatus(player, status);
-                ChatMessageHelper.sendMessage(sender, "Do Not Disturb " + (status ? "Enabled!" : "Disabled!") + "for " + playerName);
+                ChatMessageHelper.sendMessage(sender, "Do Not Disturb " + (status ? "Enabled!" : "Disabled!") + "for " + playerName, true);
             }
         }
 
