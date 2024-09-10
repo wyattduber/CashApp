@@ -2,7 +2,6 @@ package wyattduber.cashapp.chats;
 
 import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Containers.CMIUser;
-import net.Zrips.CMILib.Colors.CMIChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -41,7 +40,7 @@ public class AdminChatCMD implements CommandExecutor {
             ChatMessageHelper.sendMessage(ca.getServer().getConsoleSender(), messageFromPlayer, false);
             for (Player recipient : ca.getServer().getOnlinePlayers()) {
                 if (recipient.hasPermission("ca.adminchat")) {
-                    ChatMessageHelper.sendMessage(recipient, CMIChatColor.translate(messageFromPlayer), false);
+                    ChatMessageHelper.sendMessage(recipient, messageFromPlayer, false);
                 }
             }
         }
