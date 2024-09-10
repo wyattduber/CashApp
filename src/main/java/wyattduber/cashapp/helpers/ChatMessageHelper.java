@@ -20,10 +20,14 @@ public class ChatMessageHelper {
     private static final Pattern GRADIENT_PATTERN = Pattern.compile("\\{#([a-fA-F0-9]{6})>}(.+?)\\{#([a-fA-F0-9]{6})<}");
 
     public static void sendMessage(CommandSender sender, String message, boolean includePluginPrefix) {
+        // Check if the sender is a player or the console
         if (sender instanceof Player) {
+            // Send the full message to players, including hex colors
             sender.sendMessage((includePluginPrefix ? "§f[§aCash§bApp§f] " : "") + replaceColors(message));
         } else {
-            ca.log(message);
+            // For console, simplify the color codes
+            String consoleMessage = replaceColors(message);
+            ca.log(consoleMessage.replaceAll("§[0-9a-fk-orxX]|§x(§[0-9a-fA-F]){6}", ""));
         }
     }
 
@@ -34,33 +38,14 @@ public class ChatMessageHelper {
      * @return TextComponent with color codes and hex colors replaced
      */
     public static String replaceColors(String text) {
+        // First replace '&' codes into '§' codes for standard Minecraft colors
+        text = text.replace('&', '§');
+
+        // Create a TextComponent builder
         TextComponent.Builder componentBuilder = Component.text();
 
-        // Replace '&' codes first
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-
-            // Check if the character is a Minecraft color code '&'
-            if (c == '&' && i + 1 < text.length()) {
-                char colorCode = text.charAt(i + 1);
-
-                // Convert Minecraft color codes into TextColor or styles
-                if (isMinecraftColorCode(colorCode)) {
-                    TextColor color = minecraftColorToTextColor(colorCode);
-                    componentBuilder.append(Component.text("", TextColor.color(color)));
-                    i++; // Skip the next character as it's a part of the color code
-                } else {
-                    componentBuilder.append(Component.text("&")); // Invalid color code, just append '&'
-                }
-            } else {
-                componentBuilder.append(Component.text(String.valueOf(c)));
-            }
-        }
-
-        String remainingText = componentBuilder.build().content();
-
-        // Handle gradients
-        Matcher gradientMatcher = GRADIENT_PATTERN.matcher(remainingText);
+        // Handle gradients first
+        Matcher gradientMatcher = GRADIENT_PATTERN.matcher(text);
         while (gradientMatcher.find()) {
             String startColor = gradientMatcher.group(1);
             String message = gradientMatcher.group(2);
@@ -68,16 +53,24 @@ public class ChatMessageHelper {
 
             TextComponent gradientText = applyGradient(startColor, message, endColor);
             componentBuilder.append(gradientText);
+
+            // Remove this gradient section from the text to avoid further processing
+            text = text.replace(gradientMatcher.group(0), "");
         }
 
-        // Handle hex colors
-        Matcher hexMatcher = HEX_PATTERN.matcher(remainingText);
+        // Handle hex colors after gradients
+        Matcher hexMatcher = HEX_PATTERN.matcher(text);
         while (hexMatcher.find()) {
             String hexCode = hexMatcher.group(1);
-            TextComponent hexText = Component.text("").color(TextColor.fromHexString("#" + hexCode));
+            String remainingText = hexMatcher.replaceAll(""); // Remove matched hex code
+            TextComponent hexText = Component.text(remainingText).color(TextColor.fromHexString("#" + hexCode));
             componentBuilder.append(hexText);
         }
 
+        // Append any remaining text (which should only have Minecraft color codes at this point)
+        componentBuilder.append(Component.text(text));
+
+        // Return the final serialized message
         return PlainTextComponentSerializer.plainText().serialize(componentBuilder.build());
     }
 

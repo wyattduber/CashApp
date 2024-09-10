@@ -28,7 +28,7 @@ public class GuideChatCMD implements CommandExecutor {
         String message = String.join(" ", args);
         if (sender instanceof ConsoleCommandSender CCSender) {
             String messageFromServer = "§5§lGuideChat §6Server§f: " + message;
-            CCSender.sendMessage(messageFromServer);
+            ChatMessageHelper.sendMessage(CCSender, messageFromServer, false);
             for (Player player : ca.getServer().getOnlinePlayers()) {
                 if (player.hasPermission("ca.guidechat")) {
                     ChatMessageHelper.sendMessage(player, messageFromServer, false);
@@ -37,7 +37,7 @@ public class GuideChatCMD implements CommandExecutor {
         } else if (sender instanceof Player player) {
             CMIUser user = CMIUser.getUser(player);
             String messageFromPlayer = "§5§lGuideChat§r" + getPrefix(user) + user.getDisplayName() + "§f: " + message;
-            ca.getServer().getConsoleSender().sendMessage(messageFromPlayer);
+            ChatMessageHelper.sendMessage(ca.getServer().getConsoleSender(), messageFromPlayer, false);
             for (Player recipient : ca.getServer().getOnlinePlayers()) {
                 if (recipient.hasPermission("ca.guidechat")) {
                     ChatMessageHelper.sendMessage(recipient, messageFromPlayer, false);
