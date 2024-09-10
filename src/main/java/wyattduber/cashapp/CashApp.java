@@ -235,7 +235,7 @@ public class CashApp extends JavaPlugin {
         }
 
         try {
-            mallMsg = String.valueOf(ChatMessageHelper.replaceColors(getConfigString("mall-remind-msg")));
+            mallMsg = String.valueOf(getConfigString("mall-remind-msg"));
             log("Mall Reminder Message Loaded!");
         } catch (Exception e) {
             warn("Invalid Mall Reminder Message! Please set the mall-remind-msg in the config.yml!");
