@@ -1,7 +1,7 @@
 package wyattduber.cashapp.chats;
 
 import com.Zrips.CMI.Containers.CMIUser;
-import net.kyori.adventure.text.Component;
+import net.Zrips.CMILib.Colors.CMIChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,7 +40,7 @@ public class GuideChatCMD implements CommandExecutor {
             ChatMessageHelper.sendMessage(ca.getServer().getConsoleSender(), messageFromPlayer, false);
             for (Player recipient : ca.getServer().getOnlinePlayers()) {
                 if (recipient.hasPermission("ca.guidechat")) {
-                    ChatMessageHelper.sendMessage(recipient, messageFromPlayer, false);
+                    ChatMessageHelper.sendMessage(recipient, CMIChatColor.translate(messageFromPlayer), false);
                 }
             }
         }
