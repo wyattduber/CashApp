@@ -1,6 +1,5 @@
 package wyattduber.cashapp.chats;
 
-import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Containers.CMIUser;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -49,7 +48,6 @@ public class AdminChatCMD implements CommandExecutor {
 
     private String getPrefix(CMIUser user) {
         var prefix = user.getPrefix();
-        var manager = CMI.getInstance().getChatFormatManager();
         return prefix.isEmpty() ? "" : prefix + " ";
     }
 }
