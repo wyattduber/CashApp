@@ -21,7 +21,6 @@ import wyattduber.cashapp.anarchyItems.customitems.ItemManager;
 import wyattduber.cashapp.connectors.Database;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbCMD;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbListener;
-import wyattduber.cashapp.helpers.ChatMessageHelper;
 import wyattduber.cashapp.helpers.lib.LibrarySetup;
 import wyattduber.cashapp.connectors.Javacord;
 import wyattduber.cashapp.discordTickets.TicketHelper;
