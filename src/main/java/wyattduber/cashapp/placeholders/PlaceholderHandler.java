@@ -3,17 +3,16 @@ package wyattduber.cashapp.placeholders;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
-
-import java.util.ArrayList;
-import java.util.UUID;
+import wyattduber.cashapp.connectors.Database;
+import wyattduber.cashapp.helpers.plugin.GriefPreventionHelper;
 
 public class PlaceholderHandler extends PlaceholderExpansion {
 
     private final CashApp ca = CashApp.getPlugin();
+    private final Database db = ca.db;
 
     public PlaceholderHandler() {
         super();
@@ -69,8 +68,10 @@ public class PlaceholderHandler extends PlaceholderExpansion {
      * GriefPrevention Placeholder Handler
      * @param player The player requesting the placeholder
      * @param args The arguments provided with the placeholder
+     * @return The value of the placeholder
      * Placeholders:
-     * %ca_griefprevention_stallowner%
+     * %ca_griefprevention_stallowner% - The owner of the stall
+     * %ca_griefprevention_stalldescription_[stall]% - The custom description of the stall
      */
 
     private String griefPreventionPlaceholders(Player player, String[] args) {
@@ -84,13 +85,29 @@ public class PlaceholderHandler extends PlaceholderExpansion {
         // Parse the arguments
         switch (args[1]) {
             case "stallowner" -> {
-                var builders = new ArrayList<String>();
-                playerClaim.getPermissions(builders, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-                return Bukkit.getOfflinePlayer(UUID.fromString(builders.getFirst())).getName();
+                return GriefPreventionHelper.getClaimOwnerName(playerClaim.getOwnerID());
+            }
+            case "stalldescription" -> {
+                return retrieveStallDescription(player, args[2]);
             }
             default -> {
                 return "";
             }
         }
+    }
+
+    private String retrieveStallDescription(Player player, String stall) {
+        // Check if player is null
+        if (player == null) return "";
+
+        // Check if player is in a claim
+        Claim playerClaim = GriefPreventionHelper.getPlayerClaim(player.getUniqueId());
+        if (playerClaim == null) return "";
+
+        // Check if stall is valid
+        if (!ca.stalls.contains(stall)) return "";
+
+        // Retrieve the stall description
+        return "Stall Description: " + db.getStallDescription(stall);
     }
 }

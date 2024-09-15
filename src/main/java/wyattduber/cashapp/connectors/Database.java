@@ -39,6 +39,13 @@ public class Database {
                         "minecraftid TEXT NOT NULL, " +
                         "mcusername TEXT NOT NULL, " +
                         "doNotDisturbState BIT NOT NULL)");
+
+        updateTableStructure( "stallDescriptions",
+                "CREATE TABLE stallDescriptions (" +
+                        "stallID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "stallName TEXT NOT NULL, " +
+                        "stallDescription TEXT NOT NULL, " +
+                        "stallOwnerMinecraftID TEXT NOT NULL, ");
     }
 
     public String getDbPath() { return dbPath; }
@@ -191,6 +198,63 @@ public class Database {
         } catch (SQLException e) {
             ca.error("Error updating ticket admin only status for ticket " + channelID + "!");
             ca.error("Error Message: " + e.getMessage());
+        }
+    }
+
+    /* Stall Description Methods */
+
+    public void setStallDescription(String stallName, String stallDescription, UUID stallOwnerMinecraftID) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO stallDescriptions(stallName,stallDescription,stallOwnerMinecraftID) VALUES (?,?,?)");
+            stmt.setString(1, stallName);
+            stmt.setString(2, stallDescription);
+            stmt.setString(3, stallOwnerMinecraftID.toString());
+            stmt.execute();
+        } catch (SQLException e) {
+            ca.error("Error adding a stall description record for user " + getName(stallOwnerMinecraftID) + "!");
+            ca.error("Error Message: " + e.getMessage());
+        }
+    }
+
+    public String getStallDescription(String stallName) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT stallDescription FROM stallDescriptions WHERE stallName=?");
+            stmt.setString(1, stallName);
+            ResultSet rs = stmt.executeQuery();
+            return rs.getString("stallDescription");
+        } catch (SQLException e) {
+            ca.error("Error fetching stall description for stall " + stallName + "!");
+            ca.error("Error Message: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public boolean updateStallDescription(String stallName, String newDescription, UUID stallOwnerMinecraftID) {
+        try {
+            if (!isStallInDatabase(stallName)) {
+                setStallDescription(stallName, newDescription, stallOwnerMinecraftID);
+            } else {
+                PreparedStatement stmt = dbcon.prepareStatement("UPDATE stallDescriptions SET stallDescription=? WHERE stallName=?");
+                stmt.setString(1, newDescription);
+                stmt.setString(2, stallName);
+                stmt.execute();
+            }
+            return true;
+        } catch (SQLException e) {
+            ca.error("Error updating stall description for stall " + stallName + "!");
+            ca.error("Error Message: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean isStallInDatabase(String stallName) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT stallName FROM stallDescriptions WHERE stallName=?");
+            stmt.setString(1, stallName);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            return false;
         }
     }
 

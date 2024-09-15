@@ -345,12 +345,63 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("gc")).setExecutor(new GuideChatCMD());
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
             Objects.requireNonNull(this.getCommand("getanarchyitem")).setExecutor(new AnarchyItemsCMD());
+            Objects.requireNonNull(this.getCommand("setstalldesc")).setExecutor(new SetStallDescCMD());
 
             log("Commands Registered Successfully!");
         } catch (NullPointerException e) {
             error(e.getMessage());
         }
     }
+
+    public final List<String> stalls = Arrays.asList
+    (
+        "North-1",
+        "North-2",
+        "North-3",
+        "North-Big",
+        "North-4",
+        "North-5",
+        "North-6",
+        "East-1",
+        "East-2",
+        "East-3",
+        "East-4",
+        "South-1",
+        "South-2",
+        "South-3",
+        "South-Big",
+        "South-4",
+        "South-5",
+        "South-6",
+        "West-1",
+        "West-2",
+        "West-3",
+        "West-4",
+        "Small-1",
+        "Small-2",
+        "Small-3",
+        "Small-4",
+        "Small-5",
+        "Small-6",
+        "Small-7",
+        "Small-8",
+        "Small-9",
+        "Small-10",
+        "Small-11",
+        "Small-12",
+        "Small-13",
+        "Small-14",
+        "Small-15",
+        "Small-16",
+        "Small-17",
+        "Small-18",
+        "Small-19",
+        "Small-20",
+        "Small-21",
+        "Small-22",
+        "Small-23",
+        "Small-24"
+    );
 
     private String getConfigString(String entryName) {
         return config.getString(entryName);

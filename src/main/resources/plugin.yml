@@ -4,7 +4,7 @@ main: wyattduber.cashapp.CashApp
 api-version: 1.21
 author: wyattduber
 website: https://www.github.com/wyattduber/CashApp
-depend: [CMI, CMILib, GriefPrevention, PlaceholderAPI]
+depend: [CMI, CMILib, GriefPrevention, PlaceholderAPI, WorldGuard]
 
 commands:
   am:
@@ -47,6 +47,11 @@ commands:
     usage: /getAnarchyItem <item/trophy> [trophyType] [player]
     permission: ca.getanarchyitem
     permission-message: §cYou do not have permission!
+  setstalldesc:
+    description: Set the description of a stall
+    usage: /setStallDesc <stallID> <description>
+    permission: ca.setstalldesc
+    permission-message: §cYou do not have permission!
 
 permissions:
   ca.*:
@@ -61,6 +66,7 @@ permissions:
       ca.guidechat: true
       ca.rmd: true
       ca.getAnarchyItem: true
+      ca.setstalldesc: true
   ca.adminchat:
     description: Allows the use of the /am command
     default: op
@@ -87,4 +93,7 @@ permissions:
     default: op
   ca.getanarchyitem:
     description: Allows the use of the /getAnarchyItem command
+    default: op
+  ca.setstalldesc:
+    description: Allows the use of the /setStallDesc command
     default: op
