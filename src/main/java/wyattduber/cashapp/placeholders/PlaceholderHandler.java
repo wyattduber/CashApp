@@ -81,16 +81,16 @@ public class PlaceholderHandler extends PlaceholderExpansion {
         if (player == null) return "";
 
         // Check if player is in a claim
-        Claim playerClaim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), true, null);
+        Claim playerClaim = GriefPreventionHelper.getPlayerClaim(player.getUniqueId());
         if (playerClaim == null) return "";
 
         // Parse the arguments
         switch (args[1]) {
             case "stallowner" -> {
-                return GriefPreventionHelper.getClaimOwnerName(playerClaim.getOwnerID());
+                return GriefPreventionHelper.getClaimOwnerName(playerClaim);
             }
             case "stalldescription" -> {
-                return retrieveStallDescription(player, args[2]);
+                return retrieveStallDescription(args[2]);
             }
             default -> {
                 return "";
@@ -98,14 +98,7 @@ public class PlaceholderHandler extends PlaceholderExpansion {
         }
     }
 
-    private String retrieveStallDescription(Player player, String stall) {
-        // Check if player is null
-        if (player == null) return "";
-
-        // Check if player is in a claim
-        Claim playerClaim = GriefPreventionHelper.getPlayerClaim(player.getUniqueId());
-        if (playerClaim == null) return "";
-
+    private String retrieveStallDescription(String stall) {
         // Check if the stall is valid
         if (!ca.stalls.contains(stall)) return "";
 

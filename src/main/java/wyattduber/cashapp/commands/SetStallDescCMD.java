@@ -45,7 +45,7 @@ public class SetStallDescCMD implements TabExecutor {
                 ChatMessageHelper.sendMessage(player, "&cYou must be standing in the mall to use this command!", true);
                 return true;
             }
-            String builderName = GriefPreventionHelper.getClaimOwnerName(playerClaim.getOwnerID());
+            String builderName = GriefPreventionHelper.getClaimOwnerName(playerClaim);
             if (!player.getName().equalsIgnoreCase(builderName)) {
                 ChatMessageHelper.sendMessage(player, "&cYou must be the owner of this stall to set the description!", true);
                 return true;

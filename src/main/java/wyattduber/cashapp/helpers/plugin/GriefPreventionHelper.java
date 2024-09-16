@@ -14,10 +14,9 @@ public class GriefPreventionHelper {
         return GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), true, null);
     }
 
-    public static String getClaimOwnerName(UUID claimOwner) {
-        var playerClaim = getPlayerClaim(claimOwner);
+    public static String getClaimOwnerName(Claim claim) {
         var builders = new ArrayList<String>();
-        playerClaim.getPermissions(builders, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        claim.getPermissions(builders, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         return Bukkit.getOfflinePlayer(UUID.fromString(builders.getFirst())).getName();
     }
 
