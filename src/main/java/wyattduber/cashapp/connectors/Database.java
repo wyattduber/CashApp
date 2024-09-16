@@ -45,7 +45,7 @@ public class Database {
                         "stallID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "stallName TEXT NOT NULL, " +
                         "stallDescription TEXT NOT NULL, " +
-                        "stallOwnerMinecraftID TEXT NOT NULL, ");
+                        "stallOwnerMinecraftID TEXT NOT NULL)");
     }
 
     public String getDbPath() { return dbPath; }

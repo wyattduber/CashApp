@@ -9,6 +9,8 @@ import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.connectors.Database;
 import wyattduber.cashapp.helpers.plugin.GriefPreventionHelper;
 
+import java.util.Arrays;
+
 public class PlaceholderHandler extends PlaceholderExpansion {
 
     private final CashApp ca = CashApp.getPlugin();
@@ -104,10 +106,12 @@ public class PlaceholderHandler extends PlaceholderExpansion {
         Claim playerClaim = GriefPreventionHelper.getPlayerClaim(player.getUniqueId());
         if (playerClaim == null) return "";
 
-        // Check if stall is valid
+        // Check if the stall is valid
         if (!ca.stalls.contains(stall)) return "";
 
         // Retrieve the stall description
+        var desc = db.getStallDescription(stall);
+        if (desc.equals("null")) return "";
         return "Stall Description: " + db.getStallDescription(stall);
     }
 }
