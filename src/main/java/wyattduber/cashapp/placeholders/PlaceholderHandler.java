@@ -105,6 +105,6 @@ public class PlaceholderHandler extends PlaceholderExpansion {
         // Retrieve the stall description
         var desc = db.getStallDescription(stall);
         if (desc.equals("null")) return "";
-        return "Stall Description: " + db.getStallDescription(stall);
+        return db.getStallDescription(stall);
     }
 }
