@@ -26,7 +26,7 @@ public class Database {
                 "CREATE TABLE tickets (" +
                         "ticketID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "channelID TEXT NOT NULL, " +
-                        "ownerMinecraftID TEXT NOT NULL, " +
+                        "ownerMinecraftID TEXT NULL, " +
                         "ticketAdminOnly BIT NOT NULL, " +
                         "ticketOpen BIT NOT NULL, " +
                         "ticketClosed BIT NOT NULL, " +

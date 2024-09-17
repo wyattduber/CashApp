@@ -25,6 +25,7 @@ public class DiscordTicketCMD implements TabExecutor {
         db = ca.db;
     }
 
+    // Usage: /discordTicket <adminonly - [true/false]> [discordUsername] [subject]
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
 
@@ -33,9 +34,14 @@ public class DiscordTicketCMD implements TabExecutor {
             return true;
         } else {
             if (args.length <= 1) return false;
-
             boolean isAdminOnly = args[0].equalsIgnoreCase("true");
-            String desc = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+
+            if (args.length == 2) {
+
+            }
+
+
+            String desc = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
 
             String ticketName = new Random().nextInt(1000) + "-" + player.getName();
             //TicketHelper.createTicket(ticketName, desc, );
