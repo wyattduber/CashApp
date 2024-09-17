@@ -27,6 +27,11 @@ commands:
     usage: /bce <event id> <playername>
     permission: ca.bce
     permission-message: §cYou do not have permission!
+  discordTicket:
+    description: Command to open/respond to a ticket in Discord
+    usage: /discordTicket <adminonly - [true/false]> <discordUsername> <subject>
+    permission: ca.discordTicket
+    permission-message: §cYou do not have permission!
   dnd:
     description: Command to toggle Do Not Disturb Status for the player!
     usage: /dnd <on/off> [player]
@@ -62,6 +67,7 @@ permissions:
       ca.update: true
       ca.botm: true
       ca.bce: true
+      ca.discordTicket: true
       ca.dnd: true
       ca.guidechat: true
       ca.rmd: true
@@ -78,6 +84,9 @@ permissions:
     default: op
   ca.bce:
     description: Allows the use of the /bce command
+    default: op
+  ca.discordTicket:
+    description: Allows the use of the /discordTicket command
     default: op
   ca.dnd:
     description: Allows the use of the /dnd command

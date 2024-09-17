@@ -27,7 +27,7 @@ public class AdminChatCMD implements CommandExecutor {
         String message = String.join(" ", args);
         if (sender instanceof ConsoleCommandSender CCSender) {
             String messageFromServer = "§3§lAdminChat §6Server§f: " + message;
-            ChatMessageHelper.sendMessage(sender, messageFromServer, false);
+            ChatMessageHelper.sendMessage(CCSender, messageFromServer, false);
             for (Player player : ca.getServer().getOnlinePlayers()) {
                 if (player.hasPermission("ca.adminchat")) {
                     ChatMessageHelper.sendMessage(player, messageFromServer, false);

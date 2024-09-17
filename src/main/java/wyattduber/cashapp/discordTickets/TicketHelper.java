@@ -19,10 +19,10 @@ import java.util.List;
 
 public class TicketHelper {
 
-    public final CashApp ca;
-    public final Database db;
-    public final Javacord js;
-    public final Server discordServer;
+    private static CashApp ca;
+    private static Database db;
+    private static Javacord js;
+    private static Server discordServer;
 
     public TicketHelper() {
         ca = CashApp.getPlugin();
@@ -31,7 +31,7 @@ public class TicketHelper {
         discordServer = js.discordServer;
     }
 
-    public boolean createTicket(String name, String description, String ticketOpener, List<String> allowedOtherUsers, Player mcPlayerOpeningTicket, boolean isAdminOnly) {
+    public static boolean createTicket(String name, String description, String ticketOpener, List<String> allowedOtherUsers, Player mcPlayerOpeningTicket, boolean isAdminOnly) {
         try {
             var ticketOpenerUser = js.checkUserExists(ticketOpener);
             if (ticketOpenerUser == null) throw new Exception("User " + ticketOpener + " cannot be found in this server!");
@@ -104,7 +104,7 @@ public class TicketHelper {
         }
     }
 
-    public boolean setTicketAdminOnly(long channelID, boolean adminOnly) {
+    public static boolean setTicketAdminOnly(long channelID, boolean adminOnly) {
         try {
             var channelOptional = discordServer.getTextChannelById(channelID);
             if (channelOptional.isPresent()) {
@@ -154,17 +154,17 @@ public class TicketHelper {
         }
     }
 
-    public boolean closeTicket(long channelID) {
+    public static boolean closeTicket(long channelID) {
         db.closeTicket(channelID);
         return closeTicketInternal(channelID);
     }
 
-    public boolean closeTicket(long channelID, String closeReason) {
+    public static boolean closeTicket(long channelID, String closeReason) {
         db.closeTicket(channelID, closeReason);
         return closeTicketInternal(channelID);
     }
 
-    private boolean closeTicketInternal(long channelID) {
+    private static boolean closeTicketInternal(long channelID) {
         try {
         var channelOptional = discordServer.getTextChannelById(channelID);
         if (channelOptional.isPresent()) {
