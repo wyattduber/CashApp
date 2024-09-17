@@ -1,4 +1,4 @@
-package wyattduber.cashapp.commands;
+package wyattduber.cashapp.mallFeatures;
 
 import me.ryanhamshire.GriefPrevention.Claim;
 import org.bukkit.command.Command;

@@ -20,15 +20,14 @@ import wyattduber.cashapp.commands.*;
 import wyattduber.cashapp.anarchyItems.customitems.ItemListener;
 import wyattduber.cashapp.anarchyItems.customitems.ItemManager;
 import wyattduber.cashapp.connectors.Database;
-import wyattduber.cashapp.discordTickets.DiscordTicketCMD;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbCMD;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbListener;
 import wyattduber.cashapp.helpers.lib.LibrarySetup;
 import wyattduber.cashapp.connectors.Javacord;
-import wyattduber.cashapp.discordTickets.TicketHelper;
 import wyattduber.cashapp.listeners.LoginListener;
+import wyattduber.cashapp.mallFeatures.SetStallDescCMD;
 import wyattduber.cashapp.placeholders.PlaceholderHandler;
-import wyattduber.cashapp.stallRemind.StallRemindCMD;
+import wyattduber.cashapp.mallFeatures.StallRemindCMD;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +49,6 @@ public class CashApp extends JavaPlugin {
     public ItemListener il;
     public DoNotDisturbListener cl;
     public Javacord js;
-    public TicketHelper th;
     public Database db;
     public ProtocolManager protocolManager;
     public boolean discordConnected;
@@ -112,7 +110,6 @@ public class CashApp extends JavaPlugin {
         if (parseConfig()) {
             js = new Javacord();
             js.connectAPI();
-            th = new TicketHelper();
         }
 
         /* Commands */
@@ -343,7 +340,6 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("ca")).setExecutor(new BaseCMD());
             Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BuildOfTheMonthCMD());
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
-            //Objects.requireNonNull(this.getCommand("discordTicket")).setExecutor(new DiscordTicketCMD());
             Objects.requireNonNull(this.getCommand("dnd")).setExecutor(new DoNotDisturbCMD());
             Objects.requireNonNull(this.getCommand("gc")).setExecutor(new GuideChatCMD());
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());

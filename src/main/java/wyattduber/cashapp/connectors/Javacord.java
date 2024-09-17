@@ -4,14 +4,10 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
 import org.javacord.api.listener.message.MessageCreateListener;
 import wyattduber.cashapp.CashApp;
-import wyattduber.cashapp.discordTickets.TicketMessageListener;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.concurrent.ExecutionException;
 
 public class Javacord {
 
@@ -89,26 +85,6 @@ public class Javacord {
             ca.warn("Closed Ticket Channel not Found! Please enter a valid Channel ID in config.yml and reload the plugin.");
 
         }
-
-        verifyOpenTickets();
-        initListeners();
-    }
-
-    private void verifyOpenTickets() {
-        openTickets = db.getOpenTickets();
-
-        for (long ticket : openTickets) {
-            if (api.getTextChannelById(ticket).isEmpty()) {
-                ca.warn("Ticket Channel " + ticket + " not Found! Please enter a valid Channel ID in the database.");
-                db.closeTicket(ticket);
-                openTickets.remove(ticket);
-            }
-        }
-    }
-
-    private void initListeners() {
-        ticketMessageListener = new TicketMessageListener();
-        api.addMessageCreateListener(ticketMessageListener);
     }
 
     public void sendBOTMMessage(String username, String world, String x, String y, String z, String message) {
@@ -117,15 +93,5 @@ public class Javacord {
                                "Co-Ords: " + x + " " + y + " " + z + "\n" +
                                "Other: " + message;
         botmChannel.sendMessage(messageToSend);
-    }
-
-    public User checkUserExists(String username) {
-        try {
-            User user = api.getCachedUsersByNameIgnoreCase(username).iterator().next();
-            discordServer.requestMember(user).get().getId();
-            return user;
-        } catch (NullPointerException | InterruptedException | ExecutionException | NoSuchElementException e) {
-            return null;
-        }
     }
 }
