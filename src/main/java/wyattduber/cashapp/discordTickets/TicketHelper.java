@@ -7,6 +7,7 @@ import org.javacord.api.entity.permission.PermissionType;
 import org.javacord.api.entity.permission.Permissions;
 import org.javacord.api.entity.permission.PermissionsBuilder;
 import org.javacord.api.entity.server.Server;
+import org.jetbrains.annotations.Nullable;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.connectors.Database;
 import wyattduber.cashapp.connectors.Javacord;
@@ -31,7 +32,7 @@ public class TicketHelper {
         discordServer = js.discordServer;
     }
 
-    public static boolean createTicket(String name, String description, String ticketOpener, List<String> allowedOtherUsers, Player mcPlayerOpeningTicket, boolean isAdminOnly) {
+    public static boolean createTicket(String name, String description, @Nullable String ticketOpener, List<String> allowedOtherUsers, Player mcPlayerOpeningTicket, boolean isAdminOnly) {
         try {
             var ticketOpenerUser = js.checkUserExists(ticketOpener);
             if (ticketOpenerUser == null) throw new Exception("User " + ticketOpener + " cannot be found in this server!");
@@ -60,14 +61,16 @@ public class TicketHelper {
                 }
             }
 
-            // Set Permissions for ticket opener
-            Permissions ticketOpenerPermissionBuilder = (Permissions) new PermissionsBuilder()
-                    .setAllowed(PermissionType.VIEW_CHANNEL)
-                    .setAllowed(PermissionType.SEND_MESSAGES)
-                    .setAllowed(PermissionType.EMBED_LINKS)
-                    .setAllowed(PermissionType.ATTACH_FILE)
-                    .setAllowed(PermissionType.READ_MESSAGE_HISTORY);
-            channelBuilder.addPermissionOverwrite(ticketOpenerUser, ticketOpenerPermissionBuilder);
+            if (ticketOpener == null) {
+                // Set Permissions for ticket opener if specified
+                Permissions ticketOpenerPermissionBuilder = (Permissions) new PermissionsBuilder()
+                        .setAllowed(PermissionType.VIEW_CHANNEL)
+                        .setAllowed(PermissionType.SEND_MESSAGES)
+                        .setAllowed(PermissionType.EMBED_LINKS)
+                        .setAllowed(PermissionType.ATTACH_FILE)
+                        .setAllowed(PermissionType.READ_MESSAGE_HISTORY);
+                channelBuilder.addPermissionOverwrite(ticketOpenerUser, ticketOpenerPermissionBuilder);
+            }
 
             // Add Permission Overrides for other allowed users
             for (String allowedOtherUserName : allowedOtherUsers) {

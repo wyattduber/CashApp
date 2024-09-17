@@ -343,7 +343,7 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("ca")).setExecutor(new BaseCMD());
             Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BuildOfTheMonthCMD());
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
-            Objects.requireNonNull(this.getCommand("discordTicket")).setExecutor(new DiscordTicketCMD());
+            //Objects.requireNonNull(this.getCommand("discordTicket")).setExecutor(new DiscordTicketCMD());
             Objects.requireNonNull(this.getCommand("dnd")).setExecutor(new DoNotDisturbCMD());
             Objects.requireNonNull(this.getCommand("gc")).setExecutor(new GuideChatCMD());
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
