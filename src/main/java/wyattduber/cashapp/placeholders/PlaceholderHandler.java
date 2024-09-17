@@ -2,14 +2,11 @@ package wyattduber.cashapp.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.ryanhamshire.GriefPrevention.Claim;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import wyattduber.cashapp.CashApp;
 import wyattduber.cashapp.connectors.Database;
 import wyattduber.cashapp.helpers.plugin.GriefPreventionHelper;
-
-import java.util.Arrays;
 
 public class PlaceholderHandler extends PlaceholderExpansion {
 
@@ -90,7 +87,7 @@ public class PlaceholderHandler extends PlaceholderExpansion {
                 return GriefPreventionHelper.getClaimOwnerName(playerClaim);
             }
             case "stalldescription" -> {
-                return retrieveStallDescription(args[2]);
+                return retrieveStallDescription(args[2], playerClaim.getID());
             }
             default -> {
                 return "";
@@ -98,13 +95,13 @@ public class PlaceholderHandler extends PlaceholderExpansion {
         }
     }
 
-    private String retrieveStallDescription(String stall) {
+    private String retrieveStallDescription(String stall, long claimId) {
         // Check if the stall is valid
         if (!ca.stalls.contains(stall)) return "";
 
         // Retrieve the stall description
-        var desc = db.getStallDescription(stall);
+        var desc = db.getStallDescription(claimId, stall);
         if (desc.equals("null")) return "";
-        return db.getStallDescription(stall);
+        return desc;
     }
 }

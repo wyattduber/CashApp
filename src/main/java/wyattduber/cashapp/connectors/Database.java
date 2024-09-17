@@ -32,7 +32,8 @@ public class Database {
                         "stallID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "stallName TEXT NOT NULL, " +
                         "stallDescription TEXT NOT NULL, " +
-                        "stallOwnerMinecraftID TEXT NOT NULL)");
+                        "stallOwnerMinecraftID TEXT NOT NULL" +
+                        "claimId TEXT NOT NULL)");
     }
 
     public String getDbPath() { return dbPath; }
@@ -100,12 +101,13 @@ public class Database {
 
     /* Stall Description Methods */
 
-    public void setStallDescription(String stallName, String stallDescription, UUID stallOwnerMinecraftID) {
+    public void setStallDescription(String stallName, String stallDescription, UUID stallOwnerMinecraftID, long claimId) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO stallDescriptions(stallName,stallDescription,stallOwnerMinecraftID) VALUES (?,?,?)");
+            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO stallDescriptions(stallName,stallDescription,stallOwnerMinecraftID,claimId) VALUES (?,?,?,?)");
             stmt.setString(1, stallName);
             stmt.setString(2, stallDescription);
             stmt.setString(3, stallOwnerMinecraftID.toString());
+            stmt.setString(4, Long.toString(claimId));
             stmt.execute();
         } catch (SQLException e) {
             ca.error("Error adding a stall description record for user " + getName(stallOwnerMinecraftID) + "!");
@@ -113,10 +115,11 @@ public class Database {
         }
     }
 
-    public String getStallDescription(String stallName) {
+    public String getStallDescription(long claimId, String stallName) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT stallDescription FROM stallDescriptions WHERE stallName=?");
-            stmt.setString(1, stallName);
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT stallDescription FROM stallDescriptions WHERE claimId=? AND stallName=?");
+            stmt.setString(1, Long.toString(claimId));
+            stmt.setString(2, stallName);
             ResultSet rs = stmt.executeQuery();
             return rs.getString("stallDescription");
         } catch (SQLException e) {
@@ -126,14 +129,15 @@ public class Database {
         }
     }
 
-    public boolean updateStallDescription(String stallName, String newDescription, UUID stallOwnerMinecraftID) {
+    public boolean updateStallDescription(String stallName, String newDescription, UUID stallOwnerMinecraftID, long claimId) {
         try {
-            if (!isStallInDatabase(stallName)) {
-                setStallDescription(stallName, newDescription, stallOwnerMinecraftID);
+            if (!isStallInDatabase(stallName, claimId)) {
+                setStallDescription(stallName, newDescription, stallOwnerMinecraftID, claimId);
             } else {
-                PreparedStatement stmt = dbcon.prepareStatement("UPDATE stallDescriptions SET stallDescription=? WHERE stallName=?");
+                PreparedStatement stmt = dbcon.prepareStatement("UPDATE stallDescriptions SET stallDescription=?, stallOwnerMinecraftID=? WHERE stallName=?");
                 stmt.setString(1, newDescription);
-                stmt.setString(2, stallName);
+                stmt.setString(2, stallOwnerMinecraftID.toString());
+                stmt.setString(3, stallName);
                 stmt.execute();
             }
             return true;
@@ -144,14 +148,28 @@ public class Database {
         }
     }
 
-    public boolean isStallInDatabase(String stallName) {
+    public boolean isStallInDatabase(String stallName, long claimId) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT stallName FROM stallDescriptions WHERE stallName=?");
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT stallName FROM stallDescriptions WHERE stallName=? AND claimId=?");
             stmt.setString(1, stallName);
+            stmt.setString(2, Long.toString(claimId));
             ResultSet rs = stmt.executeQuery();
             return rs.next();
         } catch (SQLException e) {
             return false;
+        }
+    }
+
+    public long getClaimIdFromStallName(String stallName) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT claimId FROM stallDescriptions WHERE stallName=?");
+            stmt.setString(1, stallName);
+            ResultSet rs = stmt.executeQuery();
+            return Long.parseLong(rs.getString("claimId"));
+        } catch (SQLException e) {
+            ca.error("Error fetching claim ID for stall " + stallName + "!");
+            ca.error("Error Message: " + e.getMessage());
+            return -1;
         }
     }
 

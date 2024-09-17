@@ -35,16 +35,17 @@ public class SetStallDescCMD implements TabExecutor {
                 return true;
             }
 
+            // Parse Stall
+            String stall = args[0];
+
             // Check if the user is the main builder of the stall they are trying to set the description for
-            Claim playerClaim = GriefPreventionHelper.getPlayerClaim(player.getUniqueId());
-            if (playerClaim == null) {
-                ChatMessageHelper.sendMessage(player, "&cYou must be standing in a stall claim to use this command!", true);
+            long claimID = db.getClaimIdFromStallName(stall.toLowerCase());
+            Claim playerClaim = GriefPreventionHelper.getClaimById(claimID);
+            if (claimID == -1 || playerClaim == null) {
+                ChatMessageHelper.sendMessage(player, "&cThis stall does not exist!", true);
                 return true;
             }
-            if (!WorldGuardHelper.isPlayerInRegion(player, "newmall")) {
-                ChatMessageHelper.sendMessage(player, "&cYou must be standing in the mall to use this command!", true);
-                return true;
-            }
+
             String builderName = GriefPreventionHelper.getClaimOwnerName(playerClaim);
             if (!player.getName().equalsIgnoreCase(builderName)) {
                 ChatMessageHelper.sendMessage(player, "&cYou must be the owner of this stall to set the description!", true);
@@ -52,11 +53,10 @@ public class SetStallDescCMD implements TabExecutor {
             }
 
             // Set the stall description
-            String stall = args[0];
             String desc = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
             // Check if the description is too long
-            db.updateStallDescription(stall, desc, player.getUniqueId());
+            db.updateStallDescription(stall.toLowerCase(), desc, player.getUniqueId(), playerClaim.getID());
             ChatMessageHelper.sendMessage(player, "Successfully set the description for stall &a" + stall.substring(0, 1).toUpperCase() + stall.substring(1) + "&f!", true);
             return true;
         }
