@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import wyattduber.cashapp.anarchyItems.AnarchyItemsCMD;
+import wyattduber.cashapp.botm.BuildOfTheMonthCMD;
 import wyattduber.cashapp.chats.AdminChatCMD;
 import wyattduber.cashapp.chats.GuideChatCMD;
 import wyattduber.cashapp.commands.*;
@@ -23,10 +24,10 @@ import wyattduber.cashapp.doNotDisturb.DoNotDisturbCMD;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbListener;
 import wyattduber.cashapp.helpers.lib.LibrarySetup;
 import wyattduber.cashapp.connectors.Javacord;
-import wyattduber.cashapp.discordTickets.TicketHelper;
 import wyattduber.cashapp.listeners.LoginListener;
+import wyattduber.cashapp.mallFeatures.SetStallDescCMD;
 import wyattduber.cashapp.placeholders.PlaceholderHandler;
-import wyattduber.cashapp.stallRemind.StallRemindCMD;
+import wyattduber.cashapp.mallFeatures.StallRemindCMD;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +49,6 @@ public class CashApp extends JavaPlugin {
     public ItemListener il;
     public DoNotDisturbListener cl;
     public Javacord js;
-    public TicketHelper th;
     public Database db;
     public ProtocolManager protocolManager;
     public boolean discordConnected;
@@ -110,7 +110,6 @@ public class CashApp extends JavaPlugin {
         if (parseConfig()) {
             js = new Javacord();
             js.connectAPI();
-            th = new TicketHelper();
         }
 
         /* Commands */

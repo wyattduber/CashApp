@@ -20,4 +20,8 @@ public class GriefPreventionHelper {
         return Bukkit.getOfflinePlayer(UUID.fromString(builders.getFirst())).getName();
     }
 
+    public static Claim getClaimById(long claimId) {
+        return GriefPrevention.instance.dataStore.getClaim(claimId);
+    }
+
 }

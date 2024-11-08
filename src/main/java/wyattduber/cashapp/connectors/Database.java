@@ -21,19 +21,6 @@ public class Database {
         dbPath = "jdbc:sqlite:" + dbPath;
         dbcon = DriverManager.getConnection(dbPath);
 
-        // Check if the table exists and update its structure if necessary
-        updateTableStructure("tickets",
-                "CREATE TABLE tickets (" +
-                        "ticketID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "channelID TEXT NOT NULL, " +
-                        "ownerMinecraftID TEXT NOT NULL, " +
-                        "ticketAdminOnly BIT NOT NULL, " +
-                        "ticketOpen BIT NOT NULL, " +
-                        "ticketClosed BIT NOT NULL, " +
-                        "ticketCreationReason TEXT NOT NULL, " +
-                        "ticketCreationTime TEXT NOT NULL, " +
-                        "ticketCloseReason TEXT NULL)");
-
         updateTableStructure("users",
                 "CREATE TABLE users (" +
                         "minecraftid TEXT NOT NULL, " +
@@ -45,7 +32,8 @@ public class Database {
                         "stallID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "stallName TEXT NOT NULL, " +
                         "stallDescription TEXT NOT NULL, " +
-                        "stallOwnerMinecraftID TEXT NOT NULL)");
+                        "stallOwnerMinecraftID TEXT NOT NULL" +
+                        "claimId TEXT NOT NULL)");
     }
 
     public String getDbPath() { return dbPath; }
@@ -111,104 +99,15 @@ public class Database {
         }
     }
 
-    /* Ticket Methods */
-
-    public void openTicket(long channelID, UUID ownerMinecraftID, boolean ticketAdminOnly, String ticketCreationReason, String ticketCreationTime) {
-        try {
-            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO tickets(channelID,ownerMinecraftID,ticketAdminOnly,ticketOpen,ticketClosed,ticketCreationReason,ticketCreationTime,ticketCloseReason) VALUES (?,?,?,?,?,?,?,?)");
-            stmt.setString(1, Long.toString(channelID));
-            stmt.setString(2, ownerMinecraftID.toString());
-            stmt.setBoolean(3, ticketAdminOnly);
-            stmt.setBoolean(4, true);
-            stmt.setBoolean(5, false);
-            stmt.setString(6, ticketCreationReason);
-            stmt.setString(7, ticketCreationTime);
-            stmt.setString(8, null);
-            stmt.execute();
-        } catch (SQLException e) {
-            ca.error("Error adding a ticket record for user " + getName(ownerMinecraftID) + "!");
-            ca.error("Error Message: " + e.getMessage());
-        }
-    }
-
-    public void closeTicket(long channelID) {
-        try {
-            PreparedStatement stmt = dbcon.prepareStatement("UPDATE tickets SET ticketOpen=?,ticketClosed=?,ticketCloseReason=? WHERE channelID=?");
-            stmt.setBoolean(1, false);
-            stmt.setBoolean(2, true);
-            stmt.setString(3, Long.toString(channelID));
-            stmt.setString(4, "No close reason specified.");
-            stmt.execute();
-        } catch (SQLException e) {
-            ca.error("Error closing ticket " + channelID + "!");
-            ca.error("Error Message: " + e.getMessage());
-        }
-    }
-
-    public void closeTicket(long channelID, String closeReason) {
-        try {
-            PreparedStatement stmt = dbcon.prepareStatement("UPDATE tickets SET ticketOpen=?,ticketClosed=?,ticketCloseReason=? WHERE channelID=?");
-            stmt.setBoolean(1, false);
-            stmt.setBoolean(2, true);
-            stmt.setString(3, closeReason);
-            stmt.setString(4, Long.toString(channelID));
-            stmt.execute();
-        } catch (SQLException e) {
-            ca.error("Error closing ticket " + channelID + "!");
-            ca.error("Error Message: " + e.getMessage());
-        }
-    }
-
-    public List<Long> getOpenTickets() {
-        try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT channelID FROM tickets WHERE ticketOpen=?");
-            stmt.setBoolean(1, true);
-            ResultSet rs = stmt.executeQuery();
-            List<Long> openTickets = new ArrayList<>();
-            while (rs.next()) {
-                openTickets.add(rs.getLong("channelID"));
-            }
-            return openTickets;
-        } catch (SQLException e) {
-            ca.error("Error fetching open tickets!");
-            ca.error("Error Message: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public boolean isTicketAdminOnly(long channelID) {
-        try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT ticketAdminOnly FROM tickets WHERE channelID=?");
-            stmt.setString(1, Long.toString(channelID));
-            ResultSet rs = stmt.executeQuery();
-            return rs.getBoolean("ticketAdminOnly");
-        } catch (SQLException e) {
-            ca.error("Error fetching ticket admin only status for ticket " + channelID + "!");
-            ca.error("Error Message: " + e.getMessage());
-            return false;
-        }
-    }
-
-    public void setAdminOnly(long channelID, boolean ticketAdminOnly) {
-        try {
-            PreparedStatement stmt = dbcon.prepareStatement("UPDATE tickets SET ticketAdminOnly=? WHERE channelID=?");
-            stmt.setBoolean(1, ticketAdminOnly);
-            stmt.setString(2, Long.toString(channelID));
-            stmt.execute();
-        } catch (SQLException e) {
-            ca.error("Error updating ticket admin only status for ticket " + channelID + "!");
-            ca.error("Error Message: " + e.getMessage());
-        }
-    }
-
     /* Stall Description Methods */
 
-    public void setStallDescription(String stallName, String stallDescription, UUID stallOwnerMinecraftID) {
+    public void setStallDescription(String stallName, String stallDescription, UUID stallOwnerMinecraftID, long claimId) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO stallDescriptions(stallName,stallDescription,stallOwnerMinecraftID) VALUES (?,?,?)");
+            PreparedStatement stmt = dbcon.prepareStatement("INSERT INTO stallDescriptions(stallName,stallDescription,stallOwnerMinecraftID,claimId) VALUES (?,?,?,?)");
             stmt.setString(1, stallName);
             stmt.setString(2, stallDescription);
             stmt.setString(3, stallOwnerMinecraftID.toString());
+            stmt.setString(4, Long.toString(claimId));
             stmt.execute();
         } catch (SQLException e) {
             ca.error("Error adding a stall description record for user " + getName(stallOwnerMinecraftID) + "!");
@@ -216,10 +115,11 @@ public class Database {
         }
     }
 
-    public String getStallDescription(String stallName) {
+    public String getStallDescription(long claimId, String stallName) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT stallDescription FROM stallDescriptions WHERE stallName=?");
-            stmt.setString(1, stallName);
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT stallDescription FROM stallDescriptions WHERE claimId=? AND stallName=?");
+            stmt.setString(1, Long.toString(claimId));
+            stmt.setString(2, stallName);
             ResultSet rs = stmt.executeQuery();
             return rs.getString("stallDescription");
         } catch (SQLException e) {
@@ -229,14 +129,15 @@ public class Database {
         }
     }
 
-    public boolean updateStallDescription(String stallName, String newDescription, UUID stallOwnerMinecraftID) {
+    public boolean updateStallDescription(String stallName, String newDescription, UUID stallOwnerMinecraftID, long claimId) {
         try {
-            if (!isStallInDatabase(stallName)) {
-                setStallDescription(stallName, newDescription, stallOwnerMinecraftID);
+            if (!isStallInDatabase(stallName, claimId)) {
+                setStallDescription(stallName, newDescription, stallOwnerMinecraftID, claimId);
             } else {
-                PreparedStatement stmt = dbcon.prepareStatement("UPDATE stallDescriptions SET stallDescription=? WHERE stallName=?");
+                PreparedStatement stmt = dbcon.prepareStatement("UPDATE stallDescriptions SET stallDescription=?, stallOwnerMinecraftID=? WHERE stallName=?");
                 stmt.setString(1, newDescription);
-                stmt.setString(2, stallName);
+                stmt.setString(2, stallOwnerMinecraftID.toString());
+                stmt.setString(3, stallName);
                 stmt.execute();
             }
             return true;
@@ -247,14 +148,28 @@ public class Database {
         }
     }
 
-    public boolean isStallInDatabase(String stallName) {
+    public boolean isStallInDatabase(String stallName, long claimId) {
         try {
-            PreparedStatement stmt = dbcon.prepareStatement("SELECT stallName FROM stallDescriptions WHERE stallName=?");
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT stallName FROM stallDescriptions WHERE stallName=? AND claimId=?");
             stmt.setString(1, stallName);
+            stmt.setString(2, Long.toString(claimId));
             ResultSet rs = stmt.executeQuery();
             return rs.next();
         } catch (SQLException e) {
             return false;
+        }
+    }
+
+    public long getClaimIdFromStallName(String stallName) {
+        try {
+            PreparedStatement stmt = dbcon.prepareStatement("SELECT claimId FROM stallDescriptions WHERE stallName=?");
+            stmt.setString(1, stallName);
+            ResultSet rs = stmt.executeQuery();
+            return Long.parseLong(rs.getString("claimId"));
+        } catch (SQLException e) {
+            ca.error("Error fetching claim ID for stall " + stallName + "!");
+            ca.error("Error Message: " + e.getMessage());
+            return -1;
         }
     }
 
