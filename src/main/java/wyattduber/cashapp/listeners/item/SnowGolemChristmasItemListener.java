@@ -12,14 +12,15 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import wyattduber.cashapp.CashApp;
 
-import java.util.Objects;
 import java.util.Random;
 
 public class SnowGolemChristmasItemListener implements Listener {
 
     private final Random rand = new Random();
     private ItemStack christmasSnow;
+    private CashApp ca = CashApp.getPlugin();
 
     public SnowGolemChristmasItemListener() {
         var savedItems = CMI.getInstance().getSavedItemManager().getSavedItems("dc");
@@ -68,10 +69,13 @@ public class SnowGolemChristmasItemListener implements Listener {
         if (event.getEntity() instanceof Snowball snowball) {
             ItemStack snowballItem = snowball.getItem();
             ItemMeta meta = snowballItem.getItemMeta();
-            if (Boolean.TRUE.equals(Objects.requireNonNull(meta.getPersistentDataContainer().get(new NamespacedKey("cashapp", "ca_issnowgolemitem"), PersistentDataType.BOOLEAN)))) {
-                // Cancel the snowball being thrown if it is part of the event
-                event.setCancelled(true);
-            }
+            try {
+                var nbtFlag = meta.getPersistentDataContainer().get(new NamespacedKey("cashapp", "ca_issnowgolemitem"), PersistentDataType.BOOLEAN);
+                if (Boolean.TRUE.equals(nbtFlag)) {
+                    // Cancel the snowball being thrown if it is part of the event
+                    event.setCancelled(true);
+                }
+            } catch (NullPointerException ignored) {}
         }
     }
 }
