@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import wyattduber.cashapp.anarchyItems.AnarchyItemsCMD;
@@ -148,6 +149,7 @@ public class CashApp extends JavaPlugin {
         AsyncChatEvent.getHandlerList().unregister(cl);
         EntityDeathEvent.getHandlerList().unregister(sbl);
         EntityDeathEvent.getHandlerList().unregister(sgcil);
+        ProjectileLaunchEvent.getHandlerList().unregister(sgcil);
 
         // Unregister ProtocolLib Packet Listener
         protocolManager.removePacketListeners(this);
