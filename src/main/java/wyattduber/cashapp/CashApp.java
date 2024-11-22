@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +26,8 @@ import wyattduber.cashapp.doNotDisturb.DoNotDisturbListener;
 import wyattduber.cashapp.helpers.lib.LibrarySetup;
 import wyattduber.cashapp.connectors.Javacord;
 import wyattduber.cashapp.listeners.LoginListener;
+import wyattduber.cashapp.listeners.item.SnifferBurgerListener;
+import wyattduber.cashapp.listeners.item.SnowGolemChristmasItemListener;
 import wyattduber.cashapp.mallFeatures.SetStallDescCMD;
 import wyattduber.cashapp.placeholders.PlaceholderHandler;
 import wyattduber.cashapp.mallFeatures.StallRemindCMD;
@@ -48,6 +51,8 @@ public class CashApp extends JavaPlugin {
     public LoginListener ll;
     public ItemListener il;
     public DoNotDisturbListener cl;
+    public SnifferBurgerListener sbl;
+    public SnowGolemChristmasItemListener sgcil;
     public Javacord js;
     public Database db;
     public ProtocolManager protocolManager;
@@ -141,6 +146,8 @@ public class CashApp extends JavaPlugin {
         EntityLoadCrossbowEvent.getHandlerList().unregister(il);
         EntityDamageEvent.getHandlerList().unregister(il);
         AsyncChatEvent.getHandlerList().unregister(cl);
+        EntityDeathEvent.getHandlerList().unregister(sbl);
+        EntityDeathEvent.getHandlerList().unregister(sgcil);
 
         // Unregister ProtocolLib Packet Listener
         protocolManager.removePacketListeners(this);
@@ -182,6 +189,12 @@ public class CashApp extends JavaPlugin {
 
         cl = new DoNotDisturbListener();
         getServer().getPluginManager().registerEvents(cl, this);
+
+        sbl = new SnifferBurgerListener();
+        getServer().getPluginManager().registerEvents(sbl, this);
+
+        sgcil = new SnowGolemChristmasItemListener();
+        getServer().getPluginManager().registerEvents(sgcil, this);
 
         log("Listeners Loaded!");
     }
@@ -345,6 +358,7 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
             Objects.requireNonNull(this.getCommand("getanarchyitem")).setExecutor(new AnarchyItemsCMD());
             Objects.requireNonNull(this.getCommand("setstalldesc")).setExecutor(new SetStallDescCMD());
+            Objects.requireNonNull(this.getCommand("christmasGolem")).setExecutor(new SnowGolemChristmasItemCommand());
 
             log("Commands Registered Successfully!");
         } catch (NullPointerException e) {
