@@ -360,7 +360,6 @@ public class CashApp extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("rmd")).setExecutor(new StallRemindCMD());
             Objects.requireNonNull(this.getCommand("getanarchyitem")).setExecutor(new AnarchyItemsCMD());
             Objects.requireNonNull(this.getCommand("setstalldesc")).setExecutor(new SetStallDescCMD());
-            Objects.requireNonNull(this.getCommand("christmasGolem")).setExecutor(new SnowGolemChristmasItemCommand());
 
             log("Commands Registered Successfully!");
         } catch (NullPointerException e) {

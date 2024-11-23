@@ -2,7 +2,6 @@ package wyattduber.cashapp.listeners.item;
 
 import com.Zrips.CMI.CMI;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Snowman;
 import org.bukkit.event.EventHandler;
@@ -36,24 +35,6 @@ public class SnowGolemChristmasItemListener implements Listener {
             }
         }
     }
-
-    /**
-     * ChristmasSnow:
-     *     Item:
-     *       v: 3955
-     *       type: SNOWBALL
-     *       meta:
-     *         ==: ItemMeta
-     *         meta-type: UNSPECIFIC
-     *         display-name: '{"text":"","extra":[{"text":"ᴇ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#E4F3FF","bold":false},{"text":"ɴ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#DFF1FF","bold":false},{"text":"ᴄ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#DAEFFF","bold":false},{"text":"ʜ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#D5EDFF","bold":false},{"text":"ᴀ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#D0EBFF","bold":false},{"text":"ɴ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#CCE9FF","bold":false},{"text":"ᴛ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#C7E7FF","bold":false},{"text":"ᴇ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#C2E5FF","bold":false},{"text":"ᴅ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#BDE3FF","bold":false},{"text":"
-     *           ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#B9E1FF","bold":false},{"text":"ѕ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#B4DFFF","bold":false},{"text":"ɴ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#AFDDFF","bold":false},{"text":"ᴏ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#AADBFF","bold":false},{"text":"ᴡ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#A6D9FF","bold":false}]}'
-     *         lore:
-     *         - '{"text":"","extra":[{"text":"Key item in","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"gray","bold":false}]}'
-     *         - '{"text":"","extra":[{"text":"C","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#F96767","bold":false},{"text":"h","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#DDDDDD","bold":false},{"text":"r","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#277E62","bold":false},{"text":"i","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#DDDDDD","bold":false},{"text":"s","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#F96767","bold":false},{"text":"t","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#DDDDDD","bold":false},{"text":"m","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#277E62","bold":false},{"text":"a","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#DDDDDD","bold":false},{"text":"s
-     *           ","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#F96767","bold":false},{"text":"E","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#DDDDDD","bold":false},{"text":"v","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#F96767","bold":false},{"text":"e","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#277E62","bold":false},{"text":"n","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#F96767","bold":false},{"text":"t","obfuscated":false,"italic":false,"underlined":false,"strikethrough":false,"color":"#DDDDDD","bold":false}]}'
-     *         enchantment-glint-override: true
-     *
-     */
 
     @EventHandler
     public void onSnowGolemDeath(EntityDeathEvent event) {
