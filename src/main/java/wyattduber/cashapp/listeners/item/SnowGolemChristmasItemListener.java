@@ -2,6 +2,7 @@ package wyattduber.cashapp.listeners.item;
 
 import com.Zrips.CMI.CMI;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Snowman;
 import org.bukkit.event.EventHandler;
@@ -39,8 +40,10 @@ public class SnowGolemChristmasItemListener implements Listener {
     @EventHandler
     public void onSnowGolemDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof Snowman) {
-            if (rand.nextInt(10) == 1) { // 10% Chance
-                event.getDrops().add(christmasSnow.clone());
+            if (event.getEntity().getKiller() != null) { // This means a player killed the entity
+                if (rand.nextInt(10) == 1) { // 10% Chance
+                    event.getDrops().add(christmasSnow.clone());
+                }
             }
         }
     }
