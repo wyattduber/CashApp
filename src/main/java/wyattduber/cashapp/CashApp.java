@@ -28,7 +28,7 @@ import wyattduber.cashapp.helpers.lib.LibrarySetup;
 import wyattduber.cashapp.connectors.Javacord;
 import wyattduber.cashapp.listeners.LoginListener;
 import wyattduber.cashapp.listeners.item.SnifferBurgerListener;
-import wyattduber.cashapp.listeners.item.SnowGolemChristmasItemListener;
+import wyattduber.cashapp.christmasEvent.SnowGolemChristmasItemListener;
 import wyattduber.cashapp.mallFeatures.SetStallDescCMD;
 import wyattduber.cashapp.placeholders.PlaceholderHandler;
 import wyattduber.cashapp.mallFeatures.StallRemindCMD;

@@ -1,8 +1,7 @@
-package wyattduber.cashapp.listeners.item;
+package wyattduber.cashapp.christmasEvent;
 
 import com.Zrips.CMI.CMI;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Snowman;
 import org.bukkit.event.EventHandler;
