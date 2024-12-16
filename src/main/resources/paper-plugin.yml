@@ -1,0 +1,78 @@
+name: CashApp
+version: '1.4.0'
+authors: [Wcash]
+website: https://www.github.com/wyattduber/CashApp
+main: wyattduber.cashapp.CashApp
+api-version: '1.21.4'
+description: A custom-developed plugin for the Element Animation Minecraft Server
+dependencies:
+  server:
+    CMI:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    CMILib:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    GriefPrevention:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    PlaceholderAPI:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    ProtocolLib:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    WorldGuard:
+      load: BEFORE
+      required: true
+      join-classpath: true
+
+permissions:
+  ca.*:
+    description: Gives access to all CashApp Commands and Features
+    children:
+      ca.adminchat: true
+      ca.ca: true
+      ca.update: true
+      ca.botm: true
+      ca.bce: true
+      ca.dnd: true
+      ca.guidechat: true
+      ca.rmd: true
+      ca.getAnarchyItem: true
+      ca.setstalldesc: true
+  ca.adminchat:
+    description: Allows the use of the /am command
+    default: op
+  ca.botm:
+    description: Allows the use of the BOTM command
+    default: op
+  ca.ca:
+    description: Allows the use of the /ca command
+    default: op
+  ca.bce:
+    description: Allows the use of the /bce command
+    default: op
+  ca.dnd:
+    description: Allows the use of the /dnd command
+    default: op
+  ca.dnd.others:
+    description: Allows the user of the /dnd on other players
+    default: op
+  ca.guidechat:
+    description: Allows the use of the /gc command
+    default: op
+  ca.rmd:
+    description: Allows the use of the /rmd command
+    default: op
+  ca.getanarchyitem:
+    description: Allows the use of the /getAnarchyItem command
+    default: op
+  ca.setstalldesc:
+    description: Allows the use of the /setStallDesc command
+    default: op

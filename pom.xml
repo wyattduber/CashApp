@@ -53,7 +53,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.3-R0.1-SNAPSHOT</version>
+            <version>1.21.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -259,6 +259,7 @@
                         <exclude>com.bencodez:votingplugin:6.14</exclude>
                         <exclude>io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT</exclude>
                         <exclude>com.github.Azim.libby:libby-bukkit:53954e3276</exclude>
+                        <exclude>org.javacord:javacord:3.8.0</exclude>
                     </excludes>
                 </configuration>
                 <executions>

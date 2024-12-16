@@ -4,7 +4,7 @@ main: wyattduber.cashapp.CashApp
 api-version: 1.21
 author: wyattduber
 website: https://www.github.com/wyattduber/CashApp
-depend: [CMI, CMILib, GriefPrevention, PlaceholderAPI, WorldGuard]
+depend: [CMI, CMILib, GriefPrevention, PlaceholderAPI, ProtocolLib, WorldGuard]
 
 commands:
   am:
