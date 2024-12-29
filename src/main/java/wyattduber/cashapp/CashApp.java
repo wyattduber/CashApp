@@ -28,7 +28,6 @@ import wyattduber.cashapp.helpers.lib.LibrarySetup;
 import wyattduber.cashapp.connectors.Javacord;
 import wyattduber.cashapp.listeners.LoginListener;
 import wyattduber.cashapp.listeners.item.SnifferBurgerListener;
-import wyattduber.cashapp.christmasEvent.SnowGolemChristmasItemListener;
 import wyattduber.cashapp.mallFeatures.SetStallDescCMD;
 import wyattduber.cashapp.placeholders.PlaceholderHandler;
 import wyattduber.cashapp.mallFeatures.StallRemindCMD;
@@ -53,7 +52,6 @@ public class CashApp extends JavaPlugin {
     public ItemListener il;
     public DoNotDisturbListener cl;
     public SnifferBurgerListener sbl;
-    public SnowGolemChristmasItemListener sgcil;
     public Javacord js;
     public Database db;
     public ProtocolManager protocolManager;
@@ -148,8 +146,6 @@ public class CashApp extends JavaPlugin {
         EntityDamageEvent.getHandlerList().unregister(il);
         AsyncChatEvent.getHandlerList().unregister(cl);
         EntityDeathEvent.getHandlerList().unregister(sbl);
-        EntityDeathEvent.getHandlerList().unregister(sgcil);
-        ProjectileLaunchEvent.getHandlerList().unregister(sgcil);
 
         // Unregister ProtocolLib Packet Listener
         protocolManager.removePacketListeners(this);
@@ -194,9 +190,6 @@ public class CashApp extends JavaPlugin {
 
         sbl = new SnifferBurgerListener();
         getServer().getPluginManager().registerEvents(sbl, this);
-
-        sgcil = new SnowGolemChristmasItemListener();
-        getServer().getPluginManager().registerEvents(sgcil, this);
 
         log("Listeners Loaded!");
     }
