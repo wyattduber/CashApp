@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>wyattduber</groupId>
     <artifactId>cashapp</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
     <name>CashApp</name>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
     </properties>
     <url>https://www.github.com/wyattduber</url>
 
@@ -26,8 +26,8 @@
             <url>https://repo.dmulloy2.net/repository/public/</url>
         </repository>
         <repository>
-            <id>papermc-repo</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
         <repository>
             <id>AlessioDP</id>
@@ -53,16 +53,16 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.3-R0.1-SNAPSHOT</version>
+            <version>[26.1.2.build,)</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.javacord</groupId>
             <artifactId>javacord</artifactId>
             <version>3.8.0</version>
             <scope>provided</scope>
             <type>pom</type>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
@@ -78,7 +78,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.15.2</version>
+            <version>2.21.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -90,31 +90,31 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.1</version>
+            <version>2.12.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>5.1.0</version>
+            <version>5.4.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.Zrips</groupId>
             <artifactId>CMIAPI</artifactId>
-            <version>9.7.4.1</version>
+            <version>9.8.7.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.Zrips</groupId>
             <artifactId>CMILib</artifactId>
-            <version>1.4.7.4</version>
+            <version>1.5.9.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.GriefPrevention</groupId>
             <artifactId>GriefPrevention</artifactId>
-            <version>16.18.2</version>
+            <version>16.18.7</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -143,14 +143,14 @@
                 <version>3.5.0</version>
                 <configuration>
                     <relocations>
-                        <relocation>
+                        <!--relocation>
                             <pattern>org.javacord.javacord-api</pattern>
                             <shadedPattern>lib.org.javacord.javacord-api</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.javacord.javacord-core</pattern>
                             <shadedPattern>lib.org.javacord.javacord-core</shadedPattern>
-                        </relocation>
+                        </relocation-->
                         <relocation>
                             <pattern>com.squareup.okhttp3.okhttp</pattern>
                             <shadedPattern>lib.com.squareup.okhttp3.okhttp</shadedPattern>
@@ -243,7 +243,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                     <outputDirectory>/home/wyatt/Desktop/server/plugins</outputDirectory>
+                     <outputDirectory>C:\Users\E093685\Downloads</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>

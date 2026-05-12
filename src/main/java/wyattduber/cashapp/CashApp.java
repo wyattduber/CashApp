@@ -11,11 +11,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import wyattduber.cashapp.anarchyItems.AnarchyItemsCMD;
-import wyattduber.cashapp.botm.BuildOfTheMonthCMD;
+//import wyattduber.cashapp.botm.BuildOfTheMonthCMD;
 import wyattduber.cashapp.chats.AdminChatCMD;
 import wyattduber.cashapp.chats.GuideChatCMD;
 import wyattduber.cashapp.commands.*;
@@ -25,7 +24,7 @@ import wyattduber.cashapp.connectors.Database;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbCMD;
 import wyattduber.cashapp.doNotDisturb.DoNotDisturbListener;
 import wyattduber.cashapp.helpers.lib.LibrarySetup;
-import wyattduber.cashapp.connectors.Javacord;
+//import wyattduber.cashapp.connectors.Javacord;
 import wyattduber.cashapp.listeners.LoginListener;
 import wyattduber.cashapp.listeners.item.SnifferBurgerListener;
 import wyattduber.cashapp.mallFeatures.SetStallDescCMD;
@@ -52,7 +51,7 @@ public class CashApp extends JavaPlugin {
     public ItemListener il;
     public DoNotDisturbListener cl;
     public SnifferBurgerListener sbl;
-    public Javacord js;
+    //public Javacord js;
     public Database db;
     public ProtocolManager protocolManager;
     public boolean discordConnected;
@@ -112,8 +111,8 @@ public class CashApp extends JavaPlugin {
 
         /* Config Parsing */
         if (parseConfig()) {
-            js = new Javacord();
-            js.connectAPI();
+            //js = new Javacord();
+            //js.connectAPI();
         }
 
         /* Commands */
@@ -131,9 +130,9 @@ public class CashApp extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (js != null) {
-            js.disconnectAPI();
-        }
+        //if (js != null) {
+        //    js.disconnectAPI();
+        //}
     }
 
     public void reload() {
@@ -169,11 +168,11 @@ public class CashApp extends JavaPlugin {
             error("SQL State: " + e.getSQLState());
         }
 
-        if (parseConfig() || js == null) {
-            js = new Javacord();
-        } else {
-            js.reload();
-        }
+        //if (parseConfig() || js == null) {
+        //    js = new Javacord();
+        //} else {
+        //    js.reload();
+        //}
 
         initListeners();
     }
@@ -248,7 +247,7 @@ public class CashApp extends JavaPlugin {
         }
 
         try {
-            messageDelayTicks = getConfigInt("message-delay");
+            messageDelayTicks = getConfigInt();
             log("Message Delay Loaded!");
         } catch (NullPointerException e) {
             error("Cannot Find \"message-delay\" Boolean in Config! Make sure it's there and reload the plugin.");
@@ -333,7 +332,7 @@ public class CashApp extends JavaPlugin {
 
     private void parseColorCodesOld(StringBuilder message, String[] tempAdd) {
         for (int i = 0; i < tempAdd.length; i++) {
-            tempAdd[i] = tempAdd[i].replaceAll("&", "§");
+            tempAdd[i] = tempAdd[i].replace("&", "§");
             if (i == 0) {
                 message.append(tempAdd[i]);
             } else {
@@ -346,7 +345,7 @@ public class CashApp extends JavaPlugin {
         try {
             Objects.requireNonNull(this.getCommand("am")).setExecutor(new AdminChatCMD());
             Objects.requireNonNull(this.getCommand("ca")).setExecutor(new BaseCMD());
-            Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BuildOfTheMonthCMD());
+            //Objects.requireNonNull(this.getCommand("botm")).setExecutor(new BuildOfTheMonthCMD());
             Objects.requireNonNull(this.getCommand("bce")).setExecutor(new BuycraftMailCMD());
             Objects.requireNonNull(this.getCommand("dnd")).setExecutor(new DoNotDisturbCMD());
             Objects.requireNonNull(this.getCommand("gc")).setExecutor(new GuideChatCMD());
@@ -414,8 +413,8 @@ public class CashApp extends JavaPlugin {
         return config.getString(entryName);
     }
 
-    private int getConfigInt(String entryName) {
-        return config.getInt(entryName);
+    private int getConfigInt() {
+        return config.getInt("message-delay");
     }
 
     private boolean getConfigBool(String entryName) {

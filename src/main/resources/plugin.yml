@@ -1,7 +1,7 @@
 name: CashApp
-version: 1.4.0
+version: 1.5.0
 main: wyattduber.cashapp.CashApp
-api-version: 1.21
+api-version: '26.1.2'
 author: wyattduber
 website: https://www.github.com/wyattduber/CashApp
 depend: [CMI, CMILib, GriefPrevention, PlaceholderAPI, WorldGuard]
@@ -33,7 +33,7 @@ commands:
     permission: ca.dnd
     permission-message: §cYou do not have permission!
   gc:
-    description: Command to send a message to all online players
+    description: Command to send a message to all online guides
     usage: /gc <message>
     permission: ca.guidechat
     permission-message: §cYou do not have permission!
